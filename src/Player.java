@@ -11,7 +11,7 @@ public class Player {
 
     public Player(String name, Board board) {
         this.name = name;
-        this.board = new Board();
+        this.board = board;
         this.fleetNumber = board.getOccupied();
     }
 
