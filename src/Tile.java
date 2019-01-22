@@ -1,4 +1,3 @@
-package org.openjfx;
 
 public class Tile {
     boolean hit;
