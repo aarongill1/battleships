@@ -1,20 +1,22 @@
-package org.openjfx;
-
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
-import javafx.scene.layout.TilePane;
 import javafx.stage.Stage;
 
 public class Game extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+
+
+        Player player1 = new Player();
+        if(player1.getBoard().getTile(62))
+
+
         primaryStage.setTitle("GridPane Experiment");
 
         Tile tile1 = new Tile();
