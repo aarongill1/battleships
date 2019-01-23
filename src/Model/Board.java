@@ -9,9 +9,18 @@ import javafx.scene.shape.Rectangle;
 public class Board {
 
     private int size;
+    private Pane gameBoard;
 
     public Board() {
 
+    }
+
+    public Pane getGameBoard() {
+        return gameBoard;
+    }
+
+    public void setGameBoard(Pane gameBoard) {
+        this.gameBoard = gameBoard;
     }
 
     public Board(int size) {

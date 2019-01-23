@@ -21,8 +21,10 @@ public class Game extends Application {
         Board p1Board = new Board(8);
         Board p2Board = new Board(8);
 
+        p2Board.setGameBoard(p2Board.makeGrid(8));
+
         root.getChildren().add(p1Board.makeGrid(p1Board.getSize()));
-        root.getChildren().add(p2Board.makeGrid(p1Board.getSize()));
+        root.getChildren().add(p2Board.getGameBoard());
         root.setAlignment(Pos.CENTER);
         root.setPadding(new Insets(10, 10, 10, 10));
         root.setSpacing(10);
