@@ -14,6 +14,20 @@ public class Game extends Application {
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Release the Kracken");
 
+
+
+//        primaryStage.setX(50);
+//        primaryStage.setY(50);
+
+//        Stage stage = new Stage();
+////        stage.initModality(Modality.APPLICATION_MODAL);
+////        stage.initModality(Modality.WINDOW_MODAL);
+//        stage.initModality(Modality.NONE);
+//        primaryStage.show();
+//        stage.showAndWait();
+
+
+
         VBox root = new VBox();
 
         Board p1Board = new Board(8, 30);
@@ -41,6 +55,7 @@ public class Game extends Application {
 
         primaryStage.setScene(scene0);
         primaryStage.show();
+
     }
 
     public static void main(String[] args) {
