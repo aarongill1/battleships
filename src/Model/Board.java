@@ -1,6 +1,7 @@
 package Model;
 
 import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -66,6 +67,9 @@ public class Board {
 
                     @Override
                     public void handle(MouseEvent me) {
+
+                        Node source = (Node)me.getSource();
+                        System.out.println(source);
                         double posX = me.getX();
                         double posY = me.getY();
 

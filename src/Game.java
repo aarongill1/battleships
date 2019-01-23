@@ -14,29 +14,28 @@ public class Game extends Application {
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Release the Kracken");
 
-        VBox root = new VBox();
-
         Board p1Board = new Board(8, 30);
         Board p2Board = new Board(8, 30);
 
-        root.getChildren().add(p1Board.getGameBoard());
-        root.getChildren().add(p2Board.getGameBoard());
-        root.setAlignment(Pos.CENTER);
-        root.setPadding(new Insets(10, 10, 10, 10));
-        root.setSpacing(10);
-        Scene scene1 = new Scene(root, 320, 640);
-
+        // Scene 0 setup
         VBox welcome = new VBox();
 
         Label label = new Label("Welcome to Battleships");
         Button button1 = new Button("Play game");
         button1.setOnAction(actionEvent ->  {
+            VBox root = new VBox();
+            root.getChildren().add(p1Board.getGameBoard());
+            root.getChildren().add(p2Board.getGameBoard());
+            root.setAlignment(Pos.CENTER);
+            root.setPadding(new Insets(10, 10, 10, 10));
+            root.setSpacing(10);
+            Scene scene1 = new Scene(root, 320, 640);
             primaryStage.setScene(scene1);
         });
 
         welcome.getChildren().add(label);
         welcome.getChildren().add(button1);
-
+        welcome.getChildren().add(p1Board.getGameBoard());
         Scene scene0 = new Scene(welcome, 320, 640);
 
         primaryStage.setScene(scene0);
