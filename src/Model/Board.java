@@ -11,8 +11,9 @@ public class Board {
     private int size;
     private Pane gameBoard;
 
-    public Board() {
-
+    public Board(int size) {
+        this.size = size;
+        this.setGameBoard(this.makeGrid(size));
     }
 
     public Pane getGameBoard() {
@@ -21,10 +22,6 @@ public class Board {
 
     public void setGameBoard(Pane gameBoard) {
         this.gameBoard = gameBoard;
-    }
-
-    public Board(int size) {
-        this.size = size;
     }
 
     public int getSize() {
