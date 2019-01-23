@@ -5,7 +5,6 @@ public class Tile {
     boolean occupied;
     boolean miss;
 
-
     public Tile() {
         hit = false;
         miss = false;
