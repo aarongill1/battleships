@@ -13,12 +13,21 @@ import java.util.ArrayList;
 public class Board {
 
     private int size;
+    private Pane gameBoard;
+    private int rectWidth;
 
-    public Board() {
+    public Board(int size, int rectWidth) {
+        this.size = size;
+        this.rectWidth = rectWidth;
+        this.setGameBoard(this.makeGrid(size));
     }
 
-    public Board(int size) {
-        this.size = size;
+    public Pane getGameBoard() {
+        return gameBoard;
+    }
+
+    public void setGameBoard(Pane gameBoard) {
+        this.gameBoard = gameBoard;
     }
 
     public int getSize() {
@@ -31,7 +40,7 @@ public class Board {
 
     public Pane makeGrid(int gridSize) {
 
-        double width = 30;
+        double width = rectWidth;
         Pane pane = new Pane();
 
         Rectangle[][] rec = new Rectangle[gridSize][gridSize];
