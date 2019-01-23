@@ -18,8 +18,8 @@ public class Game extends Application {
 
         VBox root = new VBox();
 
-        Board p1Board = new Board(8);
-        Board p2Board = new Board(8);
+        Board p1Board = new Board(8, 30);
+        Board p2Board = new Board(8, 30);
 
         root.getChildren().add(p1Board.getGameBoard());
         root.getChildren().add(p2Board.getGameBoard());

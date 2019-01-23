@@ -10,9 +10,11 @@ public class Board {
 
     private int size;
     private Pane gameBoard;
+    private int rectWidth;
 
-    public Board(int size) {
+    public Board(int size, int rectWidth) {
         this.size = size;
+        this.rectWidth = rectWidth;
         this.setGameBoard(this.makeGrid(size));
     }
 
@@ -34,7 +36,7 @@ public class Board {
 
     public Pane makeGrid(int gridSize) {
 
-        double width = 30;
+        double width = rectWidth;
         Pane pane = new Pane();
 
         Rectangle[][] rec = new Rectangle[gridSize][gridSize];
