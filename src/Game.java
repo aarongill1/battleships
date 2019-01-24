@@ -29,11 +29,11 @@ public class Game extends Application {
                 double posY = me.getY();
                 int colX = (int) (posX / p2Board.getRectWidth());
                 int colY = (int) (posY / p2Board.getRectWidth());
-//                System.out.println(colX);
-//                System.out.println(colY);
                 p2Board.tileList.get(colX).get(colY).fire();
-                javafx.scene.image.Image missImage = new Image("https://openclipart.org/image/2400px/svg_to_png/16155/milker-X-icon.png");
-                javafx.scene.image.Image hitImage = new Image("https://www.clipartmax.com/png/small/132-1328230_flame-free-icon-fire-icon.png");
+                String missImagePath = "resources/miss.png";
+                String hitImagePath = "resources/fire.png";
+                Image missImage = new Image(missImagePath);
+                Image hitImage = new Image(hitImagePath);
                 if(p2Board.tileList.get(colX).get(colY).isOccupied()){
                     p2Board.rec[colX][colY].setFill(new ImagePattern(hitImage));
                 }
@@ -52,7 +52,8 @@ public class Game extends Application {
                 int colX = (int) (posX / p1Board.getRectWidth());
                 int colY = (int) (posY / p1Board.getRectWidth());
                 p1Board.tileList.get(colX).get(colY).setOccupied();
-                javafx.scene.image.Image shipImage = new Image("https://secure.webtoolhub.com/static/resources/icons/set34/222394c8.png");
+                String shipPath = "resources/boat.png";
+                Image shipImage = new Image(shipPath);
                 p1Board.rec[colX][colY].setFill(new ImagePattern(shipImage));
                 System.out.println(colX);
                 System.out.println(colY);
@@ -68,7 +69,8 @@ public class Game extends Application {
                 int colX = (int) (posX / p2Board.getRectWidth());
                 int colY = (int) (posY / p2Board.getRectWidth());
                 p2Board.tileList.get(colX).get(colY).setOccupied();
-                javafx.scene.image.Image shipImage = new Image("https://secure.webtoolhub.com/static/resources/icons/set34/222394c8.png");
+                String shipPath = "resources/boat.png";
+                Image shipImage = new Image(shipPath);
                 p2Board.rec[colX][colY].setFill(new ImagePattern(shipImage));
                 System.out.println(colX);
                 System.out.println(colY);
