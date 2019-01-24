@@ -20,6 +20,14 @@ public class Board {
         this.setGameBoard(this.makeGrid(size));
     }
 
+    public Rectangle[][] getRec() {
+        return rec;
+    }
+
+    public void setRec(Rectangle[][] rec) {
+        this.rec = rec;
+    }
+
     public Pane getGameBoard() {
         return gameBoard;
     }
@@ -51,6 +59,11 @@ public class Board {
     public void setTileList(ArrayList<ArrayList<Tile>> tileList) {
         this.tileList = tileList;
     }
+
+//    public ArrayList<Rectangle[][]> getOccupied(){
+//        ArrayList<Rectangle[][]> result = this.tileList;
+//        return result;
+//    }
 
     public Pane makeGrid(int gridSize) {
 
