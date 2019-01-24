@@ -87,6 +87,7 @@ public class Board {
                         Ship ship1 = new Ship("Battleship", 1, 2, 7);
 
                         ship1.reportIdentity();
+                        ship1.reportHealth();
                         ship1.reportLocation();
 
 
