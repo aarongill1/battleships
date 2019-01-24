@@ -1,4 +1,5 @@
 import Model.Board;
+import Model.Player;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -6,6 +7,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
@@ -20,7 +22,9 @@ public class Game extends Application {
 
         Board p1Board = new Board(8, 30);
         Board p2Board = new Board(8, 30);
-//        p2Board.tileList.get(0).get(0).setOccupied();
+        Player player1 = new Player(null, p1Board);
+        Player player2 = new Player(null, p2Board);
+
 
         EventHandler<MouseEvent> fireEvent = new EventHandler<MouseEvent>() {
             @Override
@@ -46,6 +50,7 @@ public class Game extends Application {
         EventHandler<MouseEvent> p1PlaceShips = new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent me) {
+//                String clickSource = me.getSource();
                 double posX = me.getX();
                 double posY = me.getY();
                 int colX = (int) (posX / p1Board.getRectWidth());
@@ -78,32 +83,31 @@ public class Game extends Application {
 
             Label label1 = new Label("Player 2, select your ships");
             Button button2 = new Button("Select to Start Game");
-            VBox root1 = new VBox();
-            root1.getChildren().add(label1);
-            root1.getChildren().add(button2);
-            root1.getChildren().add(p2Board.getGameBoard());
-            root1.setAlignment(Pos.CENTER);
-            root1.setPadding(new Insets(10, 10, 10, 10));
-            root1.setSpacing(10);
-            Scene p2SelectShipScreen = new Scene(root1, 320, 640);
-//            p2Board.getGameBoard().setOnMouseClicked(fireEvent);
-            p2Board.getGameBoard().setOnMouseClicked(p2PlaceShips);
-//            p2Board.getGameBoard().setOnMouseClicked(fireEvent);
-            primaryStage.setScene(p2SelectShipScreen);
-
             button2.setOnAction(actionEvent1 -> {
-
                 VBox root = new VBox();
+                p2Board.getGameBoard().setOnMouseClicked(fireEvent);
                 root.getChildren().add(p2Board.getGameBoard());
                 root.getChildren().add(p1Board.getGameBoard());
                 root.setAlignment(Pos.CENTER);
                 root.setPadding(new Insets(10, 10, 10, 10));
                 root.setSpacing(10);
                 Scene scene2 = new Scene(root, 320, 640);
-
-                p2Board.getGameBoard().setOnMouseClicked(fireEvent);
                 primaryStage.setScene(scene2);
             });
+            Label nameLabel = new Label("Player 2 enter your name!");
+            TextField nameInput = new TextField();
+            VBox root1 = new VBox();
+            root1.getChildren().add(label1);
+            root1.getChildren().add(nameLabel);
+            root1.getChildren().add(nameInput);
+            root1.getChildren().add(button2);
+            root1.getChildren().add(p2Board.getGameBoard());
+            root1.setAlignment(Pos.CENTER);
+            root1.setPadding(new Insets(10, 10, 10, 10));
+            root1.setSpacing(10);
+            Scene p2SelectShipScreen = new Scene(root1, 320, 640);
+            p2Board.getGameBoard().setOnMouseClicked(p2PlaceShips);
+            primaryStage.setScene(p2SelectShipScreen);
         });
 
         welcome.getChildren().add(label);
