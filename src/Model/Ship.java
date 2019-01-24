@@ -9,16 +9,14 @@ public class Ship {
     private int shipHits;
     private int [][] gridPosition;
 
-//position array should instantiate to length = shipSize, can then be used across multiple tiles?
-//    Look into using 'coord' to put number pairs into an array??
+// Idea is to (evetual future feature) take in a number of adjacent coordinates and save in the gridPosition multi-dim array
+//    Would then allow ships to span multiple grid tiles
 
-//    public Ship(String shipClass, int shipSize, int [][] shipLocation) {
     public Ship(String shipClass, int shipSize, int posX, int posY) {
 
     this.shipClass = shipClass;
         this.shipSize = shipSize;
 
-//        this.gridPosition = new int [shipLocation.length][shipLocation[0].length];
         this.gridPosition = new int [shipSize][2];
         for(int i = 0; i < shipSize; i++) {
             for(int j = 0; j < 1; j++) {
@@ -29,7 +27,6 @@ public class Ship {
         }
         System.out.println(Arrays.deepToString(gridPosition));
 
-//        this.gridPosition = gridPosition;
         shipHits = shipSize;
     }
 

@@ -82,8 +82,8 @@ public class Board {
                         tileList.get(4).get(2).setOccupied();
                         tileList.get(5).get(1).setOccupied();
 
-//                        Sample of a ship
-//                        Ship ship1 = new Ship("Battleship", 4, new int [2][7]);
+//                        Sample of a (1 square) ship below. This needs to interact with the board and set the chosen coordinates
+//                        as occupied.
                         Ship ship1 = new Ship("Battleship", 1, 2, 7);
 
                         ship1.reportIdentity();
