@@ -26,7 +26,7 @@ public class Game extends Application {
         Player player2 = new Player(null, p2Board);
 
 
-        EventHandler<MouseEvent> fireEvent = new EventHandler<MouseEvent>() {
+        EventHandler<MouseEvent> p2fireEvent = new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent me) {
                 double posX = me.getX();
@@ -47,18 +47,42 @@ public class Game extends Application {
             }
         };
 
-        EventHandler<MouseEvent> p1PlaceShips = new EventHandler<MouseEvent>() {
+        EventHandler<MouseEvent> p1fireEvent = new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent me) {
-//                String clickSource = me.getSource();
                 double posX = me.getX();
                 double posY = me.getY();
                 int colX = (int) (posX / p1Board.getRectWidth());
                 int colY = (int) (posY / p1Board.getRectWidth());
-                p1Board.tileList.get(colX).get(colY).setOccupied();
-                String shipPath = "resources/boat.png";
-                Image shipImage = new Image(shipPath);
-                p1Board.rec[colX][colY].setFill(new ImagePattern(shipImage));
+                p1Board.tileList.get(colX).get(colY).fire();
+                String missImagePath = "resources/miss.png";
+                String hitImagePath = "resources/fire.png";
+                Image missImage = new Image(missImagePath);
+                Image hitImage = new Image(hitImagePath);
+                if(p1Board.tileList.get(colX).get(colY).isOccupied()){
+                    p1Board.rec[colX][colY].setFill(new ImagePattern(hitImage));
+                }
+                else {
+                    p1Board.rec[colX][colY].setFill(new ImagePattern(missImage));
+                }
+            }
+        };
+
+        EventHandler<MouseEvent> p1PlaceShips = new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent me) {
+                if (player1.getFleetNumber() != 0) {
+                    double posX = me.getX();
+                    double posY = me.getY();
+                    int colX = (int) (posX / p1Board.getRectWidth());
+                    int colY = (int) (posY / p1Board.getRectWidth());
+                    p1Board.tileList.get(colX).get(colY).setOccupied();
+                    String shipPath = "resources/boat.png";
+                    Image shipImage = new Image(shipPath);
+                    p1Board.rec[colX][colY].setFill(new ImagePattern(shipImage));
+                    player1.setFleetNumber((player1.getFleetNumber()-1));
+                    System.out.println(player1.getFleetNumber());
+                }
             }
         };
 
@@ -80,14 +104,16 @@ public class Game extends Application {
         Label label = new Label("Welcome to Battleships - Player 1, select your ship locations");
         Button button1 = new Button("Click when finished");
         button1.setOnAction(actionEvent -> {
-
             Label label1 = new Label("Player 2, select your ships");
             Button button2 = new Button("Select to Start Game");
             button2.setOnAction(actionEvent1 -> {
                 VBox root = new VBox();
-                p2Board.getGameBoard().setOnMouseClicked(fireEvent);
+                p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2PlaceShips);
+                p2Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p2fireEvent);
+
                 root.getChildren().add(p2Board.getGameBoard());
                 root.getChildren().add(p1Board.getGameBoard());
+                p1Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1PlaceShips);
                 root.setAlignment(Pos.CENTER);
                 root.setPadding(new Insets(10, 10, 10, 10));
                 root.setSpacing(10);
@@ -106,13 +132,14 @@ public class Game extends Application {
             root1.setPadding(new Insets(10, 10, 10, 10));
             root1.setSpacing(10);
             Scene p2SelectShipScreen = new Scene(root1, 320, 640);
-            p2Board.getGameBoard().setOnMouseClicked(p2PlaceShips);
+            p2Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p2PlaceShips);
             primaryStage.setScene(p2SelectShipScreen);
         });
 
         welcome.getChildren().add(label);
         welcome.getChildren().add(button1);
-        p1Board.getGameBoard().setOnMouseClicked(p1PlaceShips);
+        // This line carries over into play screen and allows p1 to place ships even when game has already started.
+        p1Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p1PlaceShips);
         welcome.getChildren().add(p1Board.getGameBoard());
         Scene welcomeScene = new Scene(welcome, 320, 640);
         primaryStage.setScene(welcomeScene);

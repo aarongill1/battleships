@@ -77,45 +77,6 @@ public class Board {
                 rec[i][j].setStroke(Color.BLACK);
                 pane.getChildren().add(rec[i][j]);
                 tileList.get(i).add(new Tile());
-
-//                pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
-//
-//                    @Override
-//                    public void handle(MouseEvent me) {
-//
-//                        Node source = (Node)me.getSource();
-//                        System.out.println(source);
-//                        double posX = me.getX();
-//                        double posY = me.getY();
-//
-//                        int colX = (int) (posX / width);
-//                        int colY = (int) (posY / width);
-//
-//                        System.out.println("X coordinate is: " + colX);
-//                        System.out.println("Y coordinate is: " + colY);
-//
-////                        // hard-code ships on grid
-////                        tileList.get(0).get(1).setOccupied();
-////                        tileList.get(2).get(7).setOccupied();
-////                        tileList.get(3).get(6).setOccupied();
-////                        tileList.get(4).get(2).setOccupied();
-////                        tileList.get(5).get(1).setOccupied();
-//
-//                        tileList.get(colX).get(colY).fire();
-//
-//                        javafx.scene.image.Image missImage = new Image("https://openclipart.org/image/2400px/svg_to_png/16155/milker-X-icon.png");
-//                        javafx.scene.image.Image hitImage = new Image("https://www.clipartmax.com/png/small/132-1328230_flame-free-icon-fire-icon.png");
-//
-//                        if(tileList.get(colX).get(colY).occupied){
-//
-//                            rec[colX][colY].setFill(new ImagePattern(hitImage));
-//                        }
-//                        else {
-//
-//                            rec[colX][colY].setFill(new ImagePattern(missImage));
-//                        }
-//                    }
-//                });
             }
         }
         return pane;
