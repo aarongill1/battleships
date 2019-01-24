@@ -14,59 +14,36 @@ import javafx.stage.Stage;
 
 public class Game extends Application {
 
-
-
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Release the Kracken");
 
         Board p1Board = new Board(8, 30);
         Board p2Board = new Board(8, 30);
+//        p2Board.tileList.get(0).get(0).setOccupied();
 
         EventHandler<MouseEvent> fireEvent = new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent me) {
-
                 double posX = me.getX();
                 double posY = me.getY();
-                int colX = (int) (posX / p1Board.getRectWidth());
-                int colY = (int) (posY / p1Board.getRectWidth());
-                System.out.println(colX);
-                System.out.println(colY);
-                p1Board.tileList.get(colX).get(colY).fire();
-
+                int colX = (int) (posX / p2Board.getRectWidth());
+                int colY = (int) (posY / p2Board.getRectWidth());
+//                System.out.println(colX);
+//                System.out.println(colY);
+                p2Board.tileList.get(colX).get(colY).fire();
                 javafx.scene.image.Image missImage = new Image("https://openclipart.org/image/2400px/svg_to_png/16155/milker-X-icon.png");
                 javafx.scene.image.Image hitImage = new Image("https://www.clipartmax.com/png/small/132-1328230_flame-free-icon-fire-icon.png");
-
-                if(p1Board.tileList.get(colX).get(colY).isOccupied()){
-
-                    p1Board.rec[colX][colY].setFill(new ImagePattern(hitImage));
+                if(p2Board.tileList.get(colX).get(colY).isOccupied()){
+                    p2Board.rec[colX][colY].setFill(new ImagePattern(hitImage));
                 }
                 else {
-
-                    p1Board.rec[colX][colY].setFill(new ImagePattern(missImage));
+                    p2Board.rec[colX][colY].setFill(new ImagePattern(missImage));
                 }
             }
         };
 
-        // Scene 0 setup
-        VBox welcome = new VBox();
-
-        Label label = new Label("Welcome to Battleships");
-        Button button1 = new Button("Play game");
-        button1.setOnAction(actionEvent ->  {
-            VBox root = new VBox();
-            root.getChildren().add(p1Board.getGameBoard());
-            root.getChildren().add(p2Board.getGameBoard());
-            root.setAlignment(Pos.CENTER);
-            root.setPadding(new Insets(10, 10, 10, 10));
-            root.setSpacing(10);
-            Scene scene1 = new Scene(root, 320, 640);
-            p1Board.getGameBoard().setOnMouseClicked(fireEvent);
-            primaryStage.setScene(scene1);
-        });
-
-        EventHandler<MouseEvent> eventHandler = new EventHandler<MouseEvent>() {
+        EventHandler<MouseEvent> eventHandlerPlayer1 = new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent me) {
                 System.out.println("Hello World");
@@ -74,24 +51,73 @@ public class Game extends Application {
                 double posY = me.getY();
                 int colX = (int) (posX / p1Board.getRectWidth());
                 int colY = (int) (posY / p1Board.getRectWidth());
+                p1Board.tileList.get(colX).get(colY).setOccupied();
+                javafx.scene.image.Image shipImage = new Image("https://secure.webtoolhub.com/static/resources/icons/set34/222394c8.png");
+                p1Board.rec[colX][colY].setFill(new ImagePattern(shipImage));
                 System.out.println(colX);
                 System.out.println(colY);
             }
         };
 
+        EventHandler<MouseEvent> eventHandlerPlayer2 = new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent me) {
+                System.out.println("Hello World 2");
+                double posX = me.getX();
+                double posY = me.getY();
+                int colX = (int) (posX / p2Board.getRectWidth());
+                int colY = (int) (posY / p2Board.getRectWidth());
+                p2Board.tileList.get(colX).get(colY).setOccupied();
+                javafx.scene.image.Image shipImage = new Image("https://secure.webtoolhub.com/static/resources/icons/set34/222394c8.png");
+                p2Board.rec[colX][colY].setFill(new ImagePattern(shipImage));
+                System.out.println(colX);
+                System.out.println(colY);
+            }
+        };
+        // Scene 0 setup
+        VBox welcome = new VBox();
+        Label label = new Label("Welcome to Battleships - Player 1, select your ship locations");
+        Button button1 = new Button("Click when finished");
+        button1.setOnAction(actionEvent -> {
+
+
+            Label label1 = new Label("Player 2, select your ships");
+
+            Button button2 = new Button("Select to Start Game");
+            VBox root1 = new VBox();
+            root1.getChildren().add(label1);
+            root1.getChildren().add(button2);
+            root1.getChildren().add(p2Board.getGameBoard());
+            root1.setAlignment(Pos.CENTER);
+            root1.setPadding(new Insets(10, 10, 10, 10));
+            root1.setSpacing(10);
+            Scene p2SelectShipScreen = new Scene(root1, 320, 640);
+//            p2Board.getGameBoard().setOnMouseClicked(fireEvent);
+            p2Board.getGameBoard().setOnMouseClicked(eventHandlerPlayer2);
+//            p2Board.getGameBoard().setOnMouseClicked(fireEvent);
+            primaryStage.setScene(p2SelectShipScreen);
+
+            button2.setOnAction(actionEvent1 -> {
+
+                VBox root = new VBox();
+                root.getChildren().add(p2Board.getGameBoard());
+                root.getChildren().add(p1Board.getGameBoard());
+                root.setAlignment(Pos.CENTER);
+                root.setPadding(new Insets(10, 10, 10, 10));
+                root.setSpacing(10);
+                Scene scene2 = new Scene(root, 320, 640);
+
+                p2Board.getGameBoard().setOnMouseClicked(fireEvent);
+                primaryStage.setScene(scene2);
+            });
+        });
 
         welcome.getChildren().add(label);
         welcome.getChildren().add(button1);
-        p1Board.tileList.get(0).get(1).setOccupied();
-        p1Board.tileList.get(2).get(7).setOccupied();
-        p1Board.tileList.get(3).get(6).setOccupied();
-        p1Board.tileList.get(4).get(2).setOccupied();
-        p1Board.tileList.get(5).get(1).setOccupied();
-        p1Board.getGameBoard().setOnMouseClicked(eventHandler);
+        p1Board.getGameBoard().setOnMouseClicked(eventHandlerPlayer1);
         welcome.getChildren().add(p1Board.getGameBoard());
-        Scene scene0 = new Scene(welcome, 320, 640);
-
-        primaryStage.setScene(scene0);
+        Scene welcomeScene = new Scene(welcome, 320, 640);
+        primaryStage.setScene(welcomeScene);
         primaryStage.show();
     }
 
