@@ -43,10 +43,9 @@ public class Game extends Application {
             }
         };
 
-        EventHandler<MouseEvent> eventHandlerPlayer1 = new EventHandler<MouseEvent>() {
+        EventHandler<MouseEvent> p1PlaceShips = new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent me) {
-                System.out.println("Hello World");
                 double posX = me.getX();
                 double posY = me.getY();
                 int colX = (int) (posX / p1Board.getRectWidth());
@@ -55,15 +54,12 @@ public class Game extends Application {
                 String shipPath = "resources/boat.png";
                 Image shipImage = new Image(shipPath);
                 p1Board.rec[colX][colY].setFill(new ImagePattern(shipImage));
-                System.out.println(colX);
-                System.out.println(colY);
             }
         };
 
-        EventHandler<MouseEvent> eventHandlerPlayer2 = new EventHandler<MouseEvent>() {
+        EventHandler<MouseEvent> p2PlaceShips = new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent me) {
-                System.out.println("Hello World 2");
                 double posX = me.getX();
                 double posY = me.getY();
                 int colX = (int) (posX / p2Board.getRectWidth());
@@ -72,8 +68,6 @@ public class Game extends Application {
                 String shipPath = "resources/boat.png";
                 Image shipImage = new Image(shipPath);
                 p2Board.rec[colX][colY].setFill(new ImagePattern(shipImage));
-                System.out.println(colX);
-                System.out.println(colY);
             }
         };
         // Scene 0 setup
@@ -82,9 +76,7 @@ public class Game extends Application {
         Button button1 = new Button("Click when finished");
         button1.setOnAction(actionEvent -> {
 
-
             Label label1 = new Label("Player 2, select your ships");
-
             Button button2 = new Button("Select to Start Game");
             VBox root1 = new VBox();
             root1.getChildren().add(label1);
@@ -95,7 +87,7 @@ public class Game extends Application {
             root1.setSpacing(10);
             Scene p2SelectShipScreen = new Scene(root1, 320, 640);
 //            p2Board.getGameBoard().setOnMouseClicked(fireEvent);
-            p2Board.getGameBoard().setOnMouseClicked(eventHandlerPlayer2);
+            p2Board.getGameBoard().setOnMouseClicked(p2PlaceShips);
 //            p2Board.getGameBoard().setOnMouseClicked(fireEvent);
             primaryStage.setScene(p2SelectShipScreen);
 
@@ -116,7 +108,7 @@ public class Game extends Application {
 
         welcome.getChildren().add(label);
         welcome.getChildren().add(button1);
-        p1Board.getGameBoard().setOnMouseClicked(eventHandlerPlayer1);
+        p1Board.getGameBoard().setOnMouseClicked(p1PlaceShips);
         welcome.getChildren().add(p1Board.getGameBoard());
         Scene welcomeScene = new Scene(welcome, 320, 640);
         primaryStage.setScene(welcomeScene);

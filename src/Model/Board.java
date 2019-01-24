@@ -56,6 +56,8 @@ public class Board {
 
         double width = rectWidth;
         Pane pane = new Pane();
+        //important for ensuring no out of bounds errors
+        pane.setMaxWidth(rectWidth*gridSize);
 
         rec = new Rectangle[gridSize][gridSize];
 
