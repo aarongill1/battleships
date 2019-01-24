@@ -1,4 +1,5 @@
 import Model.Board;
+import Server.Server;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -15,6 +16,7 @@ public class Game extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+
         primaryStage.setTitle("Release the Kraken");
 
         VBox welcome = new VBox();
@@ -65,6 +67,9 @@ public class Game extends Application {
         Label hostIPAddress = new Label("Your IP Address is: " + inetAddress.getHostAddress());
         multiplayerSetup.getChildren().add(hostIPAddress);
         Button host = new Button("Host a new game");
+        host.setOnAction(actionEvent ->{
+            Server.start(52864);
+        });
         multiplayerSetup.getChildren().add(host);
         TextField port = new TextField();
         port.setPromptText("Enter IP Address");
