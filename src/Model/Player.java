@@ -5,7 +5,7 @@ public class Player {
     private String name;
     //  private int playerId;       Could be useful for the server side logic
     private Board board;
-    private int fleetNumber;
+    private int fleetNumber = 4;
 
     public Player(String name, Board board) {
         this.name = name;
@@ -19,6 +19,10 @@ public class Player {
 
     public int getFleetNumber(){
         return this.fleetNumber;
+    }
+
+    public void setFleetNumber(int fleetNumber) {
+        this.fleetNumber = fleetNumber;
     }
 
     public String getName(){

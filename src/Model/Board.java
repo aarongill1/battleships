@@ -1,11 +1,7 @@
 package Model;
 
-import javafx.event.EventHandler;
-import javafx.scene.image.Image;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
@@ -15,11 +11,21 @@ public class Board {
     private int size;
     private Pane gameBoard;
     private int rectWidth;
+    public ArrayList<ArrayList<Tile>> tileList;
+    public Rectangle[][] rec;
 
     public Board(int size, int rectWidth) {
         this.size = size;
         this.rectWidth = rectWidth;
         this.setGameBoard(this.makeGrid(size));
+    }
+
+    public Rectangle[][] getRec() {
+        return rec;
+    }
+
+    public void setRec(Rectangle[][] rec) {
+        this.rec = rec;
     }
 
     public Pane getGameBoard() {
@@ -38,14 +44,37 @@ public class Board {
         this.size = size;
     }
 
+    public int getRectWidth() {
+        return rectWidth;
+    }
+
+    public void setRectWidth(int rectWidth) {
+        this.rectWidth = rectWidth;
+    }
+
+    public ArrayList<ArrayList<Tile>> getTileList() {
+        return tileList;
+    }
+
+    public void setTileList(ArrayList<ArrayList<Tile>> tileList) {
+        this.tileList = tileList;
+    }
+
+//    public ArrayList<Rectangle[][]> getOccupied(){
+//        ArrayList<Rectangle[][]> result = this.tileList;
+//        return result;
+//    }
+
     public Pane makeGrid(int gridSize) {
 
         double width = rectWidth;
         Pane pane = new Pane();
+        //important for ensuring no out of bounds errors
+        pane.setMaxWidth(rectWidth*gridSize);
 
-        Rectangle[][] rec = new Rectangle[gridSize][gridSize];
+        rec = new Rectangle[gridSize][gridSize];
 
-        ArrayList<ArrayList<Tile>> tileList = new ArrayList<>();
+        tileList = new ArrayList<>();
 
         for (int i = 0; i < gridSize; i++) {
             ArrayList<Tile> list = new ArrayList<>();
@@ -61,44 +90,10 @@ public class Board {
                 rec[i][j].setStroke(Color.BLACK);
                 pane.getChildren().add(rec[i][j]);
                 tileList.get(i).add(new Tile());
-
-                pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
-
-                    @Override
-                    public void handle(MouseEvent me) {
-                        double posX = me.getX();
-                        double posY = me.getY();
-
-                        int colX = (int) (posX / width);
-                        int colY = (int) (posY / width);
-
-                        System.out.println("X coordinate is: " + colX);
-                        System.out.println("Y coordinate is: " + colY);
-
-                        // hard-code ships on grid
-                        tileList.get(0).get(1).setOccupied();
-                        tileList.get(2).get(7).setOccupied();
-                        tileList.get(3).get(6).setOccupied();
-                        tileList.get(4).get(2).setOccupied();
-                        tileList.get(5).get(1).setOccupied();
-
-                        tileList.get(colX).get(colY).fire();
-
-                        javafx.scene.image.Image missImage = new Image("https://openclipart.org/image/2400px/svg_to_png/16155/milker-X-icon.png");
-                        javafx.scene.image.Image hitImage = new Image("https://www.clipartmax.com/png/small/132-1328230_flame-free-icon-fire-icon.png");
-
-                        if(tileList.get(colX).get(colY).occupied){
-
-                            rec[colX][colY].setFill(new ImagePattern(hitImage));
-                        }
-                        else {
-
-                            rec[colX][colY].setFill(new ImagePattern(missImage));
-                        }
-                    }
-                });
             }
         }
         return pane;
     }
+
+
 }
