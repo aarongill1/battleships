@@ -12,7 +12,7 @@ public class Game extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        primaryStage.setTitle("Release the Kracken");
+        primaryStage.setTitle("Release the Kraken");
 
         VBox root = new VBox();
 
@@ -28,14 +28,27 @@ public class Game extends Application {
 
         VBox welcome = new VBox();
 
-        Label label = new Label("Welcome to Battleships");
-        Button button1 = new Button("Play game");
-        button1.setOnAction(actionEvent ->  {
+        Label label = new Label("Welcome to Battleships: Kräken Edition");
+        Button twoPlayerLocal = new Button("2 Player Local");
+        twoPlayerLocal.setOnAction(actionEvent ->  {
             primaryStage.setScene(scene1);
+        });
+        Button twoPlayerLAN = new Button("2 Player LAN");
+        twoPlayerLAN.setOnAction(actionEvent ->  {
+//            primaryStage.setScene();
+        });
+        Button singlePlayer = new Button("Single Player");
+        twoPlayerLAN.setOnAction(actionEvent ->  {
+//            primaryStage.setScene();
         });
 
         welcome.getChildren().add(label);
-        welcome.getChildren().add(button1);
+        welcome.getChildren().add(twoPlayerLocal);
+        welcome.getChildren().add(twoPlayerLAN);
+        welcome.getChildren().add(singlePlayer);
+        welcome.setAlignment(Pos.CENTER);
+        welcome.setPadding(new Insets(10, 10, 10, 10));
+        welcome.setSpacing(40);
 
         Scene scene0 = new Scene(welcome, 320, 640);
 
