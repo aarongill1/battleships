@@ -56,6 +56,7 @@ public class Board {
 
         double width = rectWidth;
         Pane pane = new Pane();
+        pane.setMaxWidth(gridSize*rectWidth);
 
         rec = new Rectangle[gridSize][gridSize];
 

@@ -14,8 +14,6 @@ import javafx.stage.Stage;
 
 public class Game extends Application {
 
-
-
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Release the Kracken");
@@ -26,25 +24,27 @@ public class Game extends Application {
         EventHandler<MouseEvent> fireEvent = new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent me) {
+                try {
+                    double posX = me.getX();
+                    double posY = me.getY();
+                    int colX = (int) (posX / p1Board.getRectWidth());
+                    int colY = (int) (posY / p1Board.getRectWidth());
+                    System.out.println(colX);
+                    System.out.println(colY);
+                    p1Board.tileList.get(colX).get(colY).fire();
 
-                double posX = me.getX();
-                double posY = me.getY();
-                int colX = (int) (posX / p1Board.getRectWidth());
-                int colY = (int) (posY / p1Board.getRectWidth());
-                System.out.println(colX);
-                System.out.println(colY);
-                p1Board.tileList.get(colX).get(colY).fire();
+                    javafx.scene.image.Image missImage = new Image("https://openclipart.org/image/2400px/svg_to_png/16155/milker-X-icon.png");
+                    javafx.scene.image.Image hitImage = new Image("https://www.clipartmax.com/png/small/132-1328230_flame-free-icon-fire-icon.png");
 
-                javafx.scene.image.Image missImage = new Image("https://openclipart.org/image/2400px/svg_to_png/16155/milker-X-icon.png");
-                javafx.scene.image.Image hitImage = new Image("https://www.clipartmax.com/png/small/132-1328230_flame-free-icon-fire-icon.png");
+                    if (p1Board.tileList.get(colX).get(colY).isOccupied()) {
 
-                if(p1Board.tileList.get(colX).get(colY).isOccupied()){
+                        p1Board.rec[colX][colY].setFill(new ImagePattern(hitImage));
+                    } else {
 
-                    p1Board.rec[colX][colY].setFill(new ImagePattern(hitImage));
-                }
-                else {
-
-                    p1Board.rec[colX][colY].setFill(new ImagePattern(missImage));
+                        p1Board.rec[colX][colY].setFill(new ImagePattern(missImage));
+                    }
+                }catch(Exception e){
+                    System.out.println("Not a valid selection!");
                 }
             }
         };
