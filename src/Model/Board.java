@@ -82,6 +82,14 @@ public class Board {
                         tileList.get(4).get(2).setOccupied();
                         tileList.get(5).get(1).setOccupied();
 
+//                        Sample of a ship
+//                        Ship ship1 = new Ship("Battleship", 4, new int [2][7]);
+                        Ship ship1 = new Ship("Battleship", 1, 2, 7);
+
+                        ship1.reportIdentity();
+                        ship1.reportLocation();
+
+
                         tileList.get(colX).get(colY).fire();
 
                         javafx.scene.image.Image missImage = new Image("https://openclipart.org/image/2400px/svg_to_png/16155/milker-X-icon.png");
