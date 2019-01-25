@@ -8,22 +8,27 @@ public class Client {
 
     private static DatagramSocket socket;
     private InetAddress address;
+    private String name;
     private int port;
     private static boolean running;
-
-    public Client(String name, String address, int port){
+//
+//    public Client(String name, String address, int port){
+      public Client(String address, int port){
 
         try {
             this.address = InetAddress.getByName(address);
             this.port = port;
+            this.name = "";
             socket = new DatagramSocket();
             running = true;
             listen();
-            send("\\con: " + name);
+//            send("\\con: " + name);
+            send("\\con: ");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 
     private static boolean isCommand(String message, DatagramPacket packet){
         if (message.startsWith("\\con:")){
@@ -78,4 +83,11 @@ public class Client {
 
     }
 
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name){
+          this.name = name;
+    }
 }
