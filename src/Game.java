@@ -29,21 +29,21 @@ public class Game extends Application {
         Player player1 = new Player(null, p1Board);
         Player player2 = new Player(null, p2Board);
 
-        VBox welcomeMp = new VBox();
-        VBox root = new VBox();
+        VBox FrontPage = new VBox();
+        VBox p1Turn = new VBox();
         VBox multiplayerSetup = new VBox();
-        VBox welcome = new VBox();
+        VBox p1setup = new VBox();
 
-        root.getChildren().add(p1Board.getGameBoard());
-        root.getChildren().add(p2Board.getGameBoard());
-        root.setAlignment(Pos.CENTER);
-        root.setPadding(new Insets(10, 10, 10, 10));
-        root.setSpacing(10);
+        p1Turn.getChildren().add(p1Board.getGameBoard());
+        p1Turn.getChildren().add(p2Board.getGameBoard());
+        p1Turn.setAlignment(Pos.CENTER);
+        p1Turn.setPadding(new Insets(10, 10, 10, 10));
+        p1Turn.setSpacing(10);
 
-        Scene sceneMPS = new Scene(welcomeMp, 320, 640);
-        Scene scene1 = new Scene(root, 320, 640);
+        Scene sceneMPS = new Scene(FrontPage, 320, 640);
+        Scene scene1 = new Scene(p1Turn, 320, 640);
         Scene mps = new Scene(multiplayerSetup, 320, 640);
-        Scene welcomeScene = new Scene(welcome, 320, 640);
+        Scene welcomeScene = new Scene(p1setup, 320, 640);
 
         Label welcomeLabel = new Label("Welcome to Battleships: Kräken Edition");
         Button twoPlayerLocal = new Button("2 Player Local");
@@ -59,24 +59,16 @@ public class Game extends Application {
 //            primaryStage.setScene();
         });
 
-        welcomeMp.getChildren().add(welcomeLabel);
-        welcomeMp.getChildren().add(twoPlayerLocal);
-        welcomeMp.getChildren().add(twoPlayerLan);
-        welcomeMp.getChildren().add(singlePlayer);
-        welcomeMp.setAlignment(Pos.CENTER);
-        welcomeMp.setPadding(new Insets(10, 10, 10, 10));
-        welcomeMp.setSpacing(40);
+        FrontPage.getChildren().add(welcomeLabel);
+        FrontPage.getChildren().add(twoPlayerLocal);
+        FrontPage.getChildren().add(twoPlayerLan);
+        FrontPage.getChildren().add(singlePlayer);
+        FrontPage.setAlignment(Pos.CENTER);
+        FrontPage.setPadding(new Insets(10, 10, 10, 10));
+        FrontPage.setSpacing(40);
 
-
-
-//        root.getChildren().add(p1Board.getGameBoard());
-//        root.getChildren().add(p2Board.getGameBoard());
-//        root.setAlignment(Pos.CENTER);
-//        root.setPadding(new Insets(10, 10, 10, 10));
-//        root.setSpacing(10);
-
-        Label multiplsyerLabel = new Label("Choose connection type");
-        multiplayerSetup.getChildren().add(multiplsyerLabel);
+        Label multiplayerLabel = new Label("Choose connection type");
+        multiplayerSetup.getChildren().add(multiplayerLabel);
         multiplayerSetup.setAlignment(Pos.CENTER);
         multiplayerSetup.setPadding(new Insets(10, 10, 10, 10));
         multiplayerSetup.setSpacing(10);
@@ -169,61 +161,53 @@ public class Game extends Application {
             }
         };
 
-//        // Scene 0 setup
-//        VBox welcome = new VBox();
-        Label label = new Label("Welcome to Battleships - Player 1, select your ship locations");
-        Button button1 = new Button("Click when finished");
+
+        Label p1welcomeMessage = new Label("Welcome to Battleships - Player 1, select your ship locations");
+        //Button advanceTop2Setup = new Button("Click when finished");
         Label label1 = new Label("Player 2, select your ships");
-        Button button2 = new Button("Select to Start Game");
-        button1.setOnAction(actionEvent -> {
+        Button startGameButton = new Button("Select to Start Game");
+        startGameButton.setOnAction(actionEvent -> {
+            startGameButton.setOnAction(actionEvent1 -> {
+                p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2PlaceShips);
+                p2Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p2fireEvent);
+                p1Turn.getChildren().add(p2Board.getGameBoard());
+                p1Turn.getChildren().add(p1Board.getGameBoard());
+                p1Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1PlaceShips);
+                p1Turn.setAlignment(Pos.CENTER);
+                p1Turn.setPadding(new Insets(10, 10, 10, 10));
+                p1Turn.setSpacing(10);
+                primaryStage.setScene(scene1);
+            });
 
-                    button2.setOnAction(actionEvent1 -> {
-//                VBox root = new VBox();
-                        p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2PlaceShips);
-                        p2Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p2fireEvent);
-                        root.getChildren().add(p2Board.getGameBoard());
-                        root.getChildren().add(p1Board.getGameBoard());
-                        p1Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1PlaceShips);
-                        root.setAlignment(Pos.CENTER);
-                        root.setPadding(new Insets(10, 10, 10, 10));
-                        root.setSpacing(10);
-                        //****Scene scene2 = new Scene(root, 320, 640);
-                        primaryStage.setScene(scene1);
-                    });
+            // p2 setup
+            Label nameLabel = new Label("Player 2 enter your name!");
+            TextField nameInput = new TextField();
+            VBox p2setup = new VBox();
+            p2setup.getChildren().add(label1);
+            p2setup.getChildren().add(nameLabel);
+            p2setup.getChildren().add(nameInput);
+            p2setup.getChildren().add(startGameButton);
+            p2setup.getChildren().add(p2Board.getGameBoard());
+            p2setup.setAlignment(Pos.CENTER);
+            p2setup.setPadding(new Insets(10, 10, 10, 10));
+            p2setup.setSpacing(10);
+            Scene p2SelectShipScreen = new Scene(p2setup, 320, 640);
+            p2Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p2PlaceShips);
+            primaryStage.setScene(p2SelectShipScreen);
+        });
+
+        p1setup.getChildren().add(p1welcomeMessage);
+        p1setup.getChildren().add(startGameButton);
+        // This line carries over into play screen and allows p1 to place ships even when game has already started.
+        p1Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p1PlaceShips);
+        p1setup.getChildren().add(p1Board.getGameBoard());
+
+////    BackgroundImage kraken = new BackgroundImage(new Image("", 320, 640, true, true), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
+////    welcome.setBackground(new Background(kraken));
 
 
-                    Label nameLabel = new Label("Player 2 enter your name!");
-                    TextField nameInput = new TextField();
-                    VBox root1 = new VBox();
-                    root1.getChildren().add(label1);
-                    root1.getChildren().add(nameLabel);
-                    root1.getChildren().add(nameInput);
-                    root1.getChildren().add(button2);
-                    root1.getChildren().add(p2Board.getGameBoard());
-                    root1.setAlignment(Pos.CENTER);
-                    root1.setPadding(new Insets(10, 10, 10, 10));
-                    root1.setSpacing(10);
-                    Scene p2SelectShipScreen = new Scene(root1, 320, 640);
-                    p2Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p2PlaceShips);
-                    primaryStage.setScene(p2SelectShipScreen);
-
-                });
-
-            welcome.getChildren().add(label);
-            welcome.getChildren().add(button1);
-            // This line carries over into play screen and allows p1 to place ships even when game has already started.
-            p1Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p1PlaceShips);
-            welcome.getChildren().add(p1Board.getGameBoard());
-            //Scene welcomeScene = new Scene(welcome, 320, 640);
-            //primaryStage.setScene(welcomeScene);
-//
-////        BackgroundImage kraken = new BackgroundImage(new Image("", 320, 640, true, true), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
-////        welcome.setBackground(new Background(kraken));
-
-            //allows p1 to set ships - no transition to next scene however
-            primaryStage.setScene(sceneMPS);
-            primaryStage.show();
-
+        primaryStage.setScene(sceneMPS);
+        primaryStage.show();
     }
 
     public static void main(String[] args) {
