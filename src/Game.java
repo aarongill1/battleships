@@ -1,3 +1,4 @@
+import Client.Client;
 import Model.Board;
 import Model.Player;
 import Server.Server;
@@ -103,8 +104,8 @@ public class Game extends Application {
         Button join = new Button("Join game");
         multiplayerSetup.getChildren().add(join);
         join.setOnAction(actionEvent -> {
-//            String IP = port.getText();
-//            Client client = new Client(IP, 52864);
+            String IP = port.getText();
+            Client client = new Client(IP, 52864);
             primaryStage.setScene(welcomeScene);
         });
 
