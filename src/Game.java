@@ -106,7 +106,7 @@ public class Game extends Application {
             p2setup.setAlignment(Pos.CENTER);
             p2setup.setPadding(new Insets(10, 10, 10, 10));
             p2setup.setSpacing(10);
-        return new Scene(p2setup, 400, 700);
+            return new Scene(p2setup, 400, 700);
         }
 
         public Scene createP1Turn(){
@@ -117,10 +117,36 @@ public class Game extends Application {
             p2Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p2fireEvent);
             p1Turn.getChildren().add(p2Board.getGameBoard());
             p1Turn.getChildren().add(p1Board.getGameBoard());
+            Button advanceToP2Go = new Button("Next player");
+            advanceToP2Go.setOnAction(actionEvent -> {
+                guiStage.setScene(createP2Turn());
+                guiStage.show();
+            });
+            p1Turn.getChildren().add(advanceToP2Go);
             p1Turn.setAlignment(Pos.CENTER);
             p1Turn.setPadding(new Insets(10, 10, 10, 10));
             p1Turn.setSpacing(10);
-        return new Scene(p1Turn, 400, 700);
+            return new Scene(p1Turn, 400, 700);
+        }
+
+        public Scene createP2Turn(){
+            VBox p2Turn = new VBox();
+            p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2PlaceShips);
+            p1Board.setShipstoInvisible();
+            p1Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1PlaceShips);
+            p1Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p1fireEvent);
+            p2Turn.getChildren().add(p2Board.getGameBoard());
+            p2Turn.getChildren().add(p1Board.getGameBoard());
+            Button returnToP1Turn = new Button("Next player");
+            returnToP1Turn.setOnAction(actionEvent -> {
+                guiStage.setScene(createP1Turn());
+                guiStage.show();
+            });
+            p2Turn.getChildren().add(returnToP1Turn);
+            p2Turn.setAlignment(Pos.CENTER);
+            p2Turn.setPadding(new Insets(10, 10, 10, 10));
+            p2Turn.setSpacing(10);
+            return new Scene(p2Turn, 400, 700);
         }
 
 //////////Test//////////////////////
@@ -154,7 +180,7 @@ public class Game extends Application {
 //        p1Turn.setSpacing(10);
 //
 
-    
+
 //        FrontPage.getChildren().add(welcomeLabel);
 //        FrontPage.getChildren().add(twoPlayerLocal);
 //        FrontPage.getChildren().add(twoPlayerLan);
