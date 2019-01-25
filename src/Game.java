@@ -24,41 +24,75 @@ public class Game extends Application {
 
         primaryStage.setTitle("Release the Kraken");
 
-        VBox welcome = new VBox();
+        Board p1Board = new Board(8, 30);
+        Board p2Board = new Board(8, 30);
+        Player player1 = new Player(null, p1Board);
+        Player player2 = new Player(null, p2Board);
+
+        VBox welcomeMp = new VBox();
         VBox root = new VBox();
         VBox multiplayerSetup = new VBox();
+        VBox welcome = new VBox();
 
-        Scene scene0 = new Scene(welcome, 320, 640);
+        root.getChildren().add(p1Board.getGameBoard());
+        root.getChildren().add(p2Board.getGameBoard());
+        root.setAlignment(Pos.CENTER);
+        root.setPadding(new Insets(10, 10, 10, 10));
+        root.setSpacing(10);
+
+        Scene sceneMPS = new Scene(welcomeMp, 320, 640);
         Scene scene1 = new Scene(root, 320, 640);
-        Scene scene2 = new Scene(multiplayerSetup, 320, 640);
+        Scene mps = new Scene(multiplayerSetup, 320, 640);
+        Scene welcomeScene = new Scene(welcome, 320, 640);
 
-        Label label = new Label("Welcome to Battleships: Kräken Edition");
+        Label welcomeLabel = new Label("Welcome to Battleships: Kräken Edition");
         Button twoPlayerLocal = new Button("2 Player Local");
         twoPlayerLocal.setOnAction(actionEvent -> {
-            primaryStage.setScene(scene1);
+            primaryStage.setScene(welcomeScene);
         });
         Button twoPlayerLan = new Button("2 Player LAN");
         twoPlayerLan.setOnAction(actionEvent -> {
-            primaryStage.setScene(scene2);
+            primaryStage.setScene(mps);
         });
         Button singlePlayer = new Button("Single Player");
         singlePlayer.setOnAction(actionEvent -> {
 //            primaryStage.setScene();
         });
 
-        welcome.getChildren().add(label);
-        welcome.getChildren().add(twoPlayerLocal);
-        welcome.getChildren().add(twoPlayerLan);
-        welcome.getChildren().add(singlePlayer);
-        welcome.setAlignment(Pos.CENTER);
-        welcome.setPadding(new Insets(10, 10, 10, 10));
-        welcome.setSpacing(40);
+        welcomeMp.getChildren().add(welcomeLabel);
+        welcomeMp.getChildren().add(twoPlayerLocal);
+        welcomeMp.getChildren().add(twoPlayerLan);
+        welcomeMp.getChildren().add(singlePlayer);
+        welcomeMp.setAlignment(Pos.CENTER);
+        welcomeMp.setPadding(new Insets(10, 10, 10, 10));
+        welcomeMp.setSpacing(40);
 
-        Board p1Board = new Board(8, 30);
-        Board p2Board = new Board(8, 30);
-        Player player1 = new Player(null, p1Board);
-        Player player2 = new Player(null, p2Board);
 
+
+//        root.getChildren().add(p1Board.getGameBoard());
+//        root.getChildren().add(p2Board.getGameBoard());
+//        root.setAlignment(Pos.CENTER);
+//        root.setPadding(new Insets(10, 10, 10, 10));
+//        root.setSpacing(10);
+
+        Label multiplsyerLabel = new Label("Choose connection type");
+        multiplayerSetup.getChildren().add(multiplsyerLabel);
+        multiplayerSetup.setAlignment(Pos.CENTER);
+        multiplayerSetup.setPadding(new Insets(10, 10, 10, 10));
+        multiplayerSetup.setSpacing(10);
+        InetAddress inetAddress = InetAddress.getLocalHost();
+        Label hostIPAddress = new Label("Your IP Address is: " + inetAddress.getHostAddress());
+        multiplayerSetup.getChildren().add(hostIPAddress);
+        Button host = new Button("Host a new game");
+        host.setOnAction(actionEvent -> {
+            Server.start(52864);
+        });
+        multiplayerSetup.getChildren().add(host);
+        TextField port = new TextField();
+        port.setPromptText("Enter IP Address");
+        multiplayerSetup.getChildren().add(port);
+        Button join = new Button("Join game");
+        multiplayerSetup.getChildren().add(join);
 
 
         EventHandler<MouseEvent> p2fireEvent = new EventHandler<MouseEvent>() {
@@ -73,10 +107,9 @@ public class Game extends Application {
                 String hitImagePath = "resources/fire.png";
                 Image missImage = new Image(missImagePath);
                 Image hitImage = new Image(hitImagePath);
-                if(p2Board.tileList.get(colX).get(colY).isOccupied()){
+                if (p2Board.tileList.get(colX).get(colY).isOccupied()) {
                     p2Board.rec[colX][colY].setFill(new ImagePattern(hitImage));
-                }
-                else {
+                } else {
                     p2Board.rec[colX][colY].setFill(new ImagePattern(missImage));
                 }
             }
@@ -94,10 +127,9 @@ public class Game extends Application {
                 String hitImagePath = "resources/fire.png";
                 Image missImage = new Image(missImagePath);
                 Image hitImage = new Image(hitImagePath);
-                if(p1Board.tileList.get(colX).get(colY).isOccupied()){
+                if (p1Board.tileList.get(colX).get(colY).isOccupied()) {
                     p1Board.rec[colX][colY].setFill(new ImagePattern(hitImage));
-                }
-                else {
+                } else {
                     p1Board.rec[colX][colY].setFill(new ImagePattern(missImage));
                 }
             }
@@ -115,7 +147,7 @@ public class Game extends Application {
                     String shipPath = "resources/boat.png";
                     Image shipImage = new Image(shipPath);
                     p1Board.rec[colX][colY].setFill(new ImagePattern(shipImage));
-                    player1.setFleetNumber((player1.getFleetNumber()-1));
+                    player1.setFleetNumber((player1.getFleetNumber() - 1));
                 }
             }
         };
@@ -132,85 +164,66 @@ public class Game extends Application {
                     String shipPath = "resources/boat.png";
                     Image shipImage = new Image(shipPath);
                     p2Board.rec[colX][colY].setFill(new ImagePattern(shipImage));
-                    player2.setFleetNumber((player2.getFleetNumber()-1));
+                    player2.setFleetNumber((player2.getFleetNumber() - 1));
                 }
             }
         };
 
-        // Scene 0 setup
-        VBox welcome = new VBox();
+//        // Scene 0 setup
+//        VBox welcome = new VBox();
         Label label = new Label("Welcome to Battleships - Player 1, select your ship locations");
         Button button1 = new Button("Click when finished");
+        Label label1 = new Label("Player 2, select your ships");
+        Button button2 = new Button("Select to Start Game");
         button1.setOnAction(actionEvent -> {
-            Label label1 = new Label("Player 2, select your ships");
-            Button button2 = new Button("Select to Start Game");
-            button2.setOnAction(actionEvent1 -> {
-                VBox root = new VBox();
-                p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2PlaceShips);
-                p2Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p2fireEvent);
-                root.getChildren().add(p2Board.getGameBoard());
-                root.getChildren().add(p1Board.getGameBoard());
-                p1Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1PlaceShips);
-                root.setAlignment(Pos.CENTER);
-                root.setPadding(new Insets(10, 10, 10, 10));
-                root.setSpacing(10);
-                Scene scene2 = new Scene(root, 320, 640);
-                primaryStage.setScene(scene2);
-            });
-            Label nameLabel = new Label("Player 2 enter your name!");
-            TextField nameInput = new TextField();
-            VBox root1 = new VBox();
-            root1.getChildren().add(label1);
-            root1.getChildren().add(nameLabel);
-            root1.getChildren().add(nameInput);
-            root1.getChildren().add(button2);
-            root1.getChildren().add(p2Board.getGameBoard());
-            root1.setAlignment(Pos.CENTER);
-            root1.setPadding(new Insets(10, 10, 10, 10));
-            root1.setSpacing(10);
-            Scene p2SelectShipScreen = new Scene(root1, 320, 640);
-            p2Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p2PlaceShips);
-            primaryStage.setScene(p2SelectShipScreen);
-          
-        root.getChildren().add(p1Board.getGameBoard());
-        root.getChildren().add(p2Board.getGameBoard());
-        root.setAlignment(Pos.CENTER);
-        root.setPadding(new Insets(10, 10, 10, 10));
-        root.setSpacing(10);
 
-        Label multiplsyerLabel = new Label("Choose connection type");
-        multiplayerSetup.getChildren().add(multiplsyerLabel);
-        multiplayerSetup.setAlignment(Pos.CENTER);
-        multiplayerSetup.setPadding(new Insets(10, 10, 10, 10));
-        multiplayerSetup.setSpacing(10);
-        InetAddress inetAddress = InetAddress.getLocalHost();
-        Label hostIPAddress = new Label("Your IP Address is: " + inetAddress.getHostAddress());
-        multiplayerSetup.getChildren().add(hostIPAddress);
-        Button host = new Button("Host a new game");
-        host.setOnAction(actionEvent ->{
-            Server.start(52864);
-        });
-        multiplayerSetup.getChildren().add(host);
-        TextField port = new TextField();
-        port.setPromptText("Enter IP Address");
-        multiplayerSetup.getChildren().add(port);
-        Button join = new Button("Join game");
-        multiplayerSetup.getChildren().add(join);
+                    button2.setOnAction(actionEvent1 -> {
+//                VBox root = new VBox();
+                        p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2PlaceShips);
+                        p2Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p2fireEvent);
+                        root.getChildren().add(p2Board.getGameBoard());
+                        root.getChildren().add(p1Board.getGameBoard());
+                        p1Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1PlaceShips);
+                        root.setAlignment(Pos.CENTER);
+                        root.setPadding(new Insets(10, 10, 10, 10));
+                        root.setSpacing(10);
+                        Scene scene2 = new Scene(root, 320, 640);
+                        primaryStage.setScene(scene2);
+                    });
 
 
-        welcome.getChildren().add(label);
-        welcome.getChildren().add(button1);
-        // This line carries over into play screen and allows p1 to place ships even when game has already started.
-        p1Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p1PlaceShips);
-        welcome.getChildren().add(p1Board.getGameBoard());
-        Scene welcomeScene = new Scene(welcome, 320, 640);
-        primaryStage.setScene(welcomeScene);
+                    Label nameLabel = new Label("Player 2 enter your name!");
+                    TextField nameInput = new TextField();
+                    VBox root1 = new VBox();
+                    root1.getChildren().add(label1);
+                    root1.getChildren().add(nameLabel);
+                    root1.getChildren().add(nameInput);
+                    root1.getChildren().add(button2);
+                    root1.getChildren().add(p2Board.getGameBoard());
+                    root1.setAlignment(Pos.CENTER);
+                    root1.setPadding(new Insets(10, 10, 10, 10));
+                    root1.setSpacing(10);
+                    Scene p2SelectShipScreen = new Scene(root1, 320, 640);
+                    p2Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p2PlaceShips);
+                    primaryStage.setScene(p2SelectShipScreen);
 
-//        BackgroundImage kraken = new BackgroundImage(new Image("", 320, 640, true, true), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
-//        welcome.setBackground(new Background(kraken));
+                });
 
-        primaryStage.setScene(scene0);
-        primaryStage.show();
+            welcome.getChildren().add(label);
+            welcome.getChildren().add(button1);
+            // This line carries over into play screen and allows p1 to place ships even when game has already started.
+            p1Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p1PlaceShips);
+            welcome.getChildren().add(p1Board.getGameBoard());
+            //Scene welcomeScene = new Scene(welcome, 320, 640);
+            //primaryStage.setScene(welcomeScene);
+//
+////        BackgroundImage kraken = new BackgroundImage(new Image("", 320, 640, true, true), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
+////        welcome.setBackground(new Background(kraken));
+
+            //allows p1 to set ships - no transition to next scene however
+            primaryStage.setScene(sceneMPS);
+            primaryStage.show();
+
     }
 
     public static void main(String[] args) {
