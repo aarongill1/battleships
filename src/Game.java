@@ -187,8 +187,8 @@ public class Game extends Application {
                         root.setAlignment(Pos.CENTER);
                         root.setPadding(new Insets(10, 10, 10, 10));
                         root.setSpacing(10);
-                        Scene scene2 = new Scene(root, 320, 640);
-                        primaryStage.setScene(scene2);
+                        //****Scene scene2 = new Scene(root, 320, 640);
+                        primaryStage.setScene(scene1);
                     });
 
 
