@@ -25,11 +25,13 @@ public class Game extends Application {
         primaryStage.setTitle("Release the Kraken");
         primaryStage.setResizable(false);
 
+////////Game Objects creation////////
         Board p1Board = new Board(8, 30);
         Board p2Board = new Board(8, 30);
         Player player1 = new Player(null, p1Board);
         Player player2 = new Player(null, p2Board);
 
+////////Root Node creation////////
         VBox FrontPage = new VBox();
         VBox p1Turn = new VBox();
         VBox p2Turn = new VBox();
@@ -37,28 +39,51 @@ public class Game extends Application {
         VBox p1setup = new VBox();
         VBox p2setup = new VBox();
 
+        Label welcomeLabel = new Label("Welcome to Battleships: Kräken Edition");
+        Label multiplayerLabel = new Label("Choose connection type");
 
-        p1Turn.getChildren().add(p1Board.getGameBoard());
+        Button returnToPlayer1 = new Button("Player 1 turn");
+        Button twoPlayerLocal = new Button("2 Player Local");
+        Button twoPlayerLan = new Button("2 Player LAN");
+        Button singlePlayer = new Button("Single Player");
+
+
+//        p1Turn.getChildren().add(p1Board.getGameBoard());
+//        p1Turn.getChildren().add(p2Board.getGameBoard());
+//        p1Turn.setAlignment(Pos.CENTER);
+//        p1Turn.setPadding(new Insets(10, 10, 10, 10));
+//        p1Turn.setSpacing(10);
+
+        Label testLable = new Label("You shoudl see me");
+
+        p2Turn.getChildren().add(returnToPlayer1);
+        p2Turn.getChildren().add(testLable);
+        p2Turn.getChildren().add(p1Board.getGameBoard());
+        p2Turn.getChildren().add(p2Board.getGameBoard());
+        p2Turn.setPadding(new Insets(10, 10, 10, 10));
+        p2Turn.setSpacing(10);
+
+
         p1Turn.getChildren().add(p2Board.getGameBoard());
+        p1Turn.getChildren().add(p1Board.getGameBoard());
         p1Turn.setAlignment(Pos.CENTER);
         p1Turn.setPadding(new Insets(10, 10, 10, 10));
         p1Turn.setSpacing(10);
 
+////////Scene creation////////
         Scene sceneMPS = new Scene(FrontPage, 320, 640);
         Scene scene1 = new Scene(p1Turn, 320, 640);
         Scene mps = new Scene(multiplayerSetup, 320, 640);
         Scene welcomeScene = new Scene(p1setup, 320, 640);
+        Scene p2TurnScene = new Scene(p2Turn, 320, 640);
 
-        Label welcomeLabel = new Label("Welcome to Battleships: Kräken Edition");
-        Button twoPlayerLocal = new Button("2 Player Local");
+
         twoPlayerLocal.setOnAction(actionEvent -> {
             primaryStage.setScene(welcomeScene);
         });
-        Button twoPlayerLan = new Button("2 Player LAN");
         twoPlayerLan.setOnAction(actionEvent -> {
             primaryStage.setScene(mps);
         });
-        Button singlePlayer = new Button("Single Player");
         singlePlayer.setOnAction(actionEvent -> {
 //            primaryStage.setScene();
         });
@@ -71,7 +96,7 @@ public class Game extends Application {
         FrontPage.setPadding(new Insets(10, 10, 10, 10));
         FrontPage.setSpacing(40);
 
-        Label multiplayerLabel = new Label("Choose connection type");
+
         multiplayerSetup.getChildren().add(multiplayerLabel);
         multiplayerSetup.setAlignment(Pos.CENTER);
         multiplayerSetup.setPadding(new Insets(10, 10, 10, 10));
@@ -93,26 +118,27 @@ public class Game extends Application {
         EventHandler<MouseEvent> p1GameTurn = new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                p1Turn.getChildren().add(p2Board.getGameBoard());
-                p1Turn.getChildren().add(p1Board.getGameBoard());
-                p1Turn.setAlignment(Pos.CENTER);
-                p1Turn.setPadding(new Insets(10, 10, 10, 10));
-                p1Turn.setSpacing(10);
                 p2Board.setShipstoInvisible();
                 primaryStage.setScene(scene1);
+                primaryStage.show();
             }
         };
+
+        returnToPlayer1.addEventFilter(MouseEvent.MOUSE_CLICKED, p1GameTurn);
 
         EventHandler<MouseEvent> p2GameTurn = new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                Button returnToPlayer1 = new Button("Player 1 turn");
-                returnToPlayer1.addEventFilter(MouseEvent.MOUSE_CLICKED, p1GameTurn);
-                p2Turn.getChildren().add(returnToPlayer1);
-                p2Turn.getChildren().add(p1Board.getGameBoard());
-                p2Turn.getChildren().add(p2Board.getGameBoard());
-                Scene p2TurnScene = new Scene(p2Turn, 320, 640);
+//                Button returnToPlayer1 = new Button("Player 1 turn");
+//                returnToPlayer1.addEventFilter(MouseEvent.MOUSE_CLICKED, p1GameTurn);
+//                p2Turn.getChildren().add(returnToPlayer1);
+//                p2Turn.getChildren().add(p1Board.getGameBoard());
+//                p2Turn.getChildren().add(p2Board.getGameBoard());
+//                p2Turn.setPadding(new Insets(10, 10, 10, 10));
+//                p2Turn.setSpacing(10);
+                System.out.println("p2GameTurn triggered");
                 primaryStage.setScene(p2TurnScene);
+                primaryStage.show();
             }
         };
 
@@ -201,17 +227,18 @@ public class Game extends Application {
         Button startGameButton = new Button("Select to Start Game");
         startGameButton.setOnAction(actionEvent -> {
             startGameButton.setOnAction(actionEvent1 -> {
-                p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2PlaceShips);
-                p2Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p2fireEvent);
-                p1Turn.getChildren().add(p2Board.getGameBoard());
-                p1Turn.getChildren().add(p1Board.getGameBoard());
+//                p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2PlaceShips);
+//                p2Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p2fireEvent);
+//                //p1Turn.getChildren().add(p2Board.getGameBoard());
+//                //p1Turn.getChildren().add(p1Board.getGameBoard());
                 p1Turn.getChildren().add(advanceTop2Turn);
-                p1Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1PlaceShips);
-                p1Turn.setAlignment(Pos.CENTER);
-                p1Turn.setPadding(new Insets(10, 10, 10, 10));
-                p1Turn.setSpacing(10);
-                p2Board.setShipstoInvisible();
+//                p1Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1PlaceShips);
+//                p1Turn.setAlignment(Pos.CENTER);
+//                p1Turn.setPadding(new Insets(10, 10, 10, 10));
+//                p1Turn.setSpacing(10);
+//                p2Board.setShipstoInvisible();
                 primaryStage.setScene(scene1);
+                primaryStage.show();
             });
 
             // p2 setup
@@ -229,6 +256,7 @@ public class Game extends Application {
             Scene p2SelectShipScreen = new Scene(p2setup, 320, 640);
             p2Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p2PlaceShips);
             primaryStage.setScene(p2SelectShipScreen);
+            primaryStage.show();
         });
 
         p1setup.getChildren().add(p1welcomeMessage);
