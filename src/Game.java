@@ -68,6 +68,8 @@ public class Game extends Application {
 //            primaryStage.setScene();
         });
 
+
+        // MENU
         FrontPage.getChildren().add(welcomeLabel);
         FrontPage.getChildren().add(twoPlayerLocal);
         FrontPage.getChildren().add(twoPlayerLan);
@@ -75,6 +77,8 @@ public class Game extends Application {
         FrontPage.setAlignment(Pos.CENTER);
         FrontPage.setPadding(new Insets(10, 10, 10, 10));
         FrontPage.setSpacing(40);
+
+        // MULITPLAYER GAME SETUP -
 
         Label multiplayerLabel = new Label("Choose connection type");
         multiplayerSetup.getChildren().add(multiplayerLabel);
@@ -95,6 +99,22 @@ public class Game extends Application {
         multiplayerSetup.getChildren().add(port);
         Button join = new Button("Join game");
         multiplayerSetup.getChildren().add(join);
+        join.setOnAction(actionEvent -> {
+//            String IP = port.getText();
+//            Client client = new Client(IP, 52864);
+            primaryStage.setScene(welcomeScene);
+        });
+
+
+        Button backToHomeMPS = new Button("Back");
+        multiplayerSetup.getChildren().add(backToHomeMPS);
+        backToHomeMPS.setOnAction(actionEvent ->{
+            primaryStage.setScene(sceneMPS);
+        });
+
+
+
+
 
 
         EventHandler<MouseEvent> p2fireEvent = new EventHandler<MouseEvent>() {
@@ -240,6 +260,11 @@ public class Game extends Application {
         // This line carries over into play screen and allows p1 to place ships even when game has already started.
         p1Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p1PlaceShips);
         p1setup.getChildren().add(p1Board.getGameBoard());
+        Button backToHomep1 = new Button("Back");
+        p1setup.getChildren().add(backToHomep1);
+        backToHomep1.setOnAction(actionEvent ->{
+            primaryStage.setScene(sceneMPS);
+        });
 
 ////    BackgroundImage kraken = new BackgroundImage(new Image("", 320, 640, true, true), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
 ////    welcome.setBackground(new Background(kraken));
