@@ -91,6 +91,7 @@ public class Game extends Application {
         EventHandler<MouseEvent> p2fireEvent = new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent me) {
+                System.out.println(me.getSource());
                 double posX = me.getX();
                 double posY = me.getY();
                 int colX = (int) (posX / p2Board.getRectWidth());
@@ -111,6 +112,7 @@ public class Game extends Application {
         EventHandler<MouseEvent> p1fireEvent = new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent me) {
+                System.out.println(me.getSource());
                 double posX = me.getX();
                 double posY = me.getY();
                 int colX = (int) (posX / p1Board.getRectWidth());
@@ -162,11 +164,21 @@ public class Game extends Application {
                 }
             }
         };
-
-
+        
         Label p1welcomeMessage = new Label("Welcome to Battleships - Player 1, select your ship locations");
         //Button advanceTop2Setup = new Button("Click when finished");
         Label label1 = new Label("Player 2, select your ships");
+        Button advanceTop2Turn = new Button("Player 2 turn");
+        advanceTop2Turn.setOnAction(actionEvent ->{
+            VBox p2Turn = new VBox();
+            Button returnToPlayer1 = new Button("Player 1 turn");
+            p2Turn.getChildren().add(returnToPlayer1);
+            returnToPlayer1.setOnAction(actionEvent1 -> {
+                primaryStage.setScene(scene1);
+            });
+            Scene p2TurnScene = new Scene(p2Turn, 320, 640);
+            primaryStage.setScene(p2TurnScene);
+        });
         Button startGameButton = new Button("Select to Start Game");
         startGameButton.setOnAction(actionEvent -> {
 
@@ -176,6 +188,7 @@ public class Game extends Application {
                 p2Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p2fireEvent);
                 p1Turn.getChildren().add(p2Board.getGameBoard());
                 p1Turn.getChildren().add(p1Board.getGameBoard());
+                p1Turn.getChildren().add(advanceTop2Turn);
                 p1Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1PlaceShips);
                 p1Turn.setAlignment(Pos.CENTER);
                 p1Turn.setPadding(new Insets(10, 10, 10, 10));
