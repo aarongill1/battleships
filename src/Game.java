@@ -23,6 +23,7 @@ public class Game extends Application {
     public void start(Stage primaryStage) throws Exception {
 
         primaryStage.setTitle("Release the Kraken");
+        primaryStage.setResizable(false);
 
         Board p1Board = new Board(8, 30);
         Board p2Board = new Board(8, 30);
