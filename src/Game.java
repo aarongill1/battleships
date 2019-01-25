@@ -42,6 +42,9 @@ public class Game extends Application {
         VBox p1setup = new VBox();
 
         TextField p1nameInput = new TextField();
+        p1nameInput.setPromptText("Kräken Kommander 1: Enter your name!");
+        p1nameInput.setFocusTraversable(false);
+
 
         p1Turn.getChildren().add(p1Board.getGameBoard());
         p1Turn.getChildren().add(p2Board.getGameBoard());
@@ -235,11 +238,25 @@ public class Game extends Application {
                 p1Turn.setSpacing(10);
                 p2Board.setShipstoInvisible();
                 primaryStage.setScene(scene1);
+
+//                This will set Player1 name
+                player1.setName(p1nameInput.getText());
+                System.out.println(player1.getName());
+                System.out.println(player2.getName());
+
+
             });
 
             // p2 setup
             Label nameLabel = new Label("Player 2 enter your name!");
             TextField p2nameInput = new TextField();
+            p2nameInput.setPromptText("Kräken Kommander 2: Enter your name!");
+            p2nameInput.setFocusTraversable(false);
+
+//            This will set Player 2 name
+            player2.setName(p2nameInput.getText());
+
+
             VBox p2setup = new VBox();
             p2setup.getChildren().add(label1);
             p2setup.getChildren().add(nameLabel);
@@ -252,6 +269,7 @@ public class Game extends Application {
             Scene p2SelectShipScreen = new Scene(p2setup, 320, 640);
             p2Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p2PlaceShips);
             primaryStage.setScene(p2SelectShipScreen);
+
         });
 
         p1setup.getChildren().add(p1welcomeMessage);
