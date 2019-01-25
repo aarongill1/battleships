@@ -6,6 +6,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -24,6 +25,11 @@ public class Game extends Application {
 
         primaryStage.setTitle("Release the Kraken");
         primaryStage.setResizable(false);
+
+        Alert shipAlreadyPlacedAlert = new Alert(Alert.AlertType.INFORMATION);
+        shipAlreadyPlacedAlert.setTitle("Dumbass! ");
+        shipAlreadyPlacedAlert.setHeaderText("Yes, you are!");
+        shipAlreadyPlacedAlert.setContentText("You've already placed a ship there!");
 
         Board p1Board = new Board(8, 30);
         Board p2Board = new Board(8, 30);
@@ -141,11 +147,15 @@ public class Game extends Application {
                     double posY = me.getY();
                     int colX = (int) (posX / p1Board.getRectWidth());
                     int colY = (int) (posY / p1Board.getRectWidth());
-                    p1Board.tileList.get(colX).get(colY).setOccupied();
-                    String shipPath = "resources/boat.png";
-                    Image shipImage = new Image(shipPath);
-                    p1Board.rec[colX][colY].setFill(new ImagePattern(shipImage));
-                    player1.setFleetNumber((player1.getFleetNumber() - 1));
+                    if (!p1Board.tileList.get(colX).get(colY).isOccupied()) {
+                        p1Board.tileList.get(colX).get(colY).setOccupied();
+                        String shipPath = "resources/boat.png";
+                        Image shipImage = new Image(shipPath);
+                        p1Board.rec[colX][colY].setFill(new ImagePattern(shipImage));
+                        player1.setFleetNumber((player1.getFleetNumber() - 1));
+                    } else {
+                        shipAlreadyPlacedAlert.showAndWait();
+                    }
                 }
             }
         };
@@ -159,11 +169,18 @@ public class Game extends Application {
                     double posY = me.getY();
                     int colX = (int) (posX / p2Board.getRectWidth());
                     int colY = (int) (posY / p2Board.getRectWidth());
-                    p2Board.tileList.get(colX).get(colY).setOccupied();
-                    String shipPath = "resources/boat.png";
-                    Image shipImage = new Image(shipPath);
-                    p2Board.rec[colX][colY].setFill(new ImagePattern(shipImage));
-                    player2.setFleetNumber((player2.getFleetNumber() - 1));
+
+                    if (!p2Board.tileList.get(colX).get(colY).isOccupied()) {
+                        p2Board.tileList.get(colX).get(colY).setOccupied();
+                        String shipPath = "resources/boat.png";
+                        Image shipImage = new Image(shipPath);
+                        p2Board.rec[colX][colY].setFill(new ImagePattern(shipImage));
+                        player2.setFleetNumber((player2.getFleetNumber() - 1));
+                    }
+                    else{
+                        shipAlreadyPlacedAlert.showAndWait();
+                    }
+
                 }
             }
         };
