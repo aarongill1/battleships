@@ -35,6 +35,8 @@ public class Game extends Application {
         VBox multiplayerSetup = new VBox();
         VBox p1setup = new VBox();
 
+        TextField p1nameInput = new TextField();
+
         p1Turn.getChildren().add(p1Board.getGameBoard());
         p1Turn.getChildren().add(p2Board.getGameBoard());
         p1Turn.setAlignment(Pos.CENTER);
@@ -79,6 +81,7 @@ public class Game extends Application {
         Button host = new Button("Host a new game");
         host.setOnAction(actionEvent -> {
             Server.start(52864);
+            primaryStage.setScene(welcomeScene);
         });
         multiplayerSetup.getChildren().add(host);
         TextField port = new TextField();
@@ -199,11 +202,11 @@ public class Game extends Application {
 
             // p2 setup
             Label nameLabel = new Label("Player 2 enter your name!");
-            TextField nameInput = new TextField();
+            TextField p2nameInput = new TextField();
             VBox p2setup = new VBox();
             p2setup.getChildren().add(label1);
             p2setup.getChildren().add(nameLabel);
-            p2setup.getChildren().add(nameInput);
+            p2setup.getChildren().add(p2nameInput);
             p2setup.getChildren().add(startGameButton);
             p2setup.getChildren().add(p2Board.getGameBoard());
             p2setup.setAlignment(Pos.CENTER);
@@ -215,6 +218,7 @@ public class Game extends Application {
         });
 
         p1setup.getChildren().add(p1welcomeMessage);
+        p1setup.getChildren().add(p1nameInput);
         p1setup.getChildren().add(startGameButton);
         // This line carries over into play screen and allows p1 to place ships even when game has already started.
         p1Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p1PlaceShips);
