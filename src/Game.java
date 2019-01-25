@@ -145,6 +145,7 @@ public class Game extends Application {
         };
 
         EventHandler<MouseEvent> p2PlaceShips = new EventHandler<MouseEvent>() {
+
             @Override
             public void handle(MouseEvent me) {
                 if (player2.getFleetNumber() != 0) {
@@ -167,6 +168,8 @@ public class Game extends Application {
         Label label1 = new Label("Player 2, select your ships");
         Button startGameButton = new Button("Select to Start Game");
         startGameButton.setOnAction(actionEvent -> {
+
+
             startGameButton.setOnAction(actionEvent1 -> {
                 p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2PlaceShips);
                 p2Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p2fireEvent);
@@ -176,6 +179,7 @@ public class Game extends Application {
                 p1Turn.setAlignment(Pos.CENTER);
                 p1Turn.setPadding(new Insets(10, 10, 10, 10));
                 p1Turn.setSpacing(10);
+                p2Board.setShipstoInvisible();
                 primaryStage.setScene(scene1);
             });
 
