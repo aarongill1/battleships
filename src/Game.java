@@ -26,7 +26,7 @@ public class Game extends Application {
     Player player1 = new Player(null, p1Board);
     Player player2 = new Player(null, p2Board);
 
-    
+
     VBox multiplayerSetup = new VBox();
 
 
@@ -173,35 +173,7 @@ public class Game extends Application {
 //        Button join = new Button("Join game");
 //        multiplayerSetup.getChildren().add(join);
 //
-//        EventHandler<MouseEvent> p1GameTurn = new EventHandler<MouseEvent>() {
-//            @Override
-//            public void handle(MouseEvent event) {
-//                p2Board.setShipstoInvisible();
-//                primaryStage.setScene(scene1);
-//                primaryStage.show();
-//            }
-//        };
-//
-//        returnToPlayer1.addEventFilter(MouseEvent.MOUSE_CLICKED, p1GameTurn);
-//
-//        EventHandler<MouseEvent> p2GameTurn = new EventHandler<MouseEvent>() {
-//            @Override
-//            public void handle(MouseEvent event) {
-////                Button returnToPlayer1 = new Button("Player 1 turn");
-////                returnToPlayer1.addEventFilter(MouseEvent.MOUSE_CLICKED, p1GameTurn);
-////                p2Turn.getChildren().add(returnToPlayer1);
-////                p2Turn.getChildren().add(p1Board.getGameBoard());
-////                p2Turn.getChildren().add(p2Board.getGameBoard());
-////                p2Turn.setPadding(new Insets(10, 10, 10, 10));
-////                p2Turn.setSpacing(10);
-//                Node source = (Node) event.getSource();
-//                Window theStage = source.getScene().getWindow();
-//                System.out.println("p2GameTurn triggered");
-//                theStage.setScene(p2TurnScene);
-//                primaryStage.show();
-//            }
-//        };
-//
+
         EventHandler<MouseEvent> p2fireEvent = new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent me) {
@@ -275,43 +247,9 @@ public class Game extends Application {
                 }
             }
         };
-//
-//        //P1 turn
-//        Button startGameButton = new Button("Select to Start Game");
-//        startGameButton.setOnAction(actionEvent -> {
-//            startGameButton.setOnAction(actionEvent1 -> {
-////                p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2PlaceShips);
-////                p2Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p2fireEvent);
-////                //p1Turn.getChildren().add(p2Board.getGameBoard());
-////                //p1Turn.getChildren().add(p1Board.getGameBoard());
-//                p1Turn.getChildren().add(advanceTop2Turn);
-////                p1Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1PlaceShips);
-////                p1Turn.setAlignment(Pos.CENTER);
-////                p1Turn.setPadding(new Insets(10, 10, 10, 10));
-////                p1Turn.setSpacing(10);
-////                p2Board.setShipstoInvisible();
-//                primaryStage.setScene(scene1);
-//                primaryStage.show();
-//            });
-//
-//            Scene p2SelectShipScreen = new Scene(p2setup, 320, 640);
-//            p2Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p2PlaceShips);
-//            primaryStage.setScene(p2SelectShipScreen);
-//            primaryStage.show();
-//        });
-//
-//        p1setup.getChildren().add(p1welcomeMessage);
-//        p1setup.getChildren().add(startGameButton);
-//        // This line carries over into play screen and allows p1 to place ships even when game has already started.
-//        p1Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p1PlaceShips);
-//        p1setup.getChildren().add(p1Board.getGameBoard());
-//
-//////    BackgroundImage kraken = new BackgroundImage(new Image("", 320, 640, true, true), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
-//////    welcome.setBackground(new Background(kraken));
-//
-//
-//
-//    }
+
+//    BackgroundImage kraken = new BackgroundImage(new Image("", 320, 640, true, true), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
+//    welcome.setBackground(new Background(kraken));
 
     public static void main(String[] args) {
         Application.launch(args);
