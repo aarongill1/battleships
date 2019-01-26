@@ -26,8 +26,7 @@ public class Game extends Application {
     Player player1 = new Player(null, p1Board);
     Player player2 = new Player(null, p2Board);
 
-
-    VBox p2Turn = new VBox();
+    
     VBox multiplayerSetup = new VBox();
 
 
@@ -112,6 +111,7 @@ public class Game extends Application {
         public Scene createP1Turn(){
             VBox p1Turn = new VBox();
             p1Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1PlaceShips);
+            p1Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1fireEvent);
             p2Board.setShipstoInvisible();
             p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2PlaceShips);
             p2Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p2fireEvent);
@@ -132,11 +132,12 @@ public class Game extends Application {
         public Scene createP2Turn(){
             VBox p2Turn = new VBox();
             p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2PlaceShips);
+            p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2fireEvent);
             p1Board.setShipstoInvisible();
             p1Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1PlaceShips);
             p1Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p1fireEvent);
-            p2Turn.getChildren().add(p2Board.getGameBoard());
             p2Turn.getChildren().add(p1Board.getGameBoard());
+            p2Turn.getChildren().add(p2Board.getGameBoard());
             Button returnToP1Turn = new Button("Next player");
             returnToP1Turn.setOnAction(actionEvent -> {
                 guiStage.setScene(createP1Turn());
@@ -149,46 +150,10 @@ public class Game extends Application {
             return new Scene(p2Turn, 400, 700);
         }
 
-//////////Test//////////////////////
-//
-//
-//
-//        Button returnToPlayer1 = new Button("Player 1 turn");
+
 
 //          Label multiplayerLabel = new Label("Choose connection type");
-//
-////        p1Turn.getChildren().add(p1Board.getGameBoard());
-////        p1Turn.getChildren().add(p2Board.getGameBoard());
-////        p1Turn.setAlignment(Pos.CENTER);
-////        p1Turn.setPadding(new Insets(10, 10, 10, 10));
-////        p1Turn.setSpacing(10);
-//
-//        Label testLable = new Label("You shoudl see me");
-//
-//        p2Turn.getChildren().add(returnToPlayer1);
-//        p2Turn.getChildren().add(testLable);
-//        p2Turn.getChildren().add(p1Board.getGameBoard());
-//        p2Turn.getChildren().add(p2Board.getGameBoard());
-//        p2Turn.setPadding(new Insets(10, 10, 10, 10));
-//        p2Turn.setSpacing(10);
-//
-//
-//        p1Turn.getChildren().add(p2Board.getGameBoard());
-//        p1Turn.getChildren().add(p1Board.getGameBoard());
-//        p1Turn.setAlignment(Pos.CENTER);
-//        p1Turn.setPadding(new Insets(10, 10, 10, 10));
-//        p1Turn.setSpacing(10);
-//
 
-
-//        FrontPage.getChildren().add(welcomeLabel);
-//        FrontPage.getChildren().add(twoPlayerLocal);
-//        FrontPage.getChildren().add(twoPlayerLan);
-//        FrontPage.getChildren().add(singlePlayer);
-//        FrontPage.setAlignment(Pos.CENTER);
-//        FrontPage.setPadding(new Insets(10, 10, 10, 10));
-//        FrontPage.setSpacing(40);
-//
 //
 //        multiplayerSetup.getChildren().add(multiplayerLabel);
 //        multiplayerSetup.setAlignment(Pos.CENTER);
