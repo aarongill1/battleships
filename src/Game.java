@@ -1,5 +1,6 @@
 import Model.Board;
 import Model.Player;
+import Server.Server;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -20,20 +21,22 @@ public class Game extends Application {
     public static Stage getGuiStage(){
         return guiStage;
     }
+
     ////////Game Objects creation////////
     Board p1Board = new Board(8, 30);
     Board p2Board = new Board(8, 30);
     Player player1 = new Player(null, p1Board);
     Player player2 = new Player(null, p2Board);
 
-
-    VBox multiplayerSetup = new VBox();
-
-
     @Override
     public void start(Stage primaryStage) throws Exception {
         // Very important assigns the game static stage object to the primaryStage - needed to reference stage directly
         guiStage = primaryStage;
+
+//        BackgroundImage kraken = new BackgroundImage(
+//                new Image("", 320, 640, true, true),
+//                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
+//        primaryStage.setBackground(new Background(kraken));
 
         primaryStage.setTitle("Release the Kraken");
         primaryStage.setResizable(false);
@@ -41,8 +44,6 @@ public class Game extends Application {
         primaryStage.show();
     }
 
-
-////////Test//////////////////////
         public Scene createMainMenu(){
             VBox frontPage = new VBox();
             Label welcomeLabel = new Label("Welcome to Battleships: Kräken Edition");
@@ -53,9 +54,10 @@ public class Game extends Application {
                 guiStage.setScene(createP1Setup());
                 guiStage.show();
             });
-//            twoPlayerLan.setOnAction(actionEvent -> {
-//                primaryStage.setScene(mps);
-//            });
+            twoPlayerLan.setOnAction(actionEvent -> {
+                guiStage.setScene(createMPSetup());
+                guiStage.show();
+            });
 //            singlePlayer.setOnAction(actionEvent -> {
 //            primaryStage.setScene();
 //            });
@@ -63,6 +65,9 @@ public class Game extends Application {
             frontPage.getChildren().add(twoPlayerLocal);
             frontPage.getChildren().add(twoPlayerLan);
             frontPage.getChildren().add(singlePlayer);
+            frontPage.setAlignment(Pos.CENTER);
+            frontPage.setPadding(new Insets(10, 10, 10, 10));
+            frontPage.setSpacing(10);
             return new Scene(frontPage, 400, 700);
         }
 
@@ -150,30 +155,29 @@ public class Game extends Application {
             return new Scene(p2Turn, 400, 700);
         }
 
-
-
-//          Label multiplayerLabel = new Label("Choose connection type");
-
-//
-//        multiplayerSetup.getChildren().add(multiplayerLabel);
-//        multiplayerSetup.setAlignment(Pos.CENTER);
-//        multiplayerSetup.setPadding(new Insets(10, 10, 10, 10));
-//        multiplayerSetup.setSpacing(10);
-//        InetAddress inetAddress = InetAddress.getLocalHost();
-//        Label hostIPAddress = new Label("Your IP Address is: " + inetAddress.getHostAddress());
-//        multiplayerSetup.getChildren().add(hostIPAddress);
-//        Button host = new Button("Host a new game");
-//        host.setOnAction(actionEvent -> {
-//            Server.start(52864);
-//        });
-//        multiplayerSetup.getChildren().add(host);
-//        TextField port = new TextField();
-//        port.setPromptText("Enter IP Address");
-//        multiplayerSetup.getChildren().add(port);
-//        Button join = new Button("Join game");
-//        multiplayerSetup.getChildren().add(join);
-//
-
+        public Scene createMPSetup(){
+            VBox mpSetup = new VBox();
+            Label multiplayerLabel = new Label("Choose connection type");
+            mpSetup.getChildren().add(multiplayerLabel);
+            //InetAddress inetAddress = InetAddress.getLocalHost();
+            //Label hostIPAddress = new Label("Your IP Address is: " + inetAddress.getHostAddress());
+            //mpSetup.getChildren().add(hostIPAddress);
+            Button host = new Button("Host a new game");
+            host.setOnAction(actionEvent -> {
+                Server.start(52864);
+            });
+            mpSetup.getChildren().add(host);
+            TextField port = new TextField();
+            port.setPromptText("Enter IP Address");
+           mpSetup.getChildren().add(port);
+            Button join = new Button("Join game");
+            mpSetup.getChildren().add(join);
+            mpSetup.setAlignment(Pos.CENTER);
+            mpSetup.setPadding(new Insets(10, 10, 10, 10));
+            mpSetup.setSpacing(10);
+        return new Scene(mpSetup, 400,700);
+        }
+        
         EventHandler<MouseEvent> p2fireEvent = new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent me) {
@@ -247,9 +251,6 @@ public class Game extends Application {
                 }
             }
         };
-
-//    BackgroundImage kraken = new BackgroundImage(new Image("", 320, 640, true, true), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
-//    welcome.setBackground(new Background(kraken));
 
     public static void main(String[] args) {
         Application.launch(args);
