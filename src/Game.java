@@ -15,6 +15,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.ImagePattern;
 import javafx.stage.Stage;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 public class Game extends Application {
     private static Stage guiStage;
 
@@ -159,9 +162,13 @@ public class Game extends Application {
             VBox mpSetup = new VBox();
             Label multiplayerLabel = new Label("Choose connection type");
             mpSetup.getChildren().add(multiplayerLabel);
-            //InetAddress inetAddress = InetAddress.getLocalHost();
-            //Label hostIPAddress = new Label("Your IP Address is: " + inetAddress.getHostAddress());
-            //mpSetup.getChildren().add(hostIPAddress);
+            try {
+                String ip = InetAddress.getLocalHost().getHostAddress();
+                Label hostIPAddress = new Label("Your IP Address is: " + ip);
+                mpSetup.getChildren().add(hostIPAddress);
+            } catch (UnknownHostException e){
+                e.printStackTrace();
+            }
             Button host = new Button("Host a new game");
             host.setOnAction(actionEvent -> {
                 Server.start(52864);
@@ -177,7 +184,7 @@ public class Game extends Application {
             mpSetup.setSpacing(10);
         return new Scene(mpSetup, 400,700);
         }
-        
+
         EventHandler<MouseEvent> p2fireEvent = new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent me) {
