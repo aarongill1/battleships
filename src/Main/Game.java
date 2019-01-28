@@ -164,12 +164,12 @@ public class Game extends Application {
         p2Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p2fireEvent);
         p1Turn.getChildren().add(p2Board.getGameBoard());
         p1Turn.getChildren().add(p1Board.getGameBoard());
-        Button advanceToP2Go = new Button("Next player");
-        advanceToP2Go.setOnAction(actionEvent -> {
-            guiStage.setScene(createP2Turn());
+        Button endP1Turn = new Button("End Turn");
+        endP1Turn.setOnAction(actionEvent -> {
+            guiStage.setScene(endOfP1Turn());
             guiStage.show();
         });
-        p1Turn.getChildren().add(advanceToP2Go);
+        p1Turn.getChildren().add(endP1Turn);
         p1Turn.setAlignment(Pos.CENTER);
         p1Turn.setPadding(new Insets(10, 10, 10, 10));
         p1Turn.setSpacing(10);
@@ -185,16 +185,44 @@ public class Game extends Application {
         p1Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p1fireEvent);
         p2Turn.getChildren().add(p1Board.getGameBoard());
         p2Turn.getChildren().add(p2Board.getGameBoard());
-        Button returnToP1Turn = new Button("Next player");
-        returnToP1Turn.setOnAction(actionEvent -> {
-            guiStage.setScene(createP1Turn());
+        Button endP2Turn = new Button("End Turn");
+        endP2Turn.setOnAction(actionEvent -> {
+            guiStage.setScene(endOfP2Turn());
             guiStage.show();
         });
-        p2Turn.getChildren().add(returnToP1Turn);
+        p2Turn.getChildren().add(endP2Turn);
         p2Turn.setAlignment(Pos.CENTER);
         p2Turn.setPadding(new Insets(10, 10, 10, 10));
         p2Turn.setSpacing(10);
         return new Scene(p2Turn, 400, 700);
+    }
+
+    public Scene endOfP1Turn() {
+        VBox p1Intermission = new VBox();
+        Button advanceToP2Go = new Button("Next Player Turn");
+        advanceToP2Go.setOnAction(actionEvent -> {
+            guiStage.setScene(createP2Turn());
+            guiStage.show();
+        });
+        p1Intermission.getChildren().add(advanceToP2Go);
+        p1Intermission.setAlignment(Pos.CENTER);
+        p1Intermission.setPadding(new Insets(10, 10, 10, 10));
+        p1Intermission.setSpacing(10);
+        return new Scene(p1Intermission, 400, 700);
+    }
+
+    public Scene endOfP2Turn() {
+        VBox p2Intermission = new VBox();
+        Button advanceToP1Go = new Button("Next Player Turn");
+        advanceToP1Go.setOnAction(actionEvent -> {
+            guiStage.setScene(createP1Turn());
+            guiStage.show();
+        });
+        p2Intermission.getChildren().add(advanceToP1Go);
+        p2Intermission.setAlignment(Pos.CENTER);
+        p2Intermission.setPadding(new Insets(10, 10, 10, 10));
+        p2Intermission.setSpacing(10);
+        return new Scene(p2Intermission, 400, 700);
     }
 
     public Scene createMPSetup(){
