@@ -118,6 +118,14 @@ public class Game extends Application {
             guiStage.setScene(createP2Setup());
             guiStage.show();
         });
+
+        Button backToHome = new Button("Back to Main Menu");
+        backToHome.setOnAction(actionEvent -> {
+            p1Board.resetBoard();
+            guiStage.setScene(createMainMenu());
+        });
+        p1setup.getChildren().add(backToHome);
+
         p1Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p1PlaceShips);
         p1setup.getChildren().add(p1Board.getGameBoard());
         p1setup.getChildren().add(p1welcomeMessage);
@@ -146,6 +154,15 @@ public class Game extends Application {
             guiStage.setScene(createP1Turn());
             guiStage.show();
         });
+
+        Button backToHome = new Button("Back to Main Menu");
+        backToHome.setOnAction(actionEvent -> {
+            p1Board.resetBoard();
+            p2Board.resetBoard();
+            guiStage.setScene(createMainMenu());
+        });
+        p2setup.getChildren().add(backToHome);
+
         p2setup.getChildren().add(startGame);
         p2Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p2PlaceShips);
         p2setup.getChildren().add(p2Board.getGameBoard());

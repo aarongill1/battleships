@@ -104,4 +104,15 @@ public class Board {
             }
         }
     }
+
+    public void resetBoard() {
+        for (int i = 0; i < this.getSize(); i++) {
+            for (int j = 0; j < this.getSize(); j++) {
+                if (this.getTileList().get(i).get(j).isOccupied()){
+                    rec[i][j].setFill(null);
+                    this.getTileList().get(i).get(j).isOccupied(false);
+                }
+            }
+        }
+    }
 }
