@@ -107,12 +107,13 @@ public class Game extends Application {
 
         p1nameInput.setPromptText("Kräken Kommander 1: Enter your name!");
         p1nameInput.setFocusTraversable(false);
-        player1.setName(p1nameInput.getText());
-        System.out.println(player1.getName());
+
 
         p1setup.getChildren().add(p1nameInput);
         Button advanceTop2Setup = new Button("Click when finished");
         advanceTop2Setup.setOnAction(actionEvent ->{
+            player1.setName(p1nameInput.getText());
+            System.out.println(player1.getName());
             guiStage.setScene(createP2Setup());
             guiStage.show();
         });
@@ -133,13 +134,14 @@ public class Game extends Application {
 
         p2nameInput.setPromptText("Kräken Kommander 2: Enter your name!");
         p2nameInput.setFocusTraversable(false);
-        player2.setName(p2nameInput.getText());
-        System.out.println(player2.getName());
+       
 
         p2setup.getChildren().add(p2nameLabel);
         p2setup.getChildren().add(p2nameInput);
         Button startGame = new Button("Click to start game!");
         startGame.setOnAction(actionEvent -> {
+            player2.setName(p2nameInput.getText());
+            System.out.println(player2.getName());
             guiStage.setScene(createP1Turn());
             guiStage.show();
         });
