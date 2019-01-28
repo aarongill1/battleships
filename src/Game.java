@@ -1,4 +1,3 @@
-import Client.Client;
 import Model.Board;
 import Model.Player;
 import Server.Server;
@@ -159,11 +158,15 @@ public class Game extends Application {
             p2Turn.setSpacing(10);
             return new Scene(p2Turn, 400, 700);
         }
-  
-        Alert shipAlreadyPlacedAlert = new Alert(Alert.AlertType.INFORMATION);
-//        shipAlreadyPlacedAlert.setTitle("Dumbass! ");
-//        shipAlreadyPlacedAlert.setHeaderText("Yes, you are!");
-//        shipAlreadyPlacedAlert.setContentText("You've already placed a ship there!");
+
+        private void showDoubleShipAlert(){
+            Alert shipAlreadyPlacedAlert = new Alert(Alert.AlertType.INFORMATION);
+            shipAlreadyPlacedAlert.setTitle("Dumbass! ");
+            shipAlreadyPlacedAlert.setHeaderText("Yes, you are!");
+            shipAlreadyPlacedAlert.setContentText("You've already placed a ship there!");
+            shipAlreadyPlacedAlert.showAndWait();
+        }
+
 
         public Scene createMPSetup(){
             VBox mpSetup = new VBox();
@@ -247,7 +250,7 @@ public class Game extends Application {
                         p1Board.rec[colX][colY].setFill(new ImagePattern(shipImage));
                         player1.setFleetNumber((player1.getFleetNumber() - 1));
                     } else {
-                        shipAlreadyPlacedAlert.showAndWait();
+                        showDoubleShipAlert();
                     }
                 }
             }
@@ -270,7 +273,7 @@ public class Game extends Application {
                         player2.setFleetNumber((player2.getFleetNumber() - 1));
                     }
                     else{
-                        shipAlreadyPlacedAlert.showAndWait();
+                        showDoubleShipAlert();
                     }
 
                 }
