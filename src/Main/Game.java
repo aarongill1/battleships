@@ -39,6 +39,8 @@ public class Game extends Application {
     Board p2Board = new Board(8, 30);
     Player player1 = new Player(null, p1Board);
     Player player2 = new Player(null, p2Board);
+    Button endP1Turn = new Button("End Turn");
+    Button endP2Turn = new Button("End Turn");
 
     private void showDoubleShipAlert(){
         Alert shipAlreadyPlacedAlert = new Alert(Alert.AlertType.INFORMATION);
@@ -164,11 +166,12 @@ public class Game extends Application {
         p2Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p2fireEvent);
         p1Turn.getChildren().add(p2Board.getGameBoard());
         p1Turn.getChildren().add(p1Board.getGameBoard());
-        Button endP1Turn = new Button("End Turn");
+//        Button endP1Turn = new Button("End Turn");
         endP1Turn.setOnAction(actionEvent -> {
             guiStage.setScene(endOfP1Turn());
             guiStage.show();
         });
+        endP1Turn.setDisable(true);
         p1Turn.getChildren().add(endP1Turn);
         p1Turn.setAlignment(Pos.CENTER);
         p1Turn.setPadding(new Insets(10, 10, 10, 10));
@@ -185,11 +188,12 @@ public class Game extends Application {
         p1Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p1fireEvent);
         p2Turn.getChildren().add(p1Board.getGameBoard());
         p2Turn.getChildren().add(p2Board.getGameBoard());
-        Button endP2Turn = new Button("End Turn");
+//        Button endP2Turn = new Button("End Turn");
         endP2Turn.setOnAction(actionEvent -> {
             guiStage.setScene(endOfP2Turn());
             guiStage.show();
         });
+        endP2Turn.setDisable(true);
         p2Turn.getChildren().add(endP2Turn);
         p2Turn.setAlignment(Pos.CENTER);
         p2Turn.setPadding(new Insets(10, 10, 10, 10));
@@ -412,6 +416,7 @@ public class Game extends Application {
             } else {
                 p2Board.rec[colX][colY].setFill(new ImagePattern(missImage));
             }
+            endP1Turn.setDisable(false);
         }
     };
 
@@ -432,6 +437,7 @@ public class Game extends Application {
             } else {
                 p1Board.rec[colX][colY].setFill(new ImagePattern(missImage));
             }
+            endP2Turn.setDisable(false);
         }
     };
 
