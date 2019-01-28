@@ -96,10 +96,9 @@ public class Board {
     }
 
     public void setShipstoInvisible() {
-
         for (int i = 0; i < this.getSize(); i++) {
             for (int j = 0; j < this.getSize(); j++) {
-                if (this.getTileList().get(i).get(j).isOccupied()) {
+                if (this.getTileList().get(i).get(j).isOccupied() && !this.getTileList().get(i).get(j).isHit()) {
                     rec[i][j].setFill(null);
                 }
             }
