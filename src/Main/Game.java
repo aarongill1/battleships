@@ -44,6 +44,7 @@ public class Game extends Application {
     Button endP1Turn = new Button("End Turn");
     Button endP2Turn = new Button("End Turn");
 
+
     private void showDoubleShipAlert(){
         Alert shipAlreadyPlacedAlert = new Alert(Alert.AlertType.INFORMATION);
         shipAlreadyPlacedAlert.setTitle("Dumbass! ");
@@ -130,6 +131,7 @@ public class Game extends Application {
         p1setup.getChildren().add(backToHome);
 
         p1Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p1PlaceShips);
+        p1Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p1PlaceKraken);
         p1setup.getChildren().add(p1Board.getGameBoard());
         p1setup.getChildren().add(p1welcomeMessage);
         p1setup.getChildren().add(advanceTop2Setup);
@@ -546,6 +548,21 @@ public class Game extends Application {
             }
         }
     };
+
+    EventHandler<MouseEvent> p1PlaceKraken = new EventHandler<MouseEvent>() {
+        @Override
+        public void handle(MouseEvent me) {
+            double posX = me.getX();
+            double posY = me.getY();
+            int colX = (int) (posX / p1Board.getRectWidth());
+            int colY = (int) (posY / p1Board.getRectWidth());
+            String krakenPath = "resources/krispin.png";
+            Image krakenImage = new Image(krakenPath);
+            p1Board.rec[colX][colY].setFill(new ImagePattern(krakenImage));
+        }
+    };
+
+
 
     EventHandler<MouseEvent> p2PlaceShips = new EventHandler<MouseEvent>() {
         @Override
