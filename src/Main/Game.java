@@ -121,6 +121,7 @@ public class Game extends Application {
 
         Button backToHome = new Button("Back to Main Menu");
         backToHome.setOnAction(actionEvent -> {
+            player1.setFleetNumber(4);
             p1Board.resetBoard();
             guiStage.setScene(createMainMenu());
         });
@@ -157,6 +158,8 @@ public class Game extends Application {
 
         Button backToHome = new Button("Back to Main Menu");
         backToHome.setOnAction(actionEvent -> {
+            player1.setFleetNumber(4);
+            player2.setFleetNumber(4);
             p1Board.resetBoard();
             p2Board.resetBoard();
             guiStage.setScene(createMainMenu());
@@ -251,6 +254,13 @@ public class Game extends Application {
             guiStage.setScene(createMP2Setup());
 
         });
+
+        Button backToHome = new Button("Back to Main Menu");
+        backToHome.setOnAction(actionEvent -> {
+            guiStage.setScene(createMainMenu());
+        });
+        mpSetup.getChildren().add(backToHome);
+
         mpSetup.getChildren().add(join);
         mpSetup.setAlignment(Pos.CENTER);
         mpSetup.setPadding(new Insets(30, 10, 30, 10));
@@ -272,6 +282,16 @@ public class Game extends Application {
             guiStage.setScene(createMPp1View());
             guiStage.show();
         });
+
+        Button backToHome = new Button("Back to Main Menu");
+        backToHome.setOnAction(actionEvent -> {
+            p1Board.resetBoard();
+            client1.disconnect();
+            Server.stop();
+            guiStage.setScene(createMPSetup());
+        });
+        p1setup.getChildren().add(backToHome);
+
         p1Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p1PlaceShips);
         p1setup.getChildren().add(p1Board.getGameBoard());
         p1setup.getChildren().add(p1welcomeMessage);
@@ -296,6 +316,15 @@ public class Game extends Application {
             guiStage.setScene(createMPp2View());
             guiStage.show();
         });
+
+        Button backToHome = new Button("Back to Main Menu");
+        backToHome.setOnAction(actionEvent -> {
+            p1Board.resetBoard();
+            p2Board.resetBoard();
+            guiStage.setScene(createMPSetup());
+        });
+        p2setup.getChildren().add(backToHome);
+
         p2Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p2PlaceShips);
         p2setup.getChildren().add(p2Board.getGameBoard());
         p2setup.getChildren().add(p2welcomeMessage);

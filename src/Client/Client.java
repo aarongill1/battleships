@@ -105,5 +105,9 @@ public class Client {
     public void setName(String name){
           this.name = name;
     }
+
+    public void disconnect() {
+          socket.disconnect();
+    }
 }
 
