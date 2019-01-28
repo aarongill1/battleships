@@ -45,6 +45,8 @@ public class Game extends Application {
     Player player2 = new Player(null, p2Board);
     Button endP1Turn = new Button("End Turn");
     Button endP2Turn = new Button("End Turn");
+    Button advanceTop2Setup = new Button("Click when finished");
+    TextField p1nameInput = new TextField();
 
     private void showDoubleShipAlert(){
         Alert shipAlreadyPlacedAlert = new Alert(Alert.AlertType.INFORMATION);
@@ -110,29 +112,34 @@ public class Game extends Application {
 
         Label p1nameLabel = new Label("Player 1 enter your name!");
         p1setup.getChildren().add(p1nameLabel);
-        TextField p1nameInput = new TextField();
+//        TextField p1nameInput = new TextField();
 
+        p1nameInput.setText("");
         p1nameInput.setPromptText("Kräken Kommander 1: Enter your name!");
         p1nameInput.setFocusTraversable(false);
 
 
         p1setup.getChildren().add(p1nameInput);
-        Button advanceTop2Setup = new Button("Click when finished");
+//        Button advanceTop2Setup = new Button("Click when finished");
+
+
+        advanceTop2Setup.setDisable(true);
+
+        p1nameInput.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> ov, String t, String t1) {
+                if (player1.getFleetNumber()>0)
+                    advanceTop2Setup.setDisable(true);
+                else if (t1.equals(""))
+                    advanceTop2Setup.setDisable(true);
+                else
+                    advanceTop2Setup.setDisable(false);
+            }
+        });
+
+
         advanceTop2Setup.setOnAction(actionEvent ->{
             player1.setName(p1nameInput.getText());
-
-            advanceTop2Setup.setDisable(true);
-            p1nameInput.textProperty().addListener(new ChangeListener<String>() {
-                @Override
-                public void changed(ObservableValue<? extends String> ov, String t, String t1) {
-                    if(t1.equals(""))
-                        advanceTop2Setup.setDisable(true);
-                    else
-                        advanceTop2Setup.setDisable(false);
-                }
-            });
-
-
             System.out.println(player1.getName());
             guiStage.setScene(createP2Setup());
             guiStage.show();
@@ -552,6 +559,8 @@ public class Game extends Application {
                 } else {
                     showDoubleShipAlert();
                 }
+                if((p1nameInput.getText() != "") && (player1.getFleetNumber() == 0))
+                    advanceTop2Setup.setDisable(false);
             }
         }
     };
