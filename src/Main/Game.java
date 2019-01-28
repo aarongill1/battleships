@@ -59,6 +59,14 @@ public class Game extends Application {
         shipAlreadyPlacedAlert.showAndWait();
     }
 
+    private void showDuplicateMoveAlert(){
+        Alert shipAlreadyPlacedAlert = new Alert(Alert.AlertType.INFORMATION);
+        shipAlreadyPlacedAlert.setTitle("Dumbass! ");
+        shipAlreadyPlacedAlert.setHeaderText("Yes, you are!");
+        shipAlreadyPlacedAlert.setContentText("You've already fired in this square!");
+        shipAlreadyPlacedAlert.showAndWait();
+    }
+
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -514,9 +522,16 @@ public class Game extends Application {
             String hitImagePath = "resources/fire.png";
             Image missImage = new Image(missImagePath);
             Image hitImage = new Image(hitImagePath);
-            if (p2Board.tileList.get(colX).get(colY).isOccupied()) {
+            boolean validMove = false;
+
+            if (p2Board.tileList.get(colX).get(colY).getMiss() ||
+                    p2Board.tileList.get(colX).get(colY).isHit())
+            { showDuplicateMoveAlert(); }
+            else if (p2Board.tileList.get(colX).get(colY).isOccupied()) {
                 p2Board.rec[colX][colY].setFill(new ImagePattern(hitImage));
                 player2.setShipsLeft(player2.getShipsLeft() - 1);
+                p2Board.tileList.get(colX).get(colY).setHit(true);
+                validMove = true;
                 if (Gameover.isGameOver(player2)) {
                     Gameover.setWinningPlayer(player1);
                     guiStage.setScene(createGameOver());
@@ -524,9 +539,13 @@ public class Game extends Application {
                 }
             } else {
                 p2Board.rec[colX][colY].setFill(new ImagePattern(missImage));
+                p2Board.tileList.get(colX).get(colY).setMiss(true);
+                validMove = true;
             }
-            p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2fireEvent);
-            endP1Turn.setDisable(false);
+            if (validMove) {
+                p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2fireEvent);
+                endP1Turn.setDisable(false);
+            }
         }
     };
 
@@ -542,9 +561,17 @@ public class Game extends Application {
             String hitImagePath = "resources/fire.png";
             Image missImage = new Image(missImagePath);
             Image hitImage = new Image(hitImagePath);
-            if (p1Board.tileList.get(colX).get(colY).isOccupied()) {
+            boolean validMove = false;
+
+            if (p1Board.tileList.get(colX).get(colY).getMiss() ||
+                    p1Board.tileList.get(colX).get(colY).isHit())
+            { showDuplicateMoveAlert(); }
+
+            else if (p1Board.tileList.get(colX).get(colY).isOccupied()) {
                 p1Board.rec[colX][colY].setFill(new ImagePattern(hitImage));
                 player1.setShipsLeft(player1.getShipsLeft() - 1);
+                p1Board.tileList.get(colX).get(colY).setHit(true);
+                validMove = true;
                 if (Gameover.isGameOver(player1)) {
                     Gameover.setWinningPlayer(player2);
                     guiStage.setScene(createGameOver());
@@ -552,9 +579,13 @@ public class Game extends Application {
                 }
             } else {
                 p1Board.rec[colX][colY].setFill(new ImagePattern(missImage));
+                p1Board.tileList.get(colX).get(colY).setMiss(true);
+                validMove = true;
             }
-            p1Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1fireEvent);
-            endP2Turn.setDisable(false);
+            if (validMove) {
+                p1Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1fireEvent);
+                endP2Turn.setDisable(false);
+            }
         }
     };
 
