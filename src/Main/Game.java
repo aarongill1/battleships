@@ -40,12 +40,13 @@ public class Game extends Application {
     Player player1 = new Player(null, p1Board);
     Player player2 = new Player(null, p2Board);
 
-    Alert shipAlreadyPlacedAlert = new Alert(Alert.AlertType.INFORMATION);
-    //Aaron's ship already placed alert
-//    Alert shipAlreadyPlacedAlert = new Alert(Alert.AlertType.INFORMATION);
-//    shipAlreadyPlacedAlert.setTitle("Dumbass! ");
-//    shipAlreadyPlacedAlert.setHeaderText("Yes, you are!");
-//    shipAlreadyPlacedAlert.setContentText("You've already placed a ship there!");
+    private void showDoubleShipAlert(){
+        Alert shipAlreadyPlacedAlert = new Alert(Alert.AlertType.INFORMATION);
+        shipAlreadyPlacedAlert.setTitle("Dumbass! ");
+        shipAlreadyPlacedAlert.setHeaderText("Yes, you are!");
+        shipAlreadyPlacedAlert.setContentText("You've already placed a ship there!");
+        shipAlreadyPlacedAlert.showAndWait();
+    }
 
 
     @Override
@@ -424,7 +425,7 @@ public class Game extends Application {
                     p1Board.rec[colX][colY].setFill(new ImagePattern(shipImage));
                     player1.setFleetNumber((player1.getFleetNumber() - 1));
                 } else {
-                    shipAlreadyPlacedAlert.showAndWait();
+                    showDoubleShipAlert();
                 }
             }
         }
@@ -446,7 +447,7 @@ public class Game extends Application {
                     player2.setFleetNumber((player2.getFleetNumber() - 1));
                 }
                 else{
-                    shipAlreadyPlacedAlert.showAndWait();
+                    showDoubleShipAlert();
                 }
             }
         }
