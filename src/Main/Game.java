@@ -41,8 +41,6 @@ public class Game extends Application {
     Board p2Board = new Board(8, 30);
     Player player1 = new Player(null, p1Board);
     Player player2 = new Player(null, p2Board);
-    Button endP1Turn = new Button("End Turn");
-    Button endP2Turn = new Button("End Turn");
 
     private void showDoubleShipAlert(){
         Alert shipAlreadyPlacedAlert = new Alert(Alert.AlertType.INFORMATION);
@@ -184,6 +182,7 @@ public class Game extends Application {
         p2Board.setShipstoInvisible();
         p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2PlaceShips);
         p2Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p2fireEvent);
+        Button endP1Turn = new Button("End Turn");
         p1Turn.getChildren().add(p2Board.getGameBoard());
         p1Turn.getChildren().add(p1Board.getGameBoard());
         endP1Turn.setOnAction(actionEvent -> {
@@ -208,6 +207,7 @@ public class Game extends Application {
         p1Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p1fireEvent);
         p2Turn.getChildren().add(p1Board.getGameBoard());
         p2Turn.getChildren().add(p2Board.getGameBoard());
+        Button endP2Turn = new Button("End Turn");
         endP2Turn.setOnAction(actionEvent -> {
             guiStage.setScene(endOfP2Turn());
             guiStage.show();
