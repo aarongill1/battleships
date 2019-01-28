@@ -1,7 +1,9 @@
 package Model;
 
+import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
@@ -96,11 +98,33 @@ public class Board {
     }
 
     public void setShipstoInvisible() {
-
         for (int i = 0; i < this.getSize(); i++) {
             for (int j = 0; j < this.getSize(); j++) {
-                if (this.getTileList().get(i).get(j).isOccupied()) {
+                if (this.getTileList().get(i).get(j).isOccupied() && !this.getTileList().get(i).get(j).isHit()) {
                     rec[i][j].setFill(null);
+                }
+            }
+        }
+    }
+
+    public void setShipstoVisible() {
+        String shipPath = "resources/boat.png";
+        Image shipImage = new Image(shipPath);
+        for (int i = 0; i < this.getSize(); i++) {
+            for (int j = 0; j < this.getSize(); j++) {
+                if (this.getTileList().get(i).get(j).isOccupied() && !this.getTileList().get(i).get(j).isHit()) {
+                    rec[i][j].setFill(new ImagePattern(shipImage));
+                }
+            }
+        }
+    }
+
+    public void resetBoard() {
+        for (int i = 0; i < this.getSize(); i++) {
+            for (int j = 0; j < this.getSize(); j++) {
+                if (this.getTileList().get(i).get(j).isOccupied()){
+                    rec[i][j].setFill(null);
+                    this.getTileList().get(i).get(j).isOccupied(false);
                 }
             }
         }

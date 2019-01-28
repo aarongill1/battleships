@@ -32,6 +32,10 @@ public class Tile {
         return occupied;
     }
 
+    public void isOccupied(boolean cmd){
+        this.occupied = cmd;
+    }
+
     public void setOccupied() {
         this.occupied = true;
     }
