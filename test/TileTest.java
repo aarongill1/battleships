@@ -17,7 +17,7 @@ public class TileTest {
     public void miss() {
 
         Tile tile = new Tile();
-        tile.setMiss();
+        tile.setMiss(true);
         assertTrue(tile.getMiss());
     }
 
@@ -25,7 +25,7 @@ public class TileTest {
     public void hit() {
 
         Tile tile = new Tile();
-        tile.setHit();
+        tile.setHit(true);
         assertTrue(tile.isHit());
     }
 

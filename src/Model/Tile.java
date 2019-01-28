@@ -24,8 +24,8 @@ public class Tile {
         return hit;
     }
 
-    public void setHit() {
-        this.hit = true;
+    public void setHit(boolean hit) {
+        this.hit = hit;
     }
 
     public boolean isOccupied() {
@@ -40,8 +40,8 @@ public class Tile {
         this.occupied = true;
     }
 
-    public void setMiss(){
-        this.miss = true;
+    public void setMiss(boolean miss){
+        this.miss = miss;
     }
 
     public boolean getMiss(){

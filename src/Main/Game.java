@@ -111,7 +111,6 @@ public class Game extends Application {
         p1nameInput.setPromptText("Kräken Kommander 1: Enter your name!");
         p1nameInput.setFocusTraversable(false);
 
-
         p1setup.getChildren().add(p1nameInput);
         Button advanceTop2Setup = new Button("Click when finished");
         advanceTop2Setup.setOnAction(actionEvent ->{
@@ -419,6 +418,10 @@ public class Game extends Application {
         Label welcomeLabel = new Label("GAME OVER MAN, GAME OVER!");
         Button anotherGame = new Button("Play again?");
         anotherGame.setOnAction(actionEvent -> {
+            player1.resetPlayer();
+            player2.resetPlayer();
+            p1Board.resetBoard();
+            p2Board.resetBoard();
             guiStage.setScene(createMainMenu());
             guiStage.show();
         });
@@ -523,6 +526,7 @@ public class Game extends Application {
                     player2.setFleetNumber((player2.getFleetNumber() - 1));
                 }
                 else{
+                    System.out.println("TEST");
                     showDoubleShipAlert();
                 }
             }

@@ -42,5 +42,9 @@ public class Player {
     public void setShipsLeft(int shipsLeft) {
         this.shipsLeft = shipsLeft;
     }
+    public void resetPlayer(){
+        this.fleetNumber = 4;
+        this.shipsLeft = fleetNumber;
+    }
 
 }
