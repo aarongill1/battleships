@@ -46,7 +46,10 @@ public class Game extends Application {
     Button endP1Turn = new Button("End Turn");
     Button endP2Turn = new Button("End Turn");
     Button advanceTop2Setup = new Button("Click when finished");
+    Button startGame = new Button("Click to start game!");
     TextField p1nameInput = new TextField();
+    TextField p2nameInput = new TextField();
+
 
     private void showDoubleShipAlert(){
         Alert shipAlreadyPlacedAlert = new Alert(Alert.AlertType.INFORMATION);
@@ -78,6 +81,8 @@ public class Game extends Application {
         Button twoPlayerLocal = new Button("2 Player Local");
         Button twoPlayerLan = new Button("2 Player LAN");
         Button singlePlayer = new Button("Single Player");
+//        !!Single Player set to disabled - remove when implement single player feature!!
+        singlePlayer.setDisable(true);
         twoPlayerLocal.setOnAction(actionEvent -> {
             guiStage.setScene(createP1Setup());
             guiStage.show();
@@ -109,22 +114,16 @@ public class Game extends Application {
     public Scene createP1Setup(){
         VBox p1setup = new VBox();
         Label p1welcomeMessage = new Label("Welcome to Battleships - Player 1, select your ship locations");
-
         Label p1nameLabel = new Label("Player 1 enter your name!");
         p1setup.getChildren().add(p1nameLabel);
-//        TextField p1nameInput = new TextField();
-
         p1nameInput.setText("");
         p1nameInput.setPromptText("Kräken Kommander 1: Enter your name!");
         p1nameInput.setFocusTraversable(false);
 
 
         p1setup.getChildren().add(p1nameInput);
-//        Button advanceTop2Setup = new Button("Click when finished");
-
 
         advanceTop2Setup.setDisable(true);
-
         p1nameInput.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> ov, String t, String t1) {
@@ -166,15 +165,27 @@ public class Game extends Application {
     public Scene createP2Setup(){
         VBox p2setup = new VBox();
         Label p2nameLabel = new Label("Player 2 enter your name!");
-        TextField p2nameInput = new TextField();
-
+        p2nameInput.setText("");
         p2nameInput.setPromptText("Kräken Kommander 2: Enter your name!");
         p2nameInput.setFocusTraversable(false);
-       
 
         p2setup.getChildren().add(p2nameLabel);
         p2setup.getChildren().add(p2nameInput);
-        Button startGame = new Button("Click to start game!");
+        startGame.setDisable(true);
+        p2nameInput.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> ov, String t, String t1) {
+                if (player2.getFleetNumber()>0)
+                    startGame.setDisable(true);
+                else if (t1.equals(""))
+                    startGame.setDisable(true);
+                else
+                    startGame.setDisable(false);
+            }
+        });
+
+
+
         startGame.setOnAction(actionEvent -> {
             player2.setName(p2nameInput.getText());
             System.out.println(player2.getName());
@@ -559,7 +570,7 @@ public class Game extends Application {
                 } else {
                     showDoubleShipAlert();
                 }
-                if((p1nameInput.getText() != "") && (player1.getFleetNumber() == 0))
+                if(!(p1nameInput.getText().equals("")) && (player1.getFleetNumber() == 0))
                     advanceTop2Setup.setDisable(false);
             }
         }
@@ -583,6 +594,8 @@ public class Game extends Application {
                 else{
                     showDoubleShipAlert();
                 }
+                if(!(p2nameInput.getText().equals("")) && (player2.getFleetNumber() == 0))
+                    startGame.setDisable(false);
             }
         }
     };
