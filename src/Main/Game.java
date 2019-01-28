@@ -26,6 +26,7 @@ import javafx.stage.Stage;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Optional;
+import java.util.concurrent.ThreadLocalRandom;
 
 
 public class Game extends Application {
@@ -50,6 +51,7 @@ public class Game extends Application {
     Button quitGame = new Button("Quit game and return to Main Menu");
     TextField p1nameInput = new TextField();
     TextField p2nameInput = new TextField();
+    final String computer = "Computer";
 
 
     private void showDoubleShipAlert(){
@@ -107,7 +109,7 @@ public class Game extends Application {
         Button twoPlayerLan = new Button("2 Player LAN");
         Button singlePlayer = new Button("Single Player");
 //        !!Single Player set to disabled - remove when implement single player feature!!
-        singlePlayer.setDisable(true);
+//        singlePlayer.setDisable(true);
         twoPlayerLocal.setOnAction(actionEvent -> {
             guiStage.setScene(createP1Setup());
             guiStage.show();
@@ -116,11 +118,13 @@ public class Game extends Application {
             guiStage.setScene(createMPSetup());
             guiStage.show();
         });
-//      singlePlayer.setOnAction(actionEvent -> {
-        // Take player to p1 setup
-        // Run method to create a board and place 4 ships on random coordinates
-//          guiStage.setScene();
-//      });
+
+        singlePlayer.setOnAction(actionEvent -> {
+            guiStage.setScene(createP1Setup());
+            player2.setName(computer);
+            guiStage.show();
+        });
+
         BackgroundImage menu = new BackgroundImage(
                 new Image("resources/radar.jpg", 420, 700, true, true),
                 BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
@@ -160,11 +164,16 @@ public class Game extends Application {
             }
         });
 
-
         advanceTop2Setup.setOnAction(actionEvent ->{
             player1.setName(p1nameInput.getText());
-            guiStage.setScene(createP2Setup());
-            guiStage.show();
+            if(player2.getName() == "Computer") {
+                guiStage.setScene(createComputerP2Setup());
+                guiStage.show();
+            }
+            else {
+                guiStage.setScene(createP2Setup());
+                guiStage.show();
+            }
         });
 ////////Test for MP gameplay///////////////
         Button backToHome = new Button("Back to Main Menu");
@@ -233,6 +242,50 @@ public class Game extends Application {
         return new Scene(p2setup, 400, 700);
     }
 
+
+    public Scene createComputerP2Setup(){
+        VBox computerSetup = new VBox();
+
+        p2nameInput.setFocusTraversable(false);
+//
+//        p2setup.getChildren().add(p2nameLabel);
+//        p2setup.getChildren().add(p2nameInput);
+
+        int randomNum1 = ThreadLocalRandom.current().nextInt(0, 8);
+        int randomNum2 = ThreadLocalRandom.current().nextInt(0, 8);
+
+        player2.getBoard().getTileList();
+        p2nameInput.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> ov, String t, String t1) {
+                if (player2.getFleetNumber()>0)
+                    startGame.setDisable(false);
+            }
+        });
+
+        startGame.setOnAction(actionEvent -> {
+            guiStage.setScene(createP1Turn());
+            guiStage.show();
+        });
+
+        Button backToHome = new Button("Back to Main Menu");
+        backToHome.setOnAction(actionEvent -> {
+            player1.setFleetNumber(4);
+            player2.setFleetNumber(4);
+            p1Board.resetBoard();
+            p2Board.resetBoard();
+            guiStage.setScene(createMainMenu());
+        });
+        computerSetup.getChildren().add(backToHome);
+        computerSetup.getChildren().add(startGame);
+        p2Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p2ComputerPlaceShips);
+        computerSetup.getChildren().add(p2Board.getGameBoard());
+        computerSetup.setAlignment(Pos.CENTER);
+        computerSetup.setPadding(new Insets(10, 10, 10, 10));
+        computerSetup.setSpacing(10);
+        return new Scene(computerSetup, 400, 700);
+    }
+
     public Scene createP1Turn(){
         VBox p1Turn = new VBox();
         p1Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1PlaceShips);
@@ -266,6 +319,10 @@ public class Game extends Application {
         p1Board.setShipstoInvisible();
         p2Board.setShipstoVisible();
         p1Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1PlaceShips);
+        if(player2.getName() == "Computer") {
+            p1Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p1ComputerfireEvent);
+        }
+        else
         p1Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p1fireEvent);
         p2Turn.getChildren().add(quitGame);
         p2Turn.getChildren().add(p1Board.getGameBoard());
@@ -529,7 +586,6 @@ public class Game extends Application {
         return new Scene(gameOver, 400, 700);
     }
 
-
     // Fire events
 
     EventHandler<MouseEvent> p2fireEvent = new EventHandler<MouseEvent>() {
@@ -611,6 +667,42 @@ public class Game extends Application {
         }
     };
 
+    EventHandler<MouseEvent> p1ComputerfireEvent = new EventHandler<MouseEvent>() {
+        @Override
+        public void handle(MouseEvent me) {
+            int randomNum1 = ThreadLocalRandom.current().nextInt(0, 8);
+            int randomNum2 = ThreadLocalRandom.current().nextInt(0, 8);
+
+            p1Board.tileList.get(randomNum1).get(randomNum2).fire();
+            String missImagePath = "resources/miss.png";
+            String hitImagePath = "resources/fire.png";
+            Image missImage = new Image(missImagePath);
+            Image hitImage = new Image(hitImagePath);
+            boolean validMove = false;
+
+            while(!validMove) {
+                if (p1Board.tileList.get(randomNum1).get(randomNum2).getMiss() ||
+                        p1Board.tileList.get(randomNum1).get(randomNum2).isHit()) {
+                } else if (p1Board.tileList.get(randomNum1).get(randomNum2).isOccupied()) {
+                    p1Board.rec[randomNum1][randomNum2].setFill(new ImagePattern(hitImage));
+                    player1.setShipsLeft(player1.getShipsLeft() - 1);
+                    p1Board.tileList.get(randomNum1).get(randomNum2).setHit(true);
+                    validMove = true;
+                    if (Gameover.isGameOver(player1)) {
+                        Gameover.setWinningPlayer(player2);
+                        guiStage.setScene(createGameOver());
+                        guiStage.show();
+                    }
+                } else {
+                    p1Board.rec[randomNum1][randomNum2].setFill(new ImagePattern(missImage));
+                    p1Board.tileList.get(randomNum1).get(randomNum2).setMiss(true);
+                    validMove = true;
+                }
+            }
+                p1Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1fireEvent);
+                endP2Turn.setDisable(false);
+        }
+    };
 
     // Place ships events
 
@@ -661,6 +753,28 @@ public class Game extends Application {
         }
     };
 
+    EventHandler<MouseEvent> p2ComputerPlaceShips = new EventHandler<MouseEvent>() {
+        @Override
+        public void handle(MouseEvent me) {
+            while (player2.getFleetNumber() != 0) {
+                int randomNum1 = ThreadLocalRandom.current().nextInt(0, 8);
+                int randomNum2 = ThreadLocalRandom.current().nextInt(0, 8);
+                if (!p2Board.tileList.get(randomNum1).get(randomNum2).isOccupied()) {
+                    p2Board.tileList.get(randomNum1).get(randomNum2).setOccupied();
+                    String shipPath = "resources/boat.png";
+                    Image shipImage = new Image(shipPath);
+                    p2Board.rec[randomNum1][randomNum2].setFill(new ImagePattern(shipImage));
+                    player2.setFleetNumber((player2.getFleetNumber() - 1));
+                }
+                else{
+                    showDoubleShipAlert();
+                }
+
+                if(!(p2nameInput.getText().equals("")) && (player2.getFleetNumber() == 0))
+                    startGame.setDisable(false);
+            }
+        }
+    };
 
     public static void p1printToConsole(String message){
         p1display.setText(p1display.getText() + message + "\n");
