@@ -46,6 +46,7 @@ public class Game extends Application {
     Button endP2Turn = new Button("End Turn");
     Button advanceTop2Setup = new Button("Click when finished");
     Button startGame = new Button("Click to start game!");
+    Button quitGame = new Button("Quit game and return to Main Menu");
     TextField p1nameInput = new TextField();
     TextField p2nameInput = new TextField();
 
@@ -208,7 +209,6 @@ public class Game extends Application {
             guiStage.setScene(createMainMenu());
         });
         p2setup.getChildren().add(backToHome);
-
         p2setup.getChildren().add(startGame);
         p2Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p2PlaceShips);
         p2setup.getChildren().add(p2Board.getGameBoard());
@@ -226,10 +226,15 @@ public class Game extends Application {
         p2Board.setShipstoInvisible();
         p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2PlaceShips);
         p2Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p2fireEvent);
+        p1Turn.getChildren().add(quitGame);
         p1Turn.getChildren().add(p2Board.getGameBoard());
         p1Turn.getChildren().add(p1Board.getGameBoard());
         endP1Turn.setOnAction(actionEvent -> {
             guiStage.setScene(endOfP1Turn());
+            guiStage.show();
+        });
+        quitGame.setOnAction(actionEvent -> {
+            guiStage.setScene(createMainMenu());
             guiStage.show();
         });
         endP1Turn.setDisable(true);
@@ -248,10 +253,15 @@ public class Game extends Application {
         p2Board.setShipstoVisible();
         p1Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1PlaceShips);
         p1Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p1fireEvent);
+        p2Turn.getChildren().add(quitGame);
         p2Turn.getChildren().add(p1Board.getGameBoard());
         p2Turn.getChildren().add(p2Board.getGameBoard());
         endP2Turn.setOnAction(actionEvent -> {
             guiStage.setScene(endOfP2Turn());
+            guiStage.show();
+        });
+        quitGame.setOnAction(actionEvent -> {
+            guiStage.setScene(createMainMenu());
             guiStage.show();
         });
         endP2Turn.setDisable(true);
