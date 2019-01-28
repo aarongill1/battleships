@@ -25,6 +25,7 @@ import javafx.stage.Stage;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Optional;
 
 
 public class Game extends Application {
@@ -67,6 +68,22 @@ public class Game extends Application {
         shipAlreadyPlacedAlert.showAndWait();
     }
 
+    private void areYouSureYouWantToQuitAlert() {
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Quit game?");
+        alert.setContentText("Are you sure you want to quit?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            player1.resetPlayer();
+            player2.resetPlayer();
+            p1Board.resetBoard();
+            p2Board.resetBoard();
+            guiStage.setScene(createMainMenu());
+            guiStage.show();
+        }
+    }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -232,12 +249,7 @@ public class Game extends Application {
             guiStage.show();
         });
         quitGame.setOnAction(actionEvent -> {
-            player1.resetPlayer();
-            player2.resetPlayer();
-            p1Board.resetBoard();
-            p2Board.resetBoard();
-            guiStage.setScene(createMainMenu());
-            guiStage.show();
+            areYouSureYouWantToQuitAlert();
         });
         endP1Turn.setDisable(true);
         p1Turn.getChildren().add(endP1Turn);
@@ -263,12 +275,7 @@ public class Game extends Application {
             guiStage.show();
         });
         quitGame.setOnAction(actionEvent -> {
-            player1.resetPlayer();
-            player2.resetPlayer();
-            p1Board.resetBoard();
-            p2Board.resetBoard();
-            guiStage.setScene(createMainMenu());
-            guiStage.show();
+            areYouSureYouWantToQuitAlert();
         });
         endP2Turn.setDisable(true);
         p2Turn.getChildren().add(endP2Turn);
