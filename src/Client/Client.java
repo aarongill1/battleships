@@ -21,9 +21,10 @@ public class Client {
     private String name;
     private int port;
     private static boolean running;
-    //
+
 //    public Client(String name, String address, int port){
-    public Client(String address, int port){
+      public Client(String address, int port){
+
 
         try {
             this.address = InetAddress.getByName(address);
@@ -42,7 +43,6 @@ public class Client {
             e.printStackTrace();
         }
     }
-
 
 
     private static boolean isCommand(String message, DatagramPacket packet){
@@ -103,7 +103,7 @@ public class Client {
     }
 
     public void setName(String name){
-        this.name = name;
+          this.name = name;
     }
 }
 

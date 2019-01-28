@@ -69,6 +69,7 @@ public class ClientsWindow extends Application {
         String name = showTextInput("", "Enter your name below", "Anonymous");
         client = new Client("localhost", 52864);
 
+
     }
 
     public static void main(String[] args) {
