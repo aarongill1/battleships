@@ -1,21 +1,13 @@
 package Server;
 
-import Model.Player;
-
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.Socket;
 import java.util.ArrayList;
 
 public class Server {
 
     private static DatagramSocket socket;
-    private static Socket boardSocket;
-    private static ObjectInputStream objectInput;
-    private static ObjectOutputStream objectOutput;
     private static boolean running;
     private static int clientId;
     private static ArrayList<ClientInfo> clients = new ArrayList<ClientInfo>();
@@ -48,14 +40,6 @@ public class Server {
 
     }
 
-    // Send coordinate to every client
-    private static void broadcast(Player p1, Player p2){
-
-        for(ClientInfo info : clients){
-//
-        }
-
-    }
 
     // Send messages to individual clients
     private static void send(String message, InetAddress address, int port){
