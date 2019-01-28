@@ -120,13 +120,13 @@ public class Game extends Application {
             guiStage.setScene(createP2Setup());
             guiStage.show();
         });
-
+////////Test for MP gameplay///////////////
         Button backToHome = new Button("Back to Main Menu");
         backToHome.setOnAction(actionEvent -> {
-            String temp = p1Board.populateBoard();
+//            String temp = p1Board.populateBoard();
             player1.setFleetNumber(4);
             p1Board.resetBoard();
-            p1Board.drawBoard(temp);
+//            p1Board.drawBoard(temp);
             guiStage.setScene(createMainMenu());
         });
         p1setup.getChildren().add(backToHome);
