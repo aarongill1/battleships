@@ -51,7 +51,6 @@ public class Game extends Application {
     TextField p1nameInput = new TextField();
     TextField p2nameInput = new TextField();
 
-
     private void showDoubleShipAlert(){
         Alert shipAlreadyPlacedAlert = new Alert(Alert.AlertType.INFORMATION);
         shipAlreadyPlacedAlert.setTitle("Dumbass! ");
@@ -235,6 +234,7 @@ public class Game extends Application {
 
     public Scene createP1Turn(){
         VBox p1Turn = new VBox();
+        Label p1TurnLabel = new Label("It is your turn " + player1.getName());
         p1Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1PlaceShips);
         p1Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1fireEvent);
         p1Board.setShipstoVisible();
@@ -242,6 +242,7 @@ public class Game extends Application {
         p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2PlaceShips);
         p2Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p2fireEvent);
         p1Turn.getChildren().add(quitGame);
+        p1Turn.getChildren().add(p1TurnLabel);
         p1Turn.getChildren().add(p2Board.getGameBoard());
         p1Turn.getChildren().add(p1Board.getGameBoard());
         endP1Turn.setOnAction(actionEvent -> {
@@ -261,6 +262,7 @@ public class Game extends Application {
 
     public Scene createP2Turn(){
         VBox p2Turn = new VBox();
+        Label p2TurnLabel = new Label("It is your turn " + player2.getName());
         p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2PlaceShips);
         p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2fireEvent);
         p1Board.setShipstoInvisible();
@@ -268,6 +270,7 @@ public class Game extends Application {
         p1Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1PlaceShips);
         p1Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p1fireEvent);
         p2Turn.getChildren().add(quitGame);
+        p2Turn.getChildren().add(p2TurnLabel);
         p2Turn.getChildren().add(p1Board.getGameBoard());
         p2Turn.getChildren().add(p2Board.getGameBoard());
         endP2Turn.setOnAction(actionEvent -> {
