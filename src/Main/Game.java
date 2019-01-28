@@ -242,19 +242,9 @@ public class Game extends Application {
         return new Scene(p2setup, 400, 700);
     }
 
-
     public Scene createComputerP2Setup(){
         VBox computerSetup = new VBox();
-
         p2nameInput.setFocusTraversable(false);
-//
-//        p2setup.getChildren().add(p2nameLabel);
-//        p2setup.getChildren().add(p2nameInput);
-
-        int randomNum1 = ThreadLocalRandom.current().nextInt(0, 8);
-        int randomNum2 = ThreadLocalRandom.current().nextInt(0, 8);
-
-        player2.getBoard().getTileList();
         p2nameInput.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> ov, String t, String t1) {
@@ -699,7 +689,7 @@ public class Game extends Application {
                     validMove = true;
                 }
             }
-                p1Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1fireEvent);
+                p1Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1ComputerfireEvent);
                 endP2Turn.setDisable(false);
         }
     };
@@ -766,11 +756,6 @@ public class Game extends Application {
                     p2Board.rec[randomNum1][randomNum2].setFill(new ImagePattern(shipImage));
                     player2.setFleetNumber((player2.getFleetNumber() - 1));
                 }
-                else{
-                    showDoubleShipAlert();
-                }
-
-                if(!(p2nameInput.getText().equals("")) && (player2.getFleetNumber() == 0))
                     startGame.setDisable(false);
             }
         }
