@@ -166,7 +166,6 @@ public class Game extends Application {
         p2Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p2fireEvent);
         p1Turn.getChildren().add(p2Board.getGameBoard());
         p1Turn.getChildren().add(p1Board.getGameBoard());
-//        Button endP1Turn = new Button("End Turn");
         endP1Turn.setOnAction(actionEvent -> {
             guiStage.setScene(endOfP1Turn());
             guiStage.show();
@@ -188,7 +187,6 @@ public class Game extends Application {
         p1Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p1fireEvent);
         p2Turn.getChildren().add(p1Board.getGameBoard());
         p2Turn.getChildren().add(p2Board.getGameBoard());
-//        Button endP2Turn = new Button("End Turn");
         endP2Turn.setOnAction(actionEvent -> {
             guiStage.setScene(endOfP2Turn());
             guiStage.show();
@@ -416,6 +414,7 @@ public class Game extends Application {
             } else {
                 p2Board.rec[colX][colY].setFill(new ImagePattern(missImage));
             }
+            p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2fireEvent);
             endP1Turn.setDisable(false);
         }
     };
@@ -437,6 +436,7 @@ public class Game extends Application {
             } else {
                 p1Board.rec[colX][colY].setFill(new ImagePattern(missImage));
             }
+            p1Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1fireEvent);
             endP2Turn.setDisable(false);
         }
     };
