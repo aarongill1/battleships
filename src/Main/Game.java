@@ -6,6 +6,8 @@ import Model.Gameover;
 import Model.Player;
 import Server.Server;
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -118,6 +120,19 @@ public class Game extends Application {
         Button advanceTop2Setup = new Button("Click when finished");
         advanceTop2Setup.setOnAction(actionEvent ->{
             player1.setName(p1nameInput.getText());
+
+            advanceTop2Setup.setDisable(true);
+            p1nameInput.textProperty().addListener(new ChangeListener<String>() {
+                @Override
+                public void changed(ObservableValue<? extends String> ov, String t, String t1) {
+                    if(t1.equals(""))
+                        advanceTop2Setup.setDisable(true);
+                    else
+                        advanceTop2Setup.setDisable(false);
+                }
+            });
+
+
             System.out.println(player1.getName());
             guiStage.setScene(createP2Setup());
             guiStage.show();
