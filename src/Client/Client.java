@@ -154,12 +154,6 @@ public class Client {
                         String message = new String(data);
                         message = message.substring(0, message.indexOf("\\e")); // \\e denotes the end of the message
                         //  MANAGE MESSAGE
-                        if(!isCommand(message, packet)) {
-//                            ClientsWindow.printToConsole(message);
-                            Game.p1printToConsole(message);
-                            Game.p2printToConsole(message);
-                        }
-
                         //This will need to be wrapped in a loop for turn based gameplay
                         if(isInitialize(message, packet)){
 
@@ -169,6 +163,12 @@ public class Client {
 
                         }
                         //
+                        if(!isCommand(message, packet)) {
+//                            ClientsWindow.printToConsole(message);
+                            Game.p1printToConsole(message);
+                            Game.p2printToConsole(message);
+                        }
+
                     }
                 } catch (Exception e){
                     e.printStackTrace();

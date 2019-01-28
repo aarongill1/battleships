@@ -255,10 +255,10 @@ public class Game extends Application {
         multiplayerLabel.setTextFill(Color.WHITE);
         multiplayerLabel.setFont(Font.font("Arial", FontWeight.BOLD, 30));
         multiplayerLabel.setLineSpacing(30);
-//        BackgroundImage menu = new BackgroundImage(
-//                new Image("resources/tech.jpg", 420, 700, true, true),
-//                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
-//        mpSetup.setBackground(new Background(menu));
+        BackgroundImage menu = new BackgroundImage(
+                new Image("resources/mpsetup.jpg", 420, 700, true, true),
+                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
+        mpSetup.setBackground(new Background(menu));
         mpSetup.getChildren().add(multiplayerLabel);
         try {
             String ip = InetAddress.getLocalHost().getHostAddress();
