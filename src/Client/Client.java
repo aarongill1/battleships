@@ -32,10 +32,6 @@ public class Client {
             this.name = "";
             socket = new DatagramSocket();
             running = true;
-//            boardSocket = new Socket();
-//            ObjectOutputStream objectOutput = new ObjectOutputStream(boardSocket.getOutputStream());
-//            objectOutput.flush();
-//            ObjectInputStream objectInput = new ObjectInputStream(boardSocket.getInputStream());
             listen();
 //            send("\\con: " + name);
             send("\\con: ");
@@ -53,6 +49,26 @@ public class Client {
         return false;
     }
 
+    private static boolean isInitialize(String message, DatagramPacket packet){
+          if (message.startsWith("\\set: ")){
+              return true;
+          } else
+          return false;
+    }
+
+    private static boolean isHit(String message, DatagramPacket packet){
+          if (message.startsWith("\\hit: ")){
+              return true;
+          } else
+            return false;
+    }
+
+    private static boolean isMiss(String message, DatagramPacket packet){
+          if (message.startsWith("\\miss: ")){
+              return true;
+          } else
+              return false;
+    }
 
     public void send(String message){
         try {
@@ -68,6 +84,59 @@ public class Client {
             e.printStackTrace();
         }
     }
+
+    public void sendShip(String message){
+        try {
+            //prevents blank messages
+            if(message != "") {
+                String coordinates = "\\set: ";
+                coordinates += message;
+                coordinates += "\\e";  // \\e denotes the end of the message
+                byte[] data = message.getBytes();
+                //We have to pass in the source, source length, address to send to and the client's port
+                DatagramPacket packet = new DatagramPacket(data, data.length, address, port);
+                socket.send(packet);
+                System.out.println("Sent message to: " + address.getHostAddress() + " - " + port);
+            }
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void sendHit(String message){
+        try {
+            if(message != "") {
+                String coordinates = "\\hit: ";
+                coordinates += message;
+                coordinates += "\\e";  // \\e denotes the end of the message
+                byte[] data = message.getBytes();
+                //We have to pass in the source, source length, address to send to and the client's port
+                DatagramPacket packet = new DatagramPacket(data, data.length, address, port);
+                socket.send(packet);
+                System.out.println("Sent message to: " + address.getHostAddress() + " - " + port);
+            }
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void sendMiss(String message){
+        try {
+            if(message != "") {
+                String coordinates = "\\miss: ";
+                coordinates += message;
+                coordinates += "\\e";  // \\e denotes the end of the message
+                byte[] data = message.getBytes();
+                //We have to pass in the source, source length, address to send to and the client's port
+                DatagramPacket packet = new DatagramPacket(data, data.length, address, port);
+                socket.send(packet);
+                System.out.println("Sent message to: " + address.getHostAddress() + " - " + port);
+            }
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
 
     private static void listen(){
         Thread listenThread = new Thread("ChatProgram Listener"){
@@ -90,6 +159,16 @@ public class Client {
                             Game.p1printToConsole(message);
                             Game.p2printToConsole(message);
                         }
+
+                        //This will need to be wrapped in a loop for turn based gameplay
+                        if(isInitialize(message, packet)){
+
+                        } else if(isHit(message, packet)) {
+
+                        } else if(isMiss(message, packet)) {
+
+                        }
+                        //
                     }
                 } catch (Exception e){
                     e.printStackTrace();
