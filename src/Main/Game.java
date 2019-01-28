@@ -192,8 +192,6 @@ public class Game extends Application {
             }
         });
 
-
-
         startGame.setOnAction(actionEvent -> {
             player2.setName(p2nameInput.getText());
             guiStage.setScene(createP1Turn());
@@ -234,6 +232,10 @@ public class Game extends Application {
             guiStage.show();
         });
         quitGame.setOnAction(actionEvent -> {
+            player1.resetPlayer();
+            player2.resetPlayer();
+            p1Board.resetBoard();
+            p2Board.resetBoard();
             guiStage.setScene(createMainMenu());
             guiStage.show();
         });
@@ -261,6 +263,10 @@ public class Game extends Application {
             guiStage.show();
         });
         quitGame.setOnAction(actionEvent -> {
+            player1.resetPlayer();
+            player2.resetPlayer();
+            p1Board.resetBoard();
+            p2Board.resetBoard();
             guiStage.setScene(createMainMenu());
             guiStage.show();
         });
