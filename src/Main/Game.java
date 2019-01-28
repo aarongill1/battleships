@@ -2,6 +2,7 @@ package Main;
 
 import Client.Client;
 import Model.Board;
+import Model.Gameover;
 import Model.Player;
 import Server.Server;
 import javafx.application.Application;
@@ -13,7 +14,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.text.Font;
@@ -412,6 +414,22 @@ public class Game extends Application {
         return new Scene(p2Turn, 600, 700);
     }
 
+    public Scene createGameOver(){
+        VBox gameOver = new VBox();
+        Label welcomeLabel = new Label("GAME OVER MAN, GAME OVER!");
+        Button anotherGame = new Button("Play again?");
+        anotherGame.setOnAction(actionEvent -> {
+            guiStage.setScene(createMainMenu());
+            guiStage.show();
+        });
+        gameOver.getChildren().add(welcomeLabel);
+        gameOver.getChildren().add(anotherGame);
+        gameOver.setAlignment(Pos.CENTER);
+        gameOver.setPadding(new Insets(10, 10, 10, 10));
+        gameOver.setSpacing(10);
+        return new Scene(gameOver, 400, 700);
+    }
+
 
     // Fire events
 
@@ -429,6 +447,11 @@ public class Game extends Application {
             Image hitImage = new Image(hitImagePath);
             if (p2Board.tileList.get(colX).get(colY).isOccupied()) {
                 p2Board.rec[colX][colY].setFill(new ImagePattern(hitImage));
+                player2.setShipsLeft(player2.getShipsLeft() - 1);
+                if (Gameover.isGameOver(player2)) {
+                    guiStage.setScene(createGameOver());
+                    guiStage.show();
+                }
             } else {
                 p2Board.rec[colX][colY].setFill(new ImagePattern(missImage));
             }
@@ -449,6 +472,11 @@ public class Game extends Application {
             Image hitImage = new Image(hitImagePath);
             if (p1Board.tileList.get(colX).get(colY).isOccupied()) {
                 p1Board.rec[colX][colY].setFill(new ImagePattern(hitImage));
+                player1.setShipsLeft(player1.getShipsLeft() - 1);
+                if (Gameover.isGameOver(player1)) {
+                    guiStage.setScene(createGameOver());
+                    guiStage.show();
+                }
             } else {
                 p1Board.rec[colX][colY].setFill(new ImagePattern(missImage));
             }

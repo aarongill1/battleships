@@ -6,10 +6,12 @@ public class Player {
     //  private int playerId;       Could be useful for the server side logic
     private Board board;
     private int fleetNumber = 4;
+    private int shipsLeft;
 
     public Player(String name, Board board) {
         this.name = name;
         this.board = board;
+        this.shipsLeft = fleetNumber;
 //        this.fleetNumber = board.getOccupied();
     }
 
@@ -31,6 +33,14 @@ public class Player {
 
     public void setName(String name){
         this.name = name;
+    }
+
+    public int getShipsLeft() {
+        return shipsLeft;
+    }
+
+    public void setShipsLeft(int shipsLeft) {
+        this.shipsLeft = shipsLeft;
     }
 
 }
