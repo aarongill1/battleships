@@ -67,7 +67,7 @@ public class ClientsWindow extends Application {
         primaryStage.setScene(new Scene(createContent()));
         primaryStage.show();
         String name = showTextInput("", "Enter your name below", "Anonymous");
-        client = new Client(name, "localhost", 52864);
+        client = new Client("localhost", 52864);
 
     }
 

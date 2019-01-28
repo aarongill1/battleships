@@ -1,29 +1,42 @@
 package Server;
 
+import Model.Player;
+
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.Socket;
 import java.util.ArrayList;
 
 public class Server {
 
     private static DatagramSocket socket;
+    private static Socket boardSocket;
+    private static ObjectInputStream objectInput;
+    private static ObjectOutputStream objectOutput;
     private static boolean running;
     private static int clientId;
     private static ArrayList<ClientInfo> clients = new ArrayList<ClientInfo>();
 
-    // Statt server, create and initialise resources required
+    // Starts server, create and initialise resources required
     public static void start(int port){
 
         try {
             socket = new DatagramSocket(port);
+
+//            boardSocket = new Socket();
+//            ObjectOutputStream objectOutput = new ObjectOutputStream(boardSocket.getOutputStream());
+//            objectOutput.flush();
+//            ObjectInputStream objectInput = new ObjectInputStream(boardSocket.getInputStream());
+
             running = true;
             listen();
             System.out.println("Server started on port " + port);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     // Send a message to every connected client
@@ -31,6 +44,15 @@ public class Server {
 
         for(ClientInfo info : clients){
             send(message, info.getAddress(), info.getPort());
+        }
+
+    }
+
+    // Send coordinate to every client
+    private static void broadcast(Player p1, Player p2){
+
+        for(ClientInfo info : clients){
+//
         }
 
     }
@@ -54,7 +76,6 @@ public class Server {
     // Will contain a thread and will be listening the entire time the server is running, waiting for messages to arrive
     // and taking relevant actions
     private static void listen(){
-
         Thread listenThread = new Thread("ChatProgram Listener"){
             @Override
             public void run() {
@@ -74,10 +95,7 @@ public class Server {
                         if(!isCommand(message, packet)) {
                             broadcast(message);
                         }
-
                     }
-
-
                 } catch (Exception e){
                     e.printStackTrace();
                 }
@@ -97,7 +115,8 @@ public class Server {
             String name = message.substring(message.indexOf(":")+1); // Take what's after the colon
             // Using ClientId++ will prevent duplicate IDs
             clients.add(new ClientInfo(name, clientId++, packet.getAddress(), packet.getPort()));
-            broadcast("User " + name + " connected!");
+//            broadcast("Player " + name + " connected!");
+            broadcast("Player connected!");
             return true;
 
         }
