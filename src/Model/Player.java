@@ -25,6 +25,10 @@ public class Player {
         this.fleetNumber = fleetNumber;
     }
 
+    public void setName(){
+        this.name = name;
+    }
+
     public String getName(){
         return this.name;
     }

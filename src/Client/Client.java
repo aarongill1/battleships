@@ -1,12 +1,22 @@
 package Client;
 
+import Main.Game;
+
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.Socket;
 
 public class Client {
 
     private static DatagramSocket socket;
+
+    private ObjectInputStream objectInput;
+    private ObjectOutputStream objectOutput;
+    private Socket boardSocket;
+
     private InetAddress address;
     private String name;
     private int port;
@@ -21,6 +31,10 @@ public class Client {
             this.name = "";
             socket = new DatagramSocket();
             running = true;
+//            boardSocket = new Socket();
+//            ObjectOutputStream objectOutput = new ObjectOutputStream(boardSocket.getOutputStream());
+//            objectOutput.flush();
+//            ObjectInputStream objectInput = new ObjectInputStream(boardSocket.getInputStream());
             listen();
 //            send("\\con: " + name);
             send("\\con: ");
@@ -30,6 +44,7 @@ public class Client {
     }
 
 
+
     private static boolean isCommand(String message, DatagramPacket packet){
         if (message.startsWith("\\con:")){
             //Run connection code
@@ -37,6 +52,7 @@ public class Client {
         }
         return false;
     }
+
 
     public void send(String message){
         try {
@@ -54,7 +70,6 @@ public class Client {
     }
 
     private static void listen(){
-
         Thread listenThread = new Thread("ChatProgram Listener"){
             @Override
             public void run() {
@@ -69,10 +84,11 @@ public class Client {
                         socket.receive(packet);  // Socket receives data and stores it to packet
                         String message = new String(data);
                         message = message.substring(0, message.indexOf("\\e")); // \\e denotes the end of the message
-
                         //  MANAGE MESSAGE
                         if(!isCommand(message, packet)) {
-                            ClientsWindow.printToConsole(message);
+//                            ClientsWindow.printToConsole(message);
+                            Game.p1printToConsole(message);
+                            Game.p2printToConsole(message);
                         }
                     }
                 } catch (Exception e){
@@ -80,7 +96,6 @@ public class Client {
                 }
             }
         }; listenThread.start();
-
     }
 
     public String getName() {

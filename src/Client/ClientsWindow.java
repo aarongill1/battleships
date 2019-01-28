@@ -42,10 +42,12 @@ public class ClientsWindow extends Application {
         return root;
     }
 
+
     public static void printToConsole(String message){
         messages.setText(messages.getText() + message + "\n");
     }
 
+    // Pop up box with text input
     public static String showTextInput(String title, String message, String defaultValue) {
         TextInputDialog dialog = new TextInputDialog(defaultValue);
         dialog.initStyle(StageStyle.UTILITY);
@@ -67,7 +69,7 @@ public class ClientsWindow extends Application {
         primaryStage.setScene(new Scene(createContent()));
         primaryStage.show();
         String name = showTextInput("", "Enter your name below", "Anonymous");
-        client = new Client("10.0.209.188", 52864);
+        client = new Client("192.168.0.42", 52864);
 
     }
 
