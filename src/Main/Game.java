@@ -117,7 +117,6 @@ public class Game extends Application {
         Button advanceTop2Setup = new Button("Click when finished");
         advanceTop2Setup.setOnAction(actionEvent ->{
             player1.setName(p1nameInput.getText());
-            System.out.println(player1.getName());
             guiStage.setScene(createP2Setup());
             guiStage.show();
         });
@@ -154,7 +153,6 @@ public class Game extends Application {
         Button startGame = new Button("Click to start game!");
         startGame.setOnAction(actionEvent -> {
             player2.setName(p2nameInput.getText());
-            System.out.println(player2.getName());
             guiStage.setScene(createP1Turn());
             guiStage.show();
         });
@@ -445,7 +443,10 @@ public class Game extends Application {
 
     public Scene createGameOver(){
         VBox gameOver = new VBox();
-        Label welcomeLabel = new Label("GAME OVER MAN, GAME OVER!");
+        Label welcomeLabel = new Label("GAME OVER MAN, GAME OVER!\n"
+        + Gameover.getWinningPlayer().getName().toUpperCase() + " IS THE WINNER!"
+        );
+
         Button anotherGame = new Button("Play again?");
         anotherGame.setOnAction(actionEvent -> {
             player1.resetPlayer();
@@ -482,6 +483,7 @@ public class Game extends Application {
                 p2Board.rec[colX][colY].setFill(new ImagePattern(hitImage));
                 player2.setShipsLeft(player2.getShipsLeft() - 1);
                 if (Gameover.isGameOver(player2)) {
+                    Gameover.setWinningPlayer(player1);
                     guiStage.setScene(createGameOver());
                     guiStage.show();
                 }
@@ -509,6 +511,7 @@ public class Game extends Application {
                 p1Board.rec[colX][colY].setFill(new ImagePattern(hitImage));
                 player1.setShipsLeft(player1.getShipsLeft() - 1);
                 if (Gameover.isGameOver(player1)) {
+                    Gameover.setWinningPlayer(player2);
                     guiStage.setScene(createGameOver());
                     guiStage.show();
                 }
@@ -560,7 +563,6 @@ public class Game extends Application {
                     player2.setFleetNumber((player2.getFleetNumber() - 1));
                 }
                 else{
-                    System.out.println("TEST");
                     showDoubleShipAlert();
                 }
             }
