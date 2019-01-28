@@ -14,8 +14,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.text.Font;
@@ -87,10 +86,10 @@ public class Game extends Application {
         // Run method to create a board and place 4 ships on random coordinates
 //          guiStage.setScene();
 //      });
-//        BackgroundImage menu = new BackgroundImage(
-//                new Image("resources/tech-radar.jpg", 420, 700, true, true),
-//                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
-//        frontPage.setBackground(new Background(menu));
+        BackgroundImage menu = new BackgroundImage(
+                new Image("resources/radar.jpg", 420, 700, true, true),
+                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
+        frontPage.setBackground(new Background(menu));
         frontPage.getChildren().add(welcomeLabel);
         frontPage.getChildren().add(welcomeLabelPt2);
         frontPage.getChildren().add(twoPlayerLocal);
