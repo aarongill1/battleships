@@ -1,6 +1,5 @@
 package Model;
 
-import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
@@ -107,13 +106,11 @@ public class Board {
         }
     }
 
-    public void setShipstoVisible() {
-        String shipPath = "resources/boat.png";
-        Image shipImage = new Image(shipPath);
+    public void setShipstoVisible(ImagePattern fill) {
         for (int i = 0; i < this.getSize(); i++) {
             for (int j = 0; j < this.getSize(); j++) {
                 if (this.getTileList().get(i).get(j).isOccupied() && !this.getTileList().get(i).get(j).isHit()) {
-                    rec[i][j].setFill(new ImagePattern(shipImage));
+                    rec[i][j].setFill(fill);
                 }
             }
         }
@@ -133,16 +130,14 @@ public class Board {
         return result;
     }
 
-    public void drawBoard(String coords) {
-        String shipPath = "resources/boat.png";
-        Image shipImage = new Image(shipPath);
+    public void drawBoard(String coords, ImagePattern fill) {
         int[] nums = new int[coords.length()];
         for (int i = 0; i < coords.length(); i++) {
             nums[i] = Character.getNumericValue(coords.charAt(i));
         }
         for(int i = 0; i < nums.length; i+=2) {
             this.getTileList().get(nums[i]).get(nums[i+1]).setOccupied();
-            rec[nums[i]][nums[i+1]].setFill(new ImagePattern(shipImage));
+            rec[nums[i]][nums[i+1]].setFill(fill);
         }
     }
 
