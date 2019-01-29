@@ -1,10 +1,7 @@
 package Main;
 
 import Client.Client;
-import Model.Board;
-import Model.Gameover;
-import Model.Icons;
-import Model.Player;
+import Model.*;
 import Server.Server;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
@@ -43,6 +40,8 @@ public class Game extends Application {
     Board p2Board = new Board(8, 30);
     Player player1 = new Player(null, p1Board);
     Player player2 = new Player(null, p2Board);
+    Kraken p1Kraken = new Kraken();
+    Kraken p2Kraken = new Kraken();
     Button endP1Turn = new Button("End Turn");
     Button endP2Turn = new Button("End Turn");
 
@@ -248,6 +247,9 @@ public class Game extends Application {
         p1Turn.getChildren().add(p1TurnLabel);
         p1Turn.getChildren().add(p2Board.getGameBoard());
         p1Turn.getChildren().add(p1Board.getGameBoard());
+        if(p2Kraken.isReleased()){
+            p2Kraken.krakenSmash(p2Board, gameIcons.getDestroyedIcon(), gameIcons.getKrispinIcon(), player2);
+        }
         endP1Turn.setOnAction(actionEvent -> {
             guiStage.setScene(endOfP1Turn());
             guiStage.show();
@@ -276,6 +278,9 @@ public class Game extends Application {
         p2Turn.getChildren().add(p2TurnLabel);
         p2Turn.getChildren().add(p1Board.getGameBoard());
         p2Turn.getChildren().add(p2Board.getGameBoard());
+        if(p1Kraken.isReleased()){
+            p1Kraken.krakenSmash(p1Board, gameIcons.getDestroyedIcon(), gameIcons.getKrispinIcon(), player1);
+        }
         endP2Turn.setOnAction(actionEvent -> {
             guiStage.setScene(endOfP2Turn());
             guiStage.show();
@@ -599,6 +604,9 @@ public class Game extends Application {
                     guiStage.setScene(createGameOver());
                     guiStage.show();
                 }
+            } else if(p1Board.tileList.get(colX).get(colY).isKraken()){
+                p1Board.rec[colX][colY].setFill(gameIcons.getKrispinIcon());
+                p1Kraken.setReleased(true);
             } else {
                 p1Board.rec[colX][colY].setFill(gameIcons.getMissIcon());
                 p1Board.tileList.get(colX).get(colY).setMiss(true);

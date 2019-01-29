@@ -20,6 +20,14 @@ public class Icons {
     Image krispinImage = new Image(krispinImagePath);
     ImagePattern krispinIcon = new ImagePattern(krispinImage);
 
+    String destroyedImagePath = "resources/destroyed.png";
+    Image destroyedImage = new Image(destroyedImagePath);
+    ImagePattern destroyedIcon = new ImagePattern(destroyedImage);
+
+    public ImagePattern getDestroyedIcon() {
+        return destroyedIcon;
+    }
+
     public ImagePattern getKrispinIcon() {
         return krispinIcon;
     }
