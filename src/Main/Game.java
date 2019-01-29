@@ -290,7 +290,7 @@ public class Game extends Application {
 
     public Scene endOfP1Turn() {
         VBox p1Intermission = new VBox();
-        Button advanceToP2Go = new Button("Next Player Turn");
+        Button advanceToP2Go = new Button("Start " + player2.getName() + "'s Turn");
         advanceToP2Go.setOnAction(actionEvent -> {
             guiStage.setScene(createP2Turn());
             guiStage.show();
@@ -304,7 +304,7 @@ public class Game extends Application {
 
     public Scene endOfP2Turn() {
         VBox p2Intermission = new VBox();
-        Button advanceToP1Go = new Button("Next Player Turn");
+        Button advanceToP1Go = new Button("Start " + player1.getName() + "'s Turn");
         advanceToP1Go.setOnAction(actionEvent -> {
             guiStage.setScene(createP1Turn());
             guiStage.show();
