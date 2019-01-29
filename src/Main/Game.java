@@ -3,6 +3,7 @@ package Main;
 import Client.Client;
 import Model.Board;
 import Model.Gameover;
+import Model.Icons;
 import Model.Player;
 import Server.Server;
 import javafx.application.Application;
@@ -12,12 +13,10 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.ImagePattern;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
@@ -43,7 +42,7 @@ public class Game extends Application {
     Player player2 = new Player(null, p2Board);
     Button endP1Turn = new Button("End Turn");
     Button endP2Turn = new Button("End Turn");
-
+    Icons gameIcons = new Icons();
 
     private void showDoubleShipAlert(){
         Alert shipAlreadyPlacedAlert = new Alert(Alert.AlertType.INFORMATION);
@@ -131,7 +130,6 @@ public class Game extends Application {
         p1setup.getChildren().add(backToHome);
 
         p1Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p1PlaceShips);
-        p1Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p1PlaceKraken);
         p1setup.getChildren().add(p1Board.getGameBoard());
         p1setup.getChildren().add(p1welcomeMessage);
         p1setup.getChildren().add(advanceTop2Setup);
@@ -182,7 +180,7 @@ public class Game extends Application {
         VBox p1Turn = new VBox();
         p1Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1PlaceShips);
         p1Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1fireEvent);
-        p1Board.setShipstoVisible();
+        p1Board.setShipstoVisible(gameIcons.getShipIcon());
         p2Board.setShipstoInvisible();
         p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2PlaceShips);
         p2Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p2fireEvent);
@@ -205,7 +203,7 @@ public class Game extends Application {
         p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2PlaceShips);
         p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2fireEvent);
         p1Board.setShipstoInvisible();
-        p2Board.setShipstoVisible();
+        p2Board.setShipstoVisible(gameIcons.getShipIcon());
         p1Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1PlaceShips);
         p1Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p1fireEvent);
         p2Turn.getChildren().add(p1Board.getGameBoard());
@@ -477,12 +475,8 @@ public class Game extends Application {
             int colX = (int) (posX / p2Board.getRectWidth());
             int colY = (int) (posY / p2Board.getRectWidth());
             p2Board.tileList.get(colX).get(colY).fire();
-            String missImagePath = "resources/miss.png";
-            String hitImagePath = "resources/fire.png";
-            Image missImage = new Image(missImagePath);
-            Image hitImage = new Image(hitImagePath);
             if (p2Board.tileList.get(colX).get(colY).isOccupied()) {
-                p2Board.rec[colX][colY].setFill(new ImagePattern(hitImage));
+                p2Board.rec[colX][colY].setFill(gameIcons.getHitIcon());
                 player2.setShipsLeft(player2.getShipsLeft() - 1);
                 if (Gameover.isGameOver(player2)) {
                     Gameover.setWinningPlayer(player1);
@@ -490,7 +484,7 @@ public class Game extends Application {
                     guiStage.show();
                 }
             } else {
-                p2Board.rec[colX][colY].setFill(new ImagePattern(missImage));
+                p2Board.rec[colX][colY].setFill(gameIcons.getMissIcon());
             }
             p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2fireEvent);
             endP1Turn.setDisable(false);
@@ -505,12 +499,8 @@ public class Game extends Application {
             int colX = (int) (posX / p1Board.getRectWidth());
             int colY = (int) (posY / p1Board.getRectWidth());
             p1Board.tileList.get(colX).get(colY).fire();
-            String missImagePath = "resources/miss.png";
-            String hitImagePath = "resources/fire.png";
-            Image missImage = new Image(missImagePath);
-            Image hitImage = new Image(hitImagePath);
             if (p1Board.tileList.get(colX).get(colY).isOccupied()) {
-                p1Board.rec[colX][colY].setFill(new ImagePattern(hitImage));
+                p1Board.rec[colX][colY].setFill(gameIcons.getHitIcon());
                 player1.setShipsLeft(player1.getShipsLeft() - 1);
                 if (Gameover.isGameOver(player1)) {
                     Gameover.setWinningPlayer(player2);
@@ -518,7 +508,7 @@ public class Game extends Application {
                     guiStage.show();
                 }
             } else {
-                p1Board.rec[colX][colY].setFill(new ImagePattern(missImage));
+                p1Board.rec[colX][colY].setFill(gameIcons.getMissIcon());
             }
             p1Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1fireEvent);
             endP2Turn.setDisable(false);
@@ -538,9 +528,7 @@ public class Game extends Application {
                 int colY = (int) (posY / p1Board.getRectWidth());
                 if (!p1Board.tileList.get(colX).get(colY).isOccupied()) {
                     p1Board.tileList.get(colX).get(colY).setOccupied();
-                    String shipPath = "resources/boat.png";
-                    Image shipImage = new Image(shipPath);
-                    p1Board.rec[colX][colY].setFill(new ImagePattern(shipImage));
+                    p1Board.rec[colX][colY].setFill(gameIcons.getShipIcon());
                     player1.setFleetNumber((player1.getFleetNumber() - 1));
                 } else {
                     showDoubleShipAlert();
@@ -556,9 +544,7 @@ public class Game extends Application {
             double posY = me.getY();
             int colX = (int) (posX / p1Board.getRectWidth());
             int colY = (int) (posY / p1Board.getRectWidth());
-            String krakenPath = "resources/krispin.png";
-            Image krakenImage = new Image(krakenPath);
-            p1Board.rec[colX][colY].setFill(new ImagePattern(krakenImage));
+            p1Board.rec[colX][colY].setFill(gameIcons.getKrakenIcon());
         }
     };
 
@@ -574,9 +560,7 @@ public class Game extends Application {
                 int colY = (int) (posY / p2Board.getRectWidth());
                 if (!p2Board.tileList.get(colX).get(colY).isOccupied()) {
                     p2Board.tileList.get(colX).get(colY).setOccupied();
-                    String shipPath = "resources/boat.png";
-                    Image shipImage = new Image(shipPath);
-                    p2Board.rec[colX][colY].setFill(new ImagePattern(shipImage));
+                    p2Board.rec[colX][colY].setFill(gameIcons.getShipIcon());
                     player2.setFleetNumber((player2.getFleetNumber() - 1));
                 }
                 else{
