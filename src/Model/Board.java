@@ -130,16 +130,14 @@ public class Board {
         return result;
     }
 
-    public void drawBoard(String coords) {
-        String shipPath = "resources/boat.png";
-        Image shipImage = new Image(shipPath);
+    public void drawBoard(String coords, ImagePattern fill) {
         int[] nums = new int[coords.length()];
         for (int i = 0; i < coords.length(); i++) {
             nums[i] = Character.getNumericValue(coords.charAt(i));
         }
         for(int i = 0; i < nums.length; i+=2) {
             this.getTileList().get(nums[i]).get(nums[i+1]).setOccupied();
-            rec[nums[i]][nums[i+1]].setFill(new ImagePattern(shipImage));
+            rec[nums[i]][nums[i+1]].setFill(fill);
         }
     }
 

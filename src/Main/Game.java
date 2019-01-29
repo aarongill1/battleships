@@ -15,6 +15,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -541,12 +542,13 @@ public class Game extends Application {
         public void handle(MouseEvent me) {
             double posX = me.getX();
             double posY = me.getY();
+            boolean validMove = false;
             int colX = (int) (posX / p2Board.getRectWidth());
             int colY = (int) (posY / p2Board.getRectWidth());
             p2Board.tileList.get(colX).get(colY).fire();
             if (p2Board.tileList.get(colX).get(colY).isOccupied()) {
                 p2Board.rec[colX][colY].setFill(gameIcons.getHitIcon());
-            boolean validMove = false;
+            }
             if (p2Board.tileList.get(colX).get(colY).getMiss() ||
                     p2Board.tileList.get(colX).get(colY).isHit())
             { showDuplicateMoveAlert(); }
@@ -577,15 +579,15 @@ public class Game extends Application {
         public void handle(MouseEvent me) {
             double posX = me.getX();
             double posY = me.getY();
+            boolean validMove = false;
             int colX = (int) (posX / p1Board.getRectWidth());
             int colY = (int) (posY / p1Board.getRectWidth());
             p1Board.tileList.get(colX).get(colY).fire();
             if (p1Board.tileList.get(colX).get(colY).isOccupied()) {
                 p1Board.rec[colX][colY].setFill(gameIcons.getHitIcon());
-            boolean validMove = false;
-            if (p1Board.tileList.get(colX).get(colY).getMiss() ||
-                    p1Board.tileList.get(colX).get(colY).isHit())
-            { showDuplicateMoveAlert(); }
+            }
+            if (p1Board.tileList.get(colX).get(colY).getMiss() || p1Board.tileList.get(colX).get(colY).isHit()) {
+                showDuplicateMoveAlert(); }
             else if (p1Board.tileList.get(colX).get(colY).isOccupied()) {
                 p1Board.rec[colX][colY].setFill(gameIcons.getHitIcon());
                 player1.setShipsLeft(player1.getShipsLeft() - 1);
@@ -607,7 +609,6 @@ public class Game extends Application {
             }
         }
     };
-
 
     // Place ships events
 
@@ -679,5 +680,4 @@ public class Game extends Application {
     public static void main(String[] args) {
         Application.launch(args);
     }
-
 }
