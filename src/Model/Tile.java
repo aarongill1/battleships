@@ -15,7 +15,6 @@ public class Tile {
 
         if (occupied && !hit) {
             System.out.println("HIT!!!");
-            this.hit = true;
         } else
             System.out.println("MISS!!");
     }

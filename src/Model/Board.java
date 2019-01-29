@@ -116,6 +116,33 @@ public class Board {
         }
     }
 
+    public String populateBoard() {
+        String result = "";
+        for (int i = 0; i < this.getSize(); i++) {
+            for (int j = 0; j < this.getSize(); j++) {
+                if (this.getTileList().get(i).get(j).isOccupied()) {
+                    result += i;
+                    result +=j;
+                }
+            }
+        }
+        System.out.println(result);
+        return result;
+    }
+
+    public void drawBoard(String coords) {
+        String shipPath = "resources/boat.png";
+        Image shipImage = new Image(shipPath);
+        int[] nums = new int[coords.length()];
+        for (int i = 0; i < coords.length(); i++) {
+            nums[i] = Character.getNumericValue(coords.charAt(i));
+        }
+        for(int i = 0; i < nums.length; i+=2) {
+            this.getTileList().get(nums[i]).get(nums[i+1]).setOccupied();
+            rec[nums[i]][nums[i+1]].setFill(new ImagePattern(shipImage));
+        }
+    }
+
     public void resetBoard() {
         for (int i = 0; i < this.getSize(); i++) {
             for (int j = 0; j < this.getSize(); j++) {

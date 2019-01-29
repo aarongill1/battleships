@@ -7,6 +7,8 @@ import Model.Icons;
 import Model.Player;
 import Server.Server;
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -14,8 +16,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -23,6 +24,7 @@ import javafx.stage.Stage;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Optional;
 
 
 public class Game extends Application {
@@ -42,7 +44,15 @@ public class Game extends Application {
     Player player2 = new Player(null, p2Board);
     Button endP1Turn = new Button("End Turn");
     Button endP2Turn = new Button("End Turn");
+
     Icons gameIcons = new Icons();
+
+    Button advanceTop2Setup = new Button("Click when finished");
+    Button startGame = new Button("Click to start game!");
+    Button quitGame = new Button("Quit game and return to Main Menu");
+    TextField p1nameInput = new TextField();
+    TextField p2nameInput = new TextField();
+
 
     private void showDoubleShipAlert(){
         Alert shipAlreadyPlacedAlert = new Alert(Alert.AlertType.INFORMATION);
@@ -52,6 +62,30 @@ public class Game extends Application {
         shipAlreadyPlacedAlert.showAndWait();
     }
 
+    private void showDuplicateMoveAlert(){
+        Alert shipAlreadyPlacedAlert = new Alert(Alert.AlertType.INFORMATION);
+        shipAlreadyPlacedAlert.setTitle("Dumbass! ");
+        shipAlreadyPlacedAlert.setHeaderText("Yes, you are!");
+        shipAlreadyPlacedAlert.setContentText("You've already fired in this square!");
+        shipAlreadyPlacedAlert.showAndWait();
+    }
+
+    private void areYouSureYouWantToQuitAlert() {
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Quit game?");
+        alert.setContentText("Are you sure you want to quit?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            player1.resetPlayer();
+            player2.resetPlayer();
+            p1Board.resetBoard();
+            p2Board.resetBoard();
+            guiStage.setScene(createMainMenu());
+            guiStage.show();
+        }
+    }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -74,6 +108,8 @@ public class Game extends Application {
         Button twoPlayerLocal = new Button("2 Player Local");
         Button twoPlayerLan = new Button("2 Player LAN");
         Button singlePlayer = new Button("Single Player");
+//        !!Single Player set to disabled - remove when implement single player feature!!
+        singlePlayer.setDisable(true);
         twoPlayerLocal.setOnAction(actionEvent -> {
             guiStage.setScene(createP1Setup());
             guiStage.show();
@@ -87,10 +123,10 @@ public class Game extends Application {
         // Run method to create a board and place 4 ships on random coordinates
 //          guiStage.setScene();
 //      });
-//        BackgroundImage menu = new BackgroundImage(
-//                new Image("resources/tech-radar.jpg", 420, 700, true, true),
-//                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
-//        frontPage.setBackground(new Background(menu));
+        BackgroundImage menu = new BackgroundImage(
+                new Image("resources/radar.jpg", 420, 700, true, true),
+                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
+        frontPage.setBackground(new Background(menu));
         frontPage.getChildren().add(welcomeLabel);
         frontPage.getChildren().add(welcomeLabelPt2);
         frontPage.getChildren().add(twoPlayerLocal);
@@ -105,26 +141,40 @@ public class Game extends Application {
     public Scene createP1Setup(){
         VBox p1setup = new VBox();
         Label p1welcomeMessage = new Label("Welcome to Battleships - Player 1, select your ship locations");
-
         Label p1nameLabel = new Label("Player 1 enter your name!");
         p1setup.getChildren().add(p1nameLabel);
-        TextField p1nameInput = new TextField();
-
+        p1nameInput.setText("");
         p1nameInput.setPromptText("Kräken Kommander 1: Enter your name!");
         p1nameInput.setFocusTraversable(false);
 
         p1setup.getChildren().add(p1nameInput);
-        Button advanceTop2Setup = new Button("Click when finished");
+
+        advanceTop2Setup.setDisable(true);
+        p1nameInput.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> ov, String t, String t1) {
+                if (player1.getFleetNumber()>0)
+                    advanceTop2Setup.setDisable(true);
+                else if (t1.equals(""))
+                    advanceTop2Setup.setDisable(true);
+                else
+                    advanceTop2Setup.setDisable(false);
+            }
+        });
+
+
         advanceTop2Setup.setOnAction(actionEvent ->{
             player1.setName(p1nameInput.getText());
             guiStage.setScene(createP2Setup());
             guiStage.show();
         });
-
+////////Test for MP gameplay///////////////
         Button backToHome = new Button("Back to Main Menu");
         backToHome.setOnAction(actionEvent -> {
+//            String temp = p1Board.populateBoard();
             player1.setFleetNumber(4);
             p1Board.resetBoard();
+//            p1Board.drawBoard(temp);
             guiStage.setScene(createMainMenu());
         });
         p1setup.getChildren().add(backToHome);
@@ -142,15 +192,25 @@ public class Game extends Application {
     public Scene createP2Setup(){
         VBox p2setup = new VBox();
         Label p2nameLabel = new Label("Player 2 enter your name!");
-        TextField p2nameInput = new TextField();
-
+        p2nameInput.setText("");
         p2nameInput.setPromptText("Kräken Kommander 2: Enter your name!");
         p2nameInput.setFocusTraversable(false);
-       
 
         p2setup.getChildren().add(p2nameLabel);
         p2setup.getChildren().add(p2nameInput);
-        Button startGame = new Button("Click to start game!");
+        startGame.setDisable(true);
+        p2nameInput.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> ov, String t, String t1) {
+                if (player2.getFleetNumber()>0)
+                    startGame.setDisable(true);
+                else if (t1.equals(""))
+                    startGame.setDisable(true);
+                else
+                    startGame.setDisable(false);
+            }
+        });
+
         startGame.setOnAction(actionEvent -> {
             player2.setName(p2nameInput.getText());
             guiStage.setScene(createP1Turn());
@@ -166,7 +226,6 @@ public class Game extends Application {
             guiStage.setScene(createMainMenu());
         });
         p2setup.getChildren().add(backToHome);
-
         p2setup.getChildren().add(startGame);
         p2Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p2PlaceShips);
         p2setup.getChildren().add(p2Board.getGameBoard());
@@ -178,17 +237,23 @@ public class Game extends Application {
 
     public Scene createP1Turn(){
         VBox p1Turn = new VBox();
+        Label p1TurnLabel = new Label("It is your turn " + player1.getName());
         p1Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1PlaceShips);
         p1Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1fireEvent);
         p1Board.setShipstoVisible(gameIcons.getShipIcon());
         p2Board.setShipstoInvisible();
         p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2PlaceShips);
         p2Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p2fireEvent);
+        p1Turn.getChildren().add(quitGame);
+        p1Turn.getChildren().add(p1TurnLabel);
         p1Turn.getChildren().add(p2Board.getGameBoard());
         p1Turn.getChildren().add(p1Board.getGameBoard());
         endP1Turn.setOnAction(actionEvent -> {
             guiStage.setScene(endOfP1Turn());
             guiStage.show();
+        });
+        quitGame.setOnAction(actionEvent -> {
+            areYouSureYouWantToQuitAlert();
         });
         endP1Turn.setDisable(true);
         p1Turn.getChildren().add(endP1Turn);
@@ -200,17 +265,23 @@ public class Game extends Application {
 
     public Scene createP2Turn(){
         VBox p2Turn = new VBox();
+        Label p2TurnLabel = new Label("It is your turn " + player2.getName());
         p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2PlaceShips);
         p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2fireEvent);
         p1Board.setShipstoInvisible();
         p2Board.setShipstoVisible(gameIcons.getShipIcon());
         p1Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1PlaceShips);
         p1Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p1fireEvent);
+        p2Turn.getChildren().add(quitGame);
+        p2Turn.getChildren().add(p2TurnLabel);
         p2Turn.getChildren().add(p1Board.getGameBoard());
         p2Turn.getChildren().add(p2Board.getGameBoard());
         endP2Turn.setOnAction(actionEvent -> {
             guiStage.setScene(endOfP2Turn());
             guiStage.show();
+        });
+        quitGame.setOnAction(actionEvent -> {
+            areYouSureYouWantToQuitAlert();
         });
         endP2Turn.setDisable(true);
         p2Turn.getChildren().add(endP2Turn);
@@ -254,10 +325,10 @@ public class Game extends Application {
         multiplayerLabel.setTextFill(Color.WHITE);
         multiplayerLabel.setFont(Font.font("Arial", FontWeight.BOLD, 30));
         multiplayerLabel.setLineSpacing(30);
-//        BackgroundImage menu = new BackgroundImage(
-//                new Image("resources/tech.jpg", 420, 700, true, true),
-//                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
-//        mpSetup.setBackground(new Background(menu));
+        BackgroundImage menu = new BackgroundImage(
+                new Image("resources/mpsetup.jpg", 420, 700, true, true),
+                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
+        mpSetup.setBackground(new Background(menu));
         mpSetup.getChildren().add(multiplayerLabel);
         try {
             String ip = InetAddress.getLocalHost().getHostAddress();
@@ -477,7 +548,15 @@ public class Game extends Application {
             p2Board.tileList.get(colX).get(colY).fire();
             if (p2Board.tileList.get(colX).get(colY).isOccupied()) {
                 p2Board.rec[colX][colY].setFill(gameIcons.getHitIcon());
+            boolean validMove = false;
+            if (p2Board.tileList.get(colX).get(colY).getMiss() ||
+                    p2Board.tileList.get(colX).get(colY).isHit())
+            { showDuplicateMoveAlert(); }
+            else if (p2Board.tileList.get(colX).get(colY).isOccupied()) {
+                p2Board.rec[colX][colY].setFill(gameIcons.getHitIcon());
                 player2.setShipsLeft(player2.getShipsLeft() - 1);
+                p2Board.tileList.get(colX).get(colY).setHit(true);
+                validMove = true;
                 if (Gameover.isGameOver(player2)) {
                     Gameover.setWinningPlayer(player1);
                     guiStage.setScene(createGameOver());
@@ -485,9 +564,13 @@ public class Game extends Application {
                 }
             } else {
                 p2Board.rec[colX][colY].setFill(gameIcons.getMissIcon());
+                p2Board.tileList.get(colX).get(colY).setMiss(true);
+                validMove = true;
             }
-            p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2fireEvent);
-            endP1Turn.setDisable(false);
+            if (validMove) {
+                p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2fireEvent);
+                endP1Turn.setDisable(false);
+            }
         }
     };
 
@@ -501,7 +584,15 @@ public class Game extends Application {
             p1Board.tileList.get(colX).get(colY).fire();
             if (p1Board.tileList.get(colX).get(colY).isOccupied()) {
                 p1Board.rec[colX][colY].setFill(gameIcons.getHitIcon());
+            boolean validMove = false;
+            if (p1Board.tileList.get(colX).get(colY).getMiss() ||
+                    p1Board.tileList.get(colX).get(colY).isHit())
+            { showDuplicateMoveAlert(); }
+            else if (p1Board.tileList.get(colX).get(colY).isOccupied()) {
+                p1Board.rec[colX][colY].setFill(gameIcons.getHitIcon());
                 player1.setShipsLeft(player1.getShipsLeft() - 1);
+                p1Board.tileList.get(colX).get(colY).setHit(true);
+                validMove = true;
                 if (Gameover.isGameOver(player1)) {
                     Gameover.setWinningPlayer(player2);
                     guiStage.setScene(createGameOver());
@@ -509,9 +600,13 @@ public class Game extends Application {
                 }
             } else {
                 p1Board.rec[colX][colY].setFill(gameIcons.getMissIcon());
+                p1Board.tileList.get(colX).get(colY).setMiss(true);
+                validMove = true;
             }
-            p1Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1fireEvent);
-            endP2Turn.setDisable(false);
+            if (validMove) {
+                p1Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1fireEvent);
+                endP2Turn.setDisable(false);
+            }
         }
     };
 
@@ -533,6 +628,8 @@ public class Game extends Application {
                 } else {
                     showDoubleShipAlert();
                 }
+                if(!(p1nameInput.getText().equals("")) && (player1.getFleetNumber() == 0))
+                    advanceTop2Setup.setDisable(false);
             }
         }
     };
@@ -566,6 +663,8 @@ public class Game extends Application {
                 else{
                     showDoubleShipAlert();
                 }
+                if(!(p2nameInput.getText().equals("")) && (player2.getFleetNumber() == 0))
+                    startGame.setDisable(false);
             }
         }
     };
