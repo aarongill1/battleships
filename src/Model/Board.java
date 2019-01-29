@@ -117,6 +117,7 @@ public class Board {
     }
 
     public String populateBoard() {
+        // Gets ship coordinates
         String result = "";
         for (int i = 0; i < this.getSize(); i++) {
             for (int j = 0; j < this.getSize(); j++) {
@@ -126,11 +127,17 @@ public class Board {
                 }
             }
         }
-        System.out.println(result);
         return result;
     }
 
+    public void drawBoard(String coords) {
+        // Use coordinates to place ships in existing board
+        coords = coords.replaceAll("[^\\d.]", "");
+        String shipPath = "resources/boat.png";
+        Image shipImage = new Image(shipPath);
+
     public void drawBoard(String coords, ImagePattern fill) {
+
         int[] nums = new int[coords.length()];
         for (int i = 0; i < coords.length(); i++) {
             nums[i] = Character.getNumericValue(coords.charAt(i));
@@ -139,6 +146,7 @@ public class Board {
             this.getTileList().get(nums[i]).get(nums[i+1]).setOccupied();
             rec[nums[i]][nums[i+1]].setFill(fill);
         }
+
     }
 
     public void resetBoard() {

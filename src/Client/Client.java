@@ -49,22 +49,29 @@ public class Client {
         return false;
     }
 
-    private static boolean isInitialize(String message, DatagramPacket packet){
-          if (message.startsWith("\\set: ")){
+    private static boolean isInitializeP2(String message, DatagramPacket packet){
+          if (message.startsWith("\\sep:")){
               return true;
           } else
           return false;
     }
 
+    private static boolean isInitializeP1(String message, DatagramPacket packet){
+        if (message.startsWith("\\set:")){
+            return true;
+        } else
+            return false;
+    }
+
     private static boolean isHit(String message, DatagramPacket packet){
-          if (message.startsWith("\\hit: ")){
+          if (message.startsWith("\\hit:")){
               return true;
           } else
             return false;
     }
 
     private static boolean isMiss(String message, DatagramPacket packet){
-          if (message.startsWith("\\miss: ")){
+          if (message.startsWith("\\miss:")){
               return true;
           } else
               return false;
@@ -85,19 +92,40 @@ public class Client {
         }
     }
 
-    public void sendShip(String message){
+    public void p1sendShip(String message){
         try {
-            //prevents blank messages
-            if(message != "") {
+                System.out.println("msg step1: " + message);
                 String coordinates = "\\set: ";
+                System.out.println("msg step 2: " + coordinates);
                 coordinates += message;
+                System.out.println("msg step 3: " + coordinates);
                 coordinates += "\\e";  // \\e denotes the end of the message
-                byte[] data = message.getBytes();
+                System.out.println("msg step 4: " + coordinates);
+                byte[] data = coordinates.getBytes();
                 //We have to pass in the source, source length, address to send to and the client's port
                 DatagramPacket packet = new DatagramPacket(data, data.length, address, port);
                 socket.send(packet);
-                System.out.println("Sent message to: " + address.getHostAddress() + " - " + port);
-            }
+                System.out.println("Sent ship update message to: " + address.getHostAddress() + " - " + port);
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void p2sendShip(String message){
+        try {
+            //prevents blank messages
+            System.out.println("msg step1: " + message);
+            String coordinates = "\\sep: ";
+            System.out.println("msg step 2: " + coordinates);
+            coordinates += message;
+            System.out.println("msg step 3: " + coordinates);
+            coordinates += "\\e";  // \\e denotes the end of the message
+            System.out.println("msg step 4: " + coordinates);
+            byte[] data = coordinates.getBytes();
+            //We have to pass in the source, source length, address to send to and the client's port
+            DatagramPacket packet = new DatagramPacket(data, data.length, address, port);
+            socket.send(packet);
+            System.out.println("Sent ship update message to: " + address.getHostAddress() + " - " + port);
         } catch(Exception e){
             e.printStackTrace();
         }
@@ -105,7 +133,6 @@ public class Client {
 
     public void sendHit(String message){
         try {
-            if(message != "") {
                 String coordinates = "\\hit: ";
                 coordinates += message;
                 coordinates += "\\e";  // \\e denotes the end of the message
@@ -114,7 +141,6 @@ public class Client {
                 DatagramPacket packet = new DatagramPacket(data, data.length, address, port);
                 socket.send(packet);
                 System.out.println("Sent message to: " + address.getHostAddress() + " - " + port);
-            }
         } catch(Exception e){
             e.printStackTrace();
         }
@@ -122,7 +148,6 @@ public class Client {
 
     public void sendMiss(String message){
         try {
-            if(message != "") {
                 String coordinates = "\\miss: ";
                 coordinates += message;
                 coordinates += "\\e";  // \\e denotes the end of the message
@@ -131,7 +156,6 @@ public class Client {
                 DatagramPacket packet = new DatagramPacket(data, data.length, address, port);
                 socket.send(packet);
                 System.out.println("Sent message to: " + address.getHostAddress() + " - " + port);
-            }
         } catch(Exception e){
             e.printStackTrace();
         }
@@ -155,15 +179,20 @@ public class Client {
                         message = message.substring(0, message.indexOf("\\e")); // \\e denotes the end of the message
                         //  MANAGE MESSAGE
                         //This will need to be wrapped in a loop for turn based gameplay
-                        if(isInitialize(message, packet)){
-
-                        } else if(isHit(message, packet)) {
-
-                        } else if(isMiss(message, packet)) {
-
+                        if(isInitializeP1(message, packet)) {
+                            Game.p1UpdateShips(message);
+                            System.out.println("Update1 is functional");
+                        } else if(isInitializeP2(message, packet)){
+                            Game.p2UpdateShips(message);
+                            System.out.println("Update2 is functional");
                         }
+//                        } else if(isHit(message, packet)) {
+//
+//                        } else if(isMiss(message, packet)) {
+//
+//                        }
                         //
-                        if(!isCommand(message, packet)) {
+                        if(!isCommand(message, packet) && !isInitializeP1(message, packet) && !isInitializeP2(message, packet)) {
 //                            ClientsWindow.printToConsole(message);
                             Game.p1printToConsole(message);
                             Game.p2printToConsole(message);
