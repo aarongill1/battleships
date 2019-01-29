@@ -67,15 +67,40 @@ public class Game extends Application {
     private String greet1 = "Welcome to Battleships";
     private String greet2 = "Enter your name, Kräken Kommander!";
     private String prompt1 = "It is your turn, Kommander ";
+    private String prompt2 = "Redeploy this ship elsewhere, Kommander?";
 
 
+/////////////This alert block is now unused//////////////
+//    private void showDoubleShipAlert(){
+//        Alert shipAlreadyPlacedAlert = new Alert(Alert.AlertType.INFORMATION);
+//        shipAlreadyPlacedAlert.setTitle("Dumbass! ");
+//        shipAlreadyPlacedAlert.setHeaderText("Yes, you are!");
+//        shipAlreadyPlacedAlert.setContentText("You've already placed a ship there!");
+//        shipAlreadyPlacedAlert.showAndWait();
+//    }
 
-    private void showDoubleShipAlert(){
-        Alert shipAlreadyPlacedAlert = new Alert(Alert.AlertType.INFORMATION);
-        shipAlreadyPlacedAlert.setTitle("Dumbass! ");
-        shipAlreadyPlacedAlert.setHeaderText("Yes, you are!");
-        shipAlreadyPlacedAlert.setContentText("You've already placed a ship there!");
-        shipAlreadyPlacedAlert.showAndWait();
+    private void removeShipAlertP1(int colX, int colY) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Remove ship?");
+        alert.setContentText(prompt2);
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            p1Board.tileList.get(colX).get(colY).isOccupied(false);
+            p1Board.rec[colX][colY].setFill(null);
+            player1.setFleetNumber((player1.getFleetNumber() + 1));
+        }
+    }
+
+    private void removeShipAlertP2(int colX, int colY) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Remove ship?");
+        alert.setContentText(prompt2);
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            p2Board.tileList.get(colX).get(colY).isOccupied(false);
+            p2Board.rec[colX][colY].setFill(null);
+            player2.setFleetNumber((player2.getFleetNumber() + 1));
+        }
     }
 
     private void showDuplicateMoveAlert(){
@@ -109,6 +134,7 @@ public class Game extends Application {
             guiStage.show();
         }
     }
+
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -727,21 +753,27 @@ public class Game extends Application {
     EventHandler<MouseEvent> p1PlaceShips = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent me) {
-            if (player1.getFleetNumber() != 0) {
-                double posX = me.getX();
-                double posY = me.getY();
-                int colX = (int) (posX / p1Board.getRectWidth());
-                int colY = (int) (posY / p1Board.getRectWidth());
-                if (!p1Board.tileList.get(colX).get(colY).isOccupied()) {
-                    p1Board.tileList.get(colX).get(colY).setOccupied();
-                    p1Board.rec[colX][colY].setFill(gameIcons.getShipIcon());
-                    player1.setFleetNumber((player1.getFleetNumber() - 1));
-                } else {
-                    showDoubleShipAlert();
+            double posX = me.getX();
+            double posY = me.getY();
+            int colX = (int) (posX / p1Board.getRectWidth());
+            int colY = (int) (posY / p1Board.getRectWidth());
+            if (p1Board.tileList.get(colX).get(colY).isOccupied())
+                removeShipAlertP1(colX, colY);
+            else {
+                if (player1.getFleetNumber() != 0) {
+                    if (!p1Board.tileList.get(colX).get(colY).isOccupied()) {
+                        p1Board.tileList.get(colX).get(colY).setOccupied();
+                        p1Board.rec[colX][colY].setFill(gameIcons.getShipIcon());
+                        player1.setFleetNumber((player1.getFleetNumber() - 1));
+                    }
+                    else
+                        removeShipAlertP1(colX, colY);
                 }
-                if(!(p1nameInput.getText().equals("")) && (player1.getFleetNumber() == 0))
-                    advanceTop2Setup.setDisable(false);
             }
+            if (!(p1nameInput.getText().equals("")) && (player1.getFleetNumber() == 0))
+                advanceTop2Setup.setDisable(false);
+            else
+                advanceTop2Setup.setDisable(true);
         }
     };
 
@@ -761,22 +793,26 @@ public class Game extends Application {
     EventHandler<MouseEvent> p2PlaceShips = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent me) {
-            if (player2.getFleetNumber() != 0) {
-                double posX = me.getX();
-                double posY = me.getY();
-                int colX = (int) (posX / p2Board.getRectWidth());
-                int colY = (int) (posY / p2Board.getRectWidth());
-                if (!p2Board.tileList.get(colX).get(colY).isOccupied()) {
-                    p2Board.tileList.get(colX).get(colY).setOccupied();
-                    p2Board.rec[colX][colY].setFill(gameIcons.getShipIcon());
-                    player2.setFleetNumber((player2.getFleetNumber() - 1));
+            double posX = me.getX();
+            double posY = me.getY();
+            int colX = (int) (posX / p2Board.getRectWidth());
+            int colY = (int) (posY / p2Board.getRectWidth());
+            if (p2Board.tileList.get(colX).get(colY).isOccupied())
+                removeShipAlertP2(colX, colY);
+            else {
+                if (player2.getFleetNumber() != 0) {
+                    if (!p2Board.tileList.get(colX).get(colY).isOccupied()) {
+                        p2Board.tileList.get(colX).get(colY).setOccupied();
+                        p2Board.rec[colX][colY].setFill(gameIcons.getShipIcon());
+                        player2.setFleetNumber((player2.getFleetNumber() - 1));
+                    } else
+                        removeShipAlertP2(colX, colY);
                 }
-                else{
-                    showDoubleShipAlert();
-                }
-                if(!(p2nameInput.getText().equals("")) && (player2.getFleetNumber() == 0))
-                    startGame.setDisable(false);
             }
+            if (!(p2nameInput.getText().equals("")) && (player2.getFleetNumber() == 0))
+                startGame.setDisable(false);
+            else
+                startGame.setDisable(true);
         }
     };
 
