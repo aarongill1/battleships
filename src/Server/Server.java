@@ -17,12 +17,6 @@ public class Server {
 
         try {
             socket = new DatagramSocket(port);
-
-//            boardSocket = new Socket();
-//            ObjectOutputStream objectOutput = new ObjectOutputStream(boardSocket.getOutputStream());
-//            objectOutput.flush();
-//            ObjectInputStream objectInput = new ObjectInputStream(boardSocket.getInputStream());
-
             running = true;
             listen();
             System.out.println("Server started on port " + port);
@@ -37,7 +31,6 @@ public class Server {
         for(ClientInfo info : clients){
             send(message, info.getAddress(), info.getPort());
         }
-
     }
 
 
