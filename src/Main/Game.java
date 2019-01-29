@@ -159,9 +159,9 @@ public class Game extends Application {
             }
         });
 
-
         advanceTop2Setup.setOnAction(actionEvent ->{
             player1.setName(p1nameInput.getText());
+            p1Board.placeKraken(gameIcons.getKrispinIcon());
             guiStage.setScene(createP2Setup());
             guiStage.show();
         });
@@ -240,7 +240,6 @@ public class Game extends Application {
         p1Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1PlaceShips);
         p1Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1fireEvent);
         p1Board.setShipstoVisible(gameIcons.getShipIcon());
-        p1Board.placeKraken(gameIcons.getKrispinIcon());
         p2Board.setShipstoInvisible();
         p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2PlaceShips);
         p2Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p2fireEvent);

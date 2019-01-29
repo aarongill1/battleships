@@ -156,6 +156,7 @@ public class Board {
                     this.getTileList().get(i).get(j).isOccupied(false);
                     this.getTileList().get(i).get(j).setHit(false);
                     this.getTileList().get(i).get(j).setMiss(false);
+                    this.getTileList().get(i).get(j).setKraken(false);
                     rec[i][j].setFill(null);
             }
         }
@@ -173,6 +174,7 @@ public class Board {
             System.out.println(colY);
             if(!this.getTileList().get(colX).get(colY).isOccupied()){
                 this.getTileList().get(colX).get(colY).setKraken(true);
+                // Hide below line to hide krispen from view
                 rec[colX][colY].setFill(krispen);
                 this.setKrakenPlaced(true);
             }
