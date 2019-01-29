@@ -54,6 +54,9 @@ public class Game extends Application {
     Button advanceTop2Setup = new Button("Click when finished");
     Button startGame = new Button("Click to start game!");
     Button quitGame = new Button("Quit game and return to Main Menu");
+    Button backToHome = new Button("Back to Main Menu");
+
+
     TextField p1nameInput = new TextField();
     TextField p2nameInput = new TextField();
 
@@ -61,6 +64,9 @@ public class Game extends Application {
     boolean p2updated = false;
 
     final String computer = "Computer";
+    private String greet1 = "Welcome to Battleships";
+    private String greet2 = "Enter your name, Kräken Kommander!";
+    private String prompt1 = "It is your turn, Kommander ";
 
 
 
@@ -116,7 +122,7 @@ public class Game extends Application {
 
     public Scene createMainMenu(){
         VBox frontPage = new VBox();
-        Label welcomeLabel = new Label("Welcome to Battleships");
+        Label welcomeLabel = new Label(greet1);
         Label welcomeLabelPt2 = new Label("Kräken Edition");
         welcomeLabel.setTextFill(Color.WHITE);
         welcomeLabel.setFont(Font.font("Arial", FontWeight.BOLD, 30));
@@ -159,9 +165,11 @@ public class Game extends Application {
 
     public Scene createP1Setup(){
         VBox p1setup = new VBox();
-        Label p1welcomeMessage = new Label("Welcome to Battleships - Player 1, select your ship locations");
+        Label p1welcomeMessage = new Label(greet1);
+        Label p1placeShips = new Label("Choose the location of your " +player1.getFleetNumber() +" ships");
         p1nameInput.setText("");
-        p1nameInput.setPromptText("Kräken Kommander 1: Enter your name!");
+        p1nameInput.setPromptText(greet2);
+
         p1nameInput.setFocusTraversable(false);
 
         advanceTop2Setup.setDisable(true);
@@ -189,7 +197,6 @@ public class Game extends Application {
             }
         });
 ////////Test for MP gameplay///////////////
-        Button backToHome = new Button("Back to Main Menu");
         backToHome.setOnAction(actionEvent -> {
 //            String temp = p1Board.populateBoard();
             resetPlayerandBoard();
@@ -202,6 +209,7 @@ public class Game extends Application {
         p1setup.getChildren().add(p1welcomeMessage);
         p1setup.getChildren().add(p1nameInput);
         p1setup.getChildren().add(p1Board.getGameBoard());
+        p1setup.getChildren().add(p1placeShips);
         p1setup.getChildren().add(advanceTop2Setup);
         p1setup.getChildren().add(backToHome);
         p1setup.setAlignment(Pos.CENTER);
@@ -212,9 +220,11 @@ public class Game extends Application {
 
     public Scene createP2Setup(){
         VBox p2setup = new VBox();
-        Label p2welcomeMessage = new Label("Welcome to Battleships - Player 2, select your ship locations");
+        Label p2welcomeMessage = new Label(greet1);
+        Label p2placeShips = new Label("Choose the location of your " +player2.getFleetNumber() +" ships");
         p2nameInput.setText("");
-        p2nameInput.setPromptText("Kräken Kommander 2: Enter your name!");
+        p2nameInput.setPromptText(greet2);
+
         p2nameInput.setFocusTraversable(false);
 
         startGame.setDisable(true);
@@ -236,7 +246,6 @@ public class Game extends Application {
             guiStage.show();
         });
 
-        Button backToHome = new Button("Back to Main Menu");
         backToHome.setOnAction(actionEvent -> {
             resetPlayerandBoard();
             guiStage.setScene(createMainMenu());
@@ -246,6 +255,7 @@ public class Game extends Application {
         p2setup.getChildren().add(p2welcomeMessage);
         p2setup.getChildren().add(p2nameInput);
         p2setup.getChildren().add(p2Board.getGameBoard());
+        p2setup.getChildren().add(p2placeShips);
         p2setup.getChildren().add(startGame);
         p2setup.getChildren().add(backToHome);
         p2setup.setAlignment(Pos.CENTER);
@@ -270,7 +280,6 @@ public class Game extends Application {
             guiStage.show();
         });
 
-        Button backToHome = new Button("Back to Main Menu");
         backToHome.setOnAction(actionEvent -> {
             resetPlayerandBoard();
             guiStage.setScene(createMainMenu());
@@ -288,7 +297,7 @@ public class Game extends Application {
 
     public Scene createP1Turn(){
         VBox p1Turn = new VBox();
-        Label p1TurnLabel = new Label("It is your turn " + player1.getName());
+        Label p1TurnLabel = new Label(prompt1 + player1.getName());
         p1Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1PlaceShips);
         p1Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1fireEvent);
         p1Board.setShipstoVisible(gameIcons.getShipIcon());
@@ -316,7 +325,7 @@ public class Game extends Application {
 
     public Scene createP2Turn(){
         VBox p2Turn = new VBox();
-        Label p2TurnLabel = new Label("It is your turn " + player2.getName());
+        Label p2TurnLabel = new Label(prompt1 + player2.getName());
         p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2PlaceShips);
         p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2fireEvent);
         p1Board.setShipstoInvisible();
@@ -413,7 +422,6 @@ public class Game extends Application {
 
         });
 
-        Button backToHome = new Button("Back to Main Menu");
         backToHome.setOnAction(actionEvent -> {
             guiStage.setScene(createMainMenu());
         });
@@ -441,7 +449,6 @@ public class Game extends Application {
             guiStage.show();
         });
 
-        Button backToHome = new Button("Back to Main Menu");
         backToHome.setOnAction(actionEvent -> {
             resetPlayerandBoard();
             client1.disconnect();
@@ -475,7 +482,6 @@ public class Game extends Application {
             guiStage.show();
         });
 
-        Button backToHome = new Button("Back to Main Menu");
         backToHome.setOnAction(actionEvent -> {
             resetPlayerandBoard();
             guiStage.setScene(createMPSetup());
