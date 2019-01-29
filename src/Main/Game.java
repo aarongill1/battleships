@@ -19,9 +19,11 @@ import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Optional;
@@ -247,6 +249,7 @@ public class Game extends Application {
 
     public Scene createComputerP2Setup(){
         VBox computerSetup = new VBox();
+        Label computerSelection = new Label("Computer selection is automatic - select Start Game");
         p2nameInput.setFocusTraversable(false);
         p2nameInput.textProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -267,8 +270,9 @@ public class Game extends Application {
         });
         computerSetup.getChildren().add(backToHome);
         computerSetup.getChildren().add(startGame);
+        computerSetup.getChildren().add(computerSelection);
         p2Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p2ComputerPlaceShips);
-        computerSetup.getChildren().add(p2Board.getGameBoard());
+//        computerSetup.getChildren().add(p2Board.getGameBoard());
         computerSetup.setAlignment(Pos.CENTER);
         computerSetup.setPadding(new Insets(10, 10, 10, 10));
         computerSetup.setSpacing(10);
@@ -309,7 +313,7 @@ public class Game extends Application {
         p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2PlaceShips);
         p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2fireEvent);
         p1Board.setShipstoInvisible();
-        p2Board.setShipstoVisible(gameIcons.getShipIcon());
+        //p2Board.setShipstoVisible(gameIcons.getShipIcon());
         p1Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1PlaceShips);
         if(player2.getName() == "Computer") {
             p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2ComputerPlaceShips);
@@ -755,9 +759,10 @@ public class Game extends Application {
                 int randomNum2 = ThreadLocalRandom.current().nextInt(0, 8);
                 if (!p2Board.tileList.get(randomNum1).get(randomNum2).isOccupied()) {
                     p2Board.tileList.get(randomNum1).get(randomNum2).setOccupied();
-                    String shipPath = "resources/boat.png";
-                    Image shipImage = new Image(shipPath);
-                    p2Board.rec[randomNum1][randomNum2].setFill(new ImagePattern(shipImage));
+                    //code to show computer selection
+//                    String shipPath = "resources/boat.png";
+//                    Image shipImage = new Image(shipPath);
+//                    p2Board.rec[randomNum1][randomNum2].setFill(new ImagePattern(shipImage));
                     player2.setFleetNumber((player2.getFleetNumber() - 1));
                 }
                     startGame.setDisable(false);
