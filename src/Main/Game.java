@@ -22,12 +22,10 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
-
 
 public class Game extends Application {
     private static Stage guiStage;
@@ -70,6 +68,16 @@ public class Game extends Application {
         shipAlreadyPlacedAlert.showAndWait();
     }
 
+    private void resetPlayerandBoard() {
+        player1.resetPlayer();
+        player2.resetPlayer();
+        p1Board.resetBoard();
+        p2Board.resetBoard();
+        p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1fireEvent);
+        p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2fireEvent);
+        p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1ComputerfireEvent);
+    }
+
     private void areYouSureYouWantToQuitAlert() {
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -78,10 +86,7 @@ public class Game extends Application {
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK) {
-            player1.resetPlayer();
-            player2.resetPlayer();
-            p1Board.resetBoard();
-            p2Board.resetBoard();
+            resetPlayerandBoard();
             guiStage.setScene(createMainMenu());
             guiStage.show();
         }
@@ -179,8 +184,8 @@ public class Game extends Application {
         Button backToHome = new Button("Back to Main Menu");
         backToHome.setOnAction(actionEvent -> {
 //            String temp = p1Board.populateBoard();
-            player1.setFleetNumber(4);
-            p1Board.resetBoard();
+            resetPlayerandBoard();
+            p2Board.resetBoard();
 //            p1Board.drawBoard(temp);
             guiStage.setScene(createMainMenu());
         });
@@ -226,10 +231,7 @@ public class Game extends Application {
 
         Button backToHome = new Button("Back to Main Menu");
         backToHome.setOnAction(actionEvent -> {
-            player1.setFleetNumber(4);
-            player2.setFleetNumber(4);
-            p1Board.resetBoard();
-            p2Board.resetBoard();
+            resetPlayerandBoard();
             guiStage.setScene(createMainMenu());
         });
         p2setup.getChildren().add(backToHome);
@@ -252,7 +254,6 @@ public class Game extends Application {
                     startGame.setDisable(false);
             }
         });
-
         startGame.setOnAction(actionEvent -> {
             guiStage.setScene(createP1Turn());
             guiStage.show();
@@ -260,10 +261,7 @@ public class Game extends Application {
 
         Button backToHome = new Button("Back to Main Menu");
         backToHome.setOnAction(actionEvent -> {
-            player1.setFleetNumber(4);
-            player2.setFleetNumber(4);
-            p1Board.resetBoard();
-            p2Board.resetBoard();
+            resetPlayerandBoard();
             guiStage.setScene(createMainMenu());
         });
         computerSetup.getChildren().add(backToHome);
@@ -310,6 +308,7 @@ public class Game extends Application {
         p2Board.setShipstoVisible();
         p1Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1PlaceShips);
         if(player2.getName() == "Computer") {
+            p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2ComputerPlaceShips);
             p1Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p1ComputerfireEvent);
         }
         else
@@ -428,7 +427,7 @@ public class Game extends Application {
 
         Button backToHome = new Button("Back to Main Menu");
         backToHome.setOnAction(actionEvent -> {
-            p1Board.resetBoard();
+            resetPlayerandBoard();
             client1.disconnect();
             Server.stop();
             guiStage.setScene(createMPSetup());
@@ -462,8 +461,7 @@ public class Game extends Application {
 
         Button backToHome = new Button("Back to Main Menu");
         backToHome.setOnAction(actionEvent -> {
-            p1Board.resetBoard();
-            p2Board.resetBoard();
+            resetPlayerandBoard();
             guiStage.setScene(createMPSetup());
         });
         p2setup.getChildren().add(backToHome);
@@ -561,10 +559,7 @@ public class Game extends Application {
 
         Button anotherGame = new Button("Play again?");
         anotherGame.setOnAction(actionEvent -> {
-            player1.resetPlayer();
-            player2.resetPlayer();
-            p1Board.resetBoard();
-            p2Board.resetBoard();
+            resetPlayerandBoard();
             guiStage.setScene(createMainMenu());
             guiStage.show();
         });
