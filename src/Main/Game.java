@@ -210,7 +210,7 @@ public class Game extends Application {
 
         startGame.setOnAction(actionEvent -> {
             player2.setName(p2nameInput.getText());
-            guiStage.setScene(createP1Turn());
+            guiStage.setScene(endOfP2Turn());
             guiStage.show();
         });
 
