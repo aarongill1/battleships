@@ -138,13 +138,9 @@ public class Game extends Application {
     public Scene createP1Setup(){
         VBox p1setup = new VBox();
         Label p1welcomeMessage = new Label("Welcome to Battleships - Player 1, select your ship locations");
-        Label p1nameLabel = new Label("Player 1 enter your name!");
-        p1setup.getChildren().add(p1nameLabel);
         p1nameInput.setText("");
         p1nameInput.setPromptText("Kräken Kommander 1: Enter your name!");
         p1nameInput.setFocusTraversable(false);
-
-        p1setup.getChildren().add(p1nameInput);
 
         advanceTop2Setup.setDisable(true);
         p1nameInput.textProperty().addListener(new ChangeListener<String>() {
@@ -174,12 +170,13 @@ public class Game extends Application {
 //            p1Board.drawBoard(temp);
             guiStage.setScene(createMainMenu());
         });
-        p1setup.getChildren().add(backToHome);
 
         p1Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p1PlaceShips);
-        p1setup.getChildren().add(p1Board.getGameBoard());
         p1setup.getChildren().add(p1welcomeMessage);
+        p1setup.getChildren().add(p1nameInput);
+        p1setup.getChildren().add(p1Board.getGameBoard());
         p1setup.getChildren().add(advanceTop2Setup);
+        p1setup.getChildren().add(backToHome);
         p1setup.setAlignment(Pos.CENTER);
         p1setup.setPadding(new Insets(10, 10, 10, 10));
         p1setup.setSpacing(10);
@@ -188,13 +185,11 @@ public class Game extends Application {
 
     public Scene createP2Setup(){
         VBox p2setup = new VBox();
-        Label p2nameLabel = new Label("Player 2 enter your name!");
+        Label p2welcomeMessage = new Label("Welcome to Battleships - Player 2, select your ship locations");
         p2nameInput.setText("");
         p2nameInput.setPromptText("Kräken Kommander 2: Enter your name!");
         p2nameInput.setFocusTraversable(false);
 
-        p2setup.getChildren().add(p2nameLabel);
-        p2setup.getChildren().add(p2nameInput);
         startGame.setDisable(true);
         p2nameInput.textProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -222,10 +217,13 @@ public class Game extends Application {
             p2Board.resetBoard();
             guiStage.setScene(createMainMenu());
         });
-        p2setup.getChildren().add(backToHome);
-        p2setup.getChildren().add(startGame);
+
         p2Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p2PlaceShips);
+        p2setup.getChildren().add(p2welcomeMessage);
+        p2setup.getChildren().add(p2nameInput);
         p2setup.getChildren().add(p2Board.getGameBoard());
+        p2setup.getChildren().add(startGame);
+        p2setup.getChildren().add(backToHome);
         p2setup.setAlignment(Pos.CENTER);
         p2setup.setPadding(new Insets(10, 10, 10, 10));
         p2setup.setSpacing(10);
