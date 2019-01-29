@@ -209,6 +209,7 @@ public class Game extends Application {
 
         startGame.setOnAction(actionEvent -> {
             player2.setName(p2nameInput.getText());
+            p2Board.placeKraken(gameIcons.getKrispinIcon());
             guiStage.setScene(endOfP2Turn());
             guiStage.show();
         });
