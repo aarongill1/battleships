@@ -660,10 +660,7 @@ public class Game extends Application {
     EventHandler<MouseEvent> p1ComputerfireEvent = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent me) {
-            int randomNum1 = ThreadLocalRandom.current().nextInt(0, 8);
-            int randomNum2 = ThreadLocalRandom.current().nextInt(0, 8);
 
-            p1Board.tileList.get(randomNum1).get(randomNum2).fire();
             String missImagePath = "resources/miss.png";
             String hitImagePath = "resources/fire.png";
             Image missImage = new Image(missImagePath);
@@ -671,6 +668,10 @@ public class Game extends Application {
             boolean validMove = false;
 
             while(!validMove) {
+                int randomNum1 = ThreadLocalRandom.current().nextInt(0, 8);
+                int randomNum2 = ThreadLocalRandom.current().nextInt(0, 8);
+                p1Board.tileList.get(randomNum1).get(randomNum2).fire();
+
                 if (p1Board.tileList.get(randomNum1).get(randomNum2).getMiss() ||
                         p1Board.tileList.get(randomNum1).get(randomNum2).isHit()) {
                 } else if (p1Board.tileList.get(randomNum1).get(randomNum2).isOccupied()) {

@@ -45,6 +45,7 @@ public class Player {
     public void resetPlayer(){
         this.fleetNumber = 4;
         this.shipsLeft = fleetNumber;
+        this.name = "";
     }
 
 }
