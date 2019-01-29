@@ -12,6 +12,7 @@ public class Board {
     private int size;
     private Pane gameBoard;
     private int rectWidth;
+    private boolean krakenPlaced;
     public ArrayList<ArrayList<Tile>> tileList;
     public Rectangle[][] rec;
 
@@ -61,7 +62,15 @@ public class Board {
         this.tileList = tileList;
     }
 
-//    public ArrayList<Rectangle[][]> getOccupied(){
+    public boolean isKrakenPlaced() {
+        return krakenPlaced;
+    }
+
+    public void setKrakenPlaced(boolean krakenPlaced) {
+        this.krakenPlaced = krakenPlaced;
+    }
+
+    //    public ArrayList<Rectangle[][]> getOccupied(){
 //        ArrayList<Rectangle[][]> result = this.tileList;
 //        return result;
 //    }
@@ -148,7 +157,26 @@ public class Board {
                     this.getTileList().get(i).get(j).setHit(false);
                     this.getTileList().get(i).get(j).setMiss(false);
                     rec[i][j].setFill(null);
-                }
             }
         }
     }
+
+    public int getRandom(){
+        return 0 + (int)(Math.random() * (this.getSize() - 0));
+    }
+
+    public void placeKraken(ImagePattern krispen){
+        while(this.isKrakenPlaced()==false){
+            int colX = this.getRandom();
+            int colY = this.getRandom();
+            System.out.println(colX);
+            System.out.println(colY);
+            if(!this.getTileList().get(colX).get(colY).isOccupied()){
+                this.getTileList().get(colX).get(colY).setKraken(true);
+                rec[colX][colY].setFill(krispen);
+                this.setKrakenPlaced(true);
+            }
+        }
+
+    }
+}

@@ -4,11 +4,13 @@ public class Tile {
     boolean hit;
     boolean occupied;
     boolean miss;
+    boolean kraken;
 
     public Tile() {
         hit = false;
         miss = false;
         occupied = false;
+        kraken = false;
     }
 
     public void fire() {
@@ -47,4 +49,11 @@ public class Tile {
         return this.miss;
     }
 
+    public boolean isKraken() {
+        return kraken;
+    }
+
+    public void setKraken(boolean kraken) {
+        this.kraken = kraken;
+    }
 }

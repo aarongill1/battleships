@@ -240,6 +240,7 @@ public class Game extends Application {
         p1Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1PlaceShips);
         p1Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1fireEvent);
         p1Board.setShipstoVisible(gameIcons.getShipIcon());
+        p1Board.placeKraken(gameIcons.getKrispinIcon());
         p2Board.setShipstoInvisible();
         p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2PlaceShips);
         p2Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p2fireEvent);
@@ -640,7 +641,7 @@ public class Game extends Application {
             double posY = me.getY();
             int colX = (int) (posX / p1Board.getRectWidth());
             int colY = (int) (posY / p1Board.getRectWidth());
-            p1Board.rec[colX][colY].setFill(gameIcons.getKrakenIcon());
+            p1Board.rec[colX][colY].setFill(gameIcons.getKrispinIcon());
         }
     };
 
