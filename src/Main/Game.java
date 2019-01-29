@@ -49,7 +49,7 @@ public class Game extends Application {
     Button endP1Turn = new Button("End Turn");
     Button endP2Turn = new Button("End Turn");
 
-    Icons gameIcons = new Icons();
+    public static Icons gameIcons = new Icons();
 
     Button advanceTop2Setup = new Button("Click when finished");
     Button startGame = new Button("Click to start game!");
@@ -803,17 +803,13 @@ public class Game extends Application {
             int colX = (int) (posX / p2Opponent.getRectWidth());
             int colY = (int) (posY / p2Board.getRectWidth());
             p2Opponent.tileList.get(colX).get(colY).fire();
-            String missImagePath = "resources/miss.png";
-            String hitImagePath = "resources/fire.png";
-            Image missImage = new Image(missImagePath);
-            Image hitImage = new Image(hitImagePath);
             boolean validMove = false;
 
             if (p2Opponent.tileList.get(colX).get(colY).getMiss() ||
                     p2Opponent.tileList.get(colX).get(colY).isHit())
             { showDuplicateMoveAlert(); }
             else if (p2Opponent.tileList.get(colX).get(colY).isOccupied()) {
-                p2Opponent.rec[colX][colY].setFill(new ImagePattern(hitImage));
+                p2Opponent.rec[colX][colY].setFill(gameIcons.getHitIcon());
                 player2.setShipsLeft(player2.getShipsLeft() - 1);
                 p2Opponent.tileList.get(colX).get(colY).setHit(true);
                 validMove = true;
@@ -823,7 +819,7 @@ public class Game extends Application {
                     guiStage.show();
                 }
             } else {
-                p2Opponent.rec[colX][colY].setFill(new ImagePattern(missImage));
+                p2Opponent.rec[colX][colY].setFill(gameIcons.getMissIcon());
                 p2Opponent.tileList.get(colX).get(colY).setMiss(true);
                 validMove = true;
             }
@@ -842,17 +838,13 @@ public class Game extends Application {
             int colX = (int) (posX / p1Opponent.getRectWidth());
             int colY = (int) (posY / p1Opponent.getRectWidth());
             p1Opponent.tileList.get(colX).get(colY).fire();
-            String missImagePath = "resources/miss.png";
-            String hitImagePath = "resources/fire.png";
-            Image missImage = new Image(missImagePath);
-            Image hitImage = new Image(hitImagePath);
             boolean validMove = false;
 
             if (p1Opponent.tileList.get(colX).get(colY).getMiss() ||
                     p1Opponent.tileList.get(colX).get(colY).isHit())
             { showDuplicateMoveAlert(); }
             else if (p1Opponent.tileList.get(colX).get(colY).isOccupied()) {
-                p1Opponent.rec[colX][colY].setFill(new ImagePattern(hitImage));
+                p1Opponent.rec[colX][colY].setFill(gameIcons.getHitIcon());
                 player2.setShipsLeft(player2.getShipsLeft() - 1);
                 p1Opponent.tileList.get(colX).get(colY).setHit(true);
                 validMove = true;
@@ -862,7 +854,7 @@ public class Game extends Application {
                     guiStage.show();
                 }
             } else {
-                p1Opponent.rec[colX][colY].setFill(new ImagePattern(missImage));
+                p1Opponent.rec[colX][colY].setFill(gameIcons.getMissIcon());
                 p1Opponent.tileList.get(colX).get(colY).setMiss(true);
                 validMove = true;
             }
@@ -875,12 +867,6 @@ public class Game extends Application {
 
 
 
-
-
-
-
-
-
     public static void p1printToConsole(String message){
         p1display.setText(p1display.getText() + message + "\n");
     }
@@ -890,31 +876,31 @@ public class Game extends Application {
     }
 
     public static void p1UpdateShips(String shipCoordinates){
-        p1Opponent.drawBoard(shipCoordinates);
+        p1Opponent.drawBoard(shipCoordinates, gameIcons.getShipIcon());
         System.out.println("p1Updateships fired");
         p1Opponent.setShipstoInvisible();
     }
 
     public static void p2UpdateShips(String shipCoordinates){
-        p2Opponent.drawBoard(shipCoordinates);
+        p2Opponent.drawBoard(shipCoordinates, gameIcons.getShipIcon());
         System.out.println("p2UpdateShips fired");
         p2Opponent.setShipstoInvisible();
     }
 
     public static void p1UpdateHits(String hitCoordinates){
-        p1Board.drawBoard(hitCoordinates);
+        p1Board.drawBoard(hitCoordinates, gameIcons.getHitIcon());
     }
 
     public static void p2UpdateHitss(String hitCoordinates){
-        p1Board.drawBoard(hitCoordinates);
+        p1Board.drawBoard(hitCoordinates, gameIcons.getHitIcon());
     }
 
     public static void p1UpdateMisses(String missCoordinates){
-        p1Board.drawBoard(missCoordinates);
+        p1Board.drawBoard(missCoordinates, gameIcons.getMissIcon());
     }
 
     public static void p2UpdateMisses(String missCoordinates){
-        p1Board.drawBoard(missCoordinates);
+        p1Board.drawBoard(missCoordinates, gameIcons.getMissIcon());
     }
 
     public static void main(String[] args) {
