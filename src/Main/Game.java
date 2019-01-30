@@ -71,16 +71,6 @@ public class Game extends Application {
     private static String prompt1 = "It is your turn, Kommander ";
     private static String prompt2 = "Redeploy this ship elsewhere, Kommander?";
 
-
-/////////////This alert block is now unused//////////////
-//    private void showDoubleShipAlert(){
-//        Alert shipAlreadyPlacedAlert = new Alert(Alert.AlertType.INFORMATION);
-//        shipAlreadyPlacedAlert.setTitle("Dumbass! ");
-//        shipAlreadyPlacedAlert.setHeaderText("Yes, you are!");
-//        shipAlreadyPlacedAlert.setContentText("You've already placed a ship there!");
-//        shipAlreadyPlacedAlert.showAndWait();
-//    }
-
     private static void removeShipAlertP1(int colX, int colY) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Remove ship?");
@@ -107,16 +97,14 @@ public class Game extends Application {
 
     private static void showDuplicateMoveAlert(){
         Alert shipAlreadyPlacedAlert = new Alert(Alert.AlertType.INFORMATION);
-        shipAlreadyPlacedAlert.setTitle("Dumbass! ");
-        shipAlreadyPlacedAlert.setHeaderText("Yes, you are!");
+        shipAlreadyPlacedAlert.setTitle("You can't do that!");
         shipAlreadyPlacedAlert.setContentText("You've already fired in this square!");
         shipAlreadyPlacedAlert.showAndWait();
     }
 
     private static void showDuplicateKrakenAlert(){
         Alert krakenAlreadyReleasedAlert = new Alert(Alert.AlertType.INFORMATION);
-        krakenAlreadyReleasedAlert.setTitle("Dumbass! ");
-        krakenAlreadyReleasedAlert.setHeaderText("Yes, you are!");
+        krakenAlreadyReleasedAlert.setTitle("You can't do that!");
         krakenAlreadyReleasedAlert.setContentText("You've already released the Kraken!");
         krakenAlreadyReleasedAlert.showAndWait();
     }
@@ -129,6 +117,9 @@ public class Game extends Application {
         p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1fireEvent);
         p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2fireEvent);
         p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1ComputerfireEvent);
+        p1Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1fireEvent);
+        p1Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2fireEvent);
+        p1Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1ComputerfireEvent);
     }
 
     private static void areYouSureYouWantToQuitAlert() {
