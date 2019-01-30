@@ -198,12 +198,11 @@ public class Game extends Application {
     public static Scene createP1Setup(){
         VBox p1setup = new VBox();
         Label p1welcomeMessage = new Label(greet1);
-        Label p1placeShips = new Label("Choose the location of your " +player1.getFleetNumber() +" ships");
+        Label p1placeShipsA = new Label("Ships left to place: ");
+        Label p1placeShipsB = new Label("" +player1.getFleetNumber());
         p1nameInput.setText("");
         p1nameInput.setPromptText(greet2);
-
         p1nameInput.setFocusTraversable(false);
-
         advanceTop2Setup.setDisable(true);
         p1nameInput.textProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -214,6 +213,13 @@ public class Game extends Application {
                     advanceTop2Setup.setDisable(true);
                 else
                     advanceTop2Setup.setDisable(false);
+            }
+        });
+
+        player1.fleetNumberProperty().addListener(new ChangeListener<Object>() {
+            @Override
+            public void changed(ObservableValue<? extends Object> observable, Object oldValue, Object newValue) {
+                p1placeShipsB.setText(new Integer(player1.getFleetNumber()).toString());
             }
         });
 
@@ -241,6 +247,8 @@ public class Game extends Application {
         });
 
         p1Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p1PlaceShips);
+        HBox p1placeShips = new HBox(p1placeShipsA, p1placeShipsB);
+        p1placeShips.setAlignment(Pos.CENTER);
         p1setup.getChildren().add(p1welcomeMessage);
         p1setup.getChildren().add(p1nameInput);
         p1setup.getChildren().add(p1Board.getGameBoard());
@@ -256,12 +264,11 @@ public class Game extends Application {
     public static Scene createP2Setup(){
         VBox p2setup = new VBox();
         Label p2welcomeMessage = new Label(greet1);
-        Label p2placeShips = new Label("Choose the location of your " +player2.getFleetNumber() +" ships");
+        Label p2placeShipsA = new Label("Ships left to place: ");
+        Label p2placeShipsB = new Label("" +player2.getFleetNumber());
         p2nameInput.setText("");
         p2nameInput.setPromptText(greet2);
-
         p2nameInput.setFocusTraversable(false);
-
         startGame.setDisable(true);
         p2nameInput.textProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -272,6 +279,13 @@ public class Game extends Application {
                     startGame.setDisable(true);
                 else
                     startGame.setDisable(false);
+            }
+        });
+
+        player2.fleetNumberProperty().addListener(new ChangeListener<Object>() {
+            @Override
+            public void changed(ObservableValue<? extends Object> observable, Object oldValue, Object newValue) {
+                p2placeShipsB.setText(new Integer(player2.getFleetNumber()).toString());
             }
         });
 
@@ -288,6 +302,8 @@ public class Game extends Application {
         });
 
         p2Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p2PlaceShips);
+        HBox p2placeShips = new HBox(p2placeShipsA, p2placeShipsB);
+        p2placeShips.setAlignment(Pos.CENTER);
         p2setup.getChildren().add(p2welcomeMessage);
         p2setup.getChildren().add(p2nameInput);
         p2setup.getChildren().add(p2Board.getGameBoard());
