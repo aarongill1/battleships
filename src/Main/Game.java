@@ -329,7 +329,9 @@ public class Game extends Application {
         p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2PlaceShips);
         p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2fireEvent);
         p1Board.setShipstoInvisible();
-        //p2Board.setShipstoVisible(gameIcons.getShipIcon());
+        if(player2.getName() != "Computer") {
+            p2Board.setShipstoVisible(gameIcons.getShipIcon());
+        }
         p1Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1PlaceShips);
         if(player2.getName() == "Computer") {
             p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2ComputerPlaceShips);
