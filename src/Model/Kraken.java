@@ -32,6 +32,7 @@ public class Kraken {
                 moved = true;
             } else if(!board.getTileList().get(colX).get(colY).isMiss()) {
                 board.rec[colX][colY].setFill(krispin);
+                board.getTileList().get(colX).get(colY).setKraken(true);
                 moved = true;
             }
 
