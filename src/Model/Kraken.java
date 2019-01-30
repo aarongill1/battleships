@@ -17,6 +17,7 @@ public class Kraken {
         for (int i = 0; i < board.getSize(); i++) {
             for (int j = 0; j < board.getSize(); j++) {
                 if (board.getTileList().get(i).get(j).isKraken()) {
+                    board.getTileList().get(i).get(j).setKraken(false);
                     board.rec[i][j].setFill(null);
                 }
             }

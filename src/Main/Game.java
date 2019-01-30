@@ -70,6 +70,15 @@ public class Game extends Application {
         shipAlreadyPlacedAlert.showAndWait();
     }
 
+    private void showDuplicateKrakenAlert(){
+        Alert krakenAlreadyReleasedAlert = new Alert(Alert.AlertType.INFORMATION);
+        krakenAlreadyReleasedAlert.setTitle("Dumbass! ");
+        krakenAlreadyReleasedAlert.setHeaderText("Yes, you are!");
+        krakenAlreadyReleasedAlert.setContentText("You've already released the Kraken!");
+        krakenAlreadyReleasedAlert.showAndWait();
+
+    }
+
     private void areYouSureYouWantToQuitAlert() {
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -604,10 +613,12 @@ public class Game extends Application {
                     guiStage.setScene(createGameOver());
                     guiStage.show();
                 }
-            } else if(p1Board.tileList.get(colX).get(colY).isKraken()){
+            } else if(p1Board.tileList.get(colX).get(colY).isKraken()) {
                 p1Board.rec[colX][colY].setFill(gameIcons.getKrispinIcon());
                 p1Kraken.setReleased(true);
                 validMove = true;
+            } else if(p1Board.getTileList().get(colX).get(colY).isKraken() && p1Kraken.isReleased()) {
+                showDuplicateKrakenAlert();
             } else {
                 p1Board.rec[colX][colY].setFill(gameIcons.getMissIcon());
                 p1Board.tileList.get(colX).get(colY).setMiss(true);
