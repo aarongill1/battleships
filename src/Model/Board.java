@@ -178,7 +178,7 @@ public class Board {
             if(!this.getTileList().get(colX).get(colY).isOccupied()){
                 this.getTileList().get(colX).get(colY).setKraken(true);
                 // Hide below line to hide krispen from view
-                rec[colX][colY].setFill(krispen);
+//                rec[colX][colY].setFill(krispen);
                 this.setKrakenPlaced(true);
             }
         }
