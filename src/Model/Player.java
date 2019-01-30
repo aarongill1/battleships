@@ -1,30 +1,42 @@
 package Model;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+
 public class Player {
 
     private String name;
     //  private int playerId;       Could be useful for the server side logic
     private Board board;
-    private int fleetNumber = 4;
+    private IntegerProperty fleetNumber;
     private int shipsLeft;
 
     public Player(String name, Board board) {
         this.name = name;
         this.board = board;
-        this.shipsLeft = fleetNumber;
-//        this.fleetNumber = board.getOccupied();
+        this.shipsLeft = getFleetNumber();
     }
 
     public Board getBoard() {
         return board;
     }
 
-    public int getFleetNumber(){
-        return this.fleetNumber;
+    public final int getFleetNumber() {
+        if (fleetNumber != null)
+            return fleetNumber.get();
+        else
+            return 4;
     }
 
-    public void setFleetNumber(int fleetNumber) {
-        this.fleetNumber = fleetNumber;
+    public final void setFleetNumber(int number) {
+        this.fleetNumberProperty().set(number);
+    }
+
+    public final IntegerProperty fleetNumberProperty() {
+        if (fleetNumber == null) {
+            fleetNumber = new SimpleIntegerProperty(4);
+        }
+        return fleetNumber;
     }
 
     public String getName(){
@@ -43,8 +55,8 @@ public class Player {
         this.shipsLeft = shipsLeft;
     }
     public void resetPlayer(){
-        this.fleetNumber = 4;
-        this.shipsLeft = this.fleetNumber;
+        setFleetNumber(4);
+        this.shipsLeft = getFleetNumber();
         this.name = "";
     }
 
