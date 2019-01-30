@@ -511,6 +511,7 @@ public class Game extends Application {
         advanceTop2Setup.setOnAction(actionEvent ->{
             client1.setName(p1nameInput.getText());
             player1.setName(p1nameInput.getText());
+            p1Board.placeKraken(gameIcons.getKrispinIcon());
             guiStage.setScene(createMPp1View());
             guiStage.show();
         });
@@ -521,8 +522,8 @@ public class Game extends Application {
             Server.stop();
             guiStage.setScene(createMPSetup());
         });
-        p1setup.getChildren().add(backToHome);
 
+        p1setup.getChildren().add(backToHome);
         p1Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p1PlaceShips);
         p1setup.getChildren().add(p1Board.getGameBoard());
         p1setup.getChildren().add(p1welcomeMessage);
@@ -544,6 +545,8 @@ public class Game extends Application {
         Button advanceToGame = new Button("Click when finished");
         advanceToGame.setOnAction(actionEvent ->{
             client2.setName(p2nameInput.getText());
+            player2.setName(p2nameInput.getText());
+            p2Board.placeKraken(gameIcons.getKrispinIcon());
             guiStage.setScene(createMPp2View());
             guiStage.show();
         });
@@ -595,7 +598,9 @@ public class Game extends Application {
             @Override
             public void handle(ActionEvent event) {
                 String coordinates2 = p1Board.populateBoard();
+                String krakenCoordinates2 = p1Board.populateBoardByKraken();
                 System.out.println("p1 ship coordinates " + coordinates2);
+                System.out.println("kraken coordinates " + krakenCoordinates2);
                 client1.p1sendShip(coordinates2);
             }
         });
@@ -642,7 +647,10 @@ public class Game extends Application {
 
 
         String coordinates = p2Board.populateBoard();
+        String krakenCoordinates = p2Board.populateBoardByKraken();
+        System.out.println("Kraken coordinates: " + krakenCoordinates);
         client2.p2sendShip(coordinates);
+
 
 
         Button p2Send = new Button("Send");
