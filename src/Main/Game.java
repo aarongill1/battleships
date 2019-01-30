@@ -4,6 +4,7 @@ import Client.Client;
 import Model.*;
 import Server.Server;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -54,7 +55,9 @@ public class Game extends Application {
     public static Button startGame = new Button("Click to start game!");
     public static Button quitGame = new Button("Quit game and return to Main Menu");
     public static Button backToHome = new Button("Back to Main Menu");
-
+    public static Button refresh = new Button("Refresh");
+    public static Button gameOverp1 = new Button("Game Over p1");
+    public static Button gameOverp2 = new Button("Game Over p2");
 
     public static TextField p1nameInput = new TextField();
     public static TextField p2nameInput = new TextField();
@@ -237,12 +240,10 @@ public class Game extends Application {
                 guiStage.show();
             }
         });
-////////Test for MP gameplay///////////////
+
         backToHome.setOnAction(actionEvent -> {
-//            String temp = p1Board.populateBoard();
             resetPlayerandBoard();
             p2Board.resetBoard();
-//            p1Board.drawBoard(temp);
             guiStage.setScene(createMainMenu());
         });
 
@@ -444,6 +445,8 @@ public class Game extends Application {
         return new Scene(p2Intermission, 400, 700);
     }
 
+////////////////////////////////////////////MULTI PLAYER SETUP\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
     public static Scene createMPSetup(){
         VBox mpSetup = new VBox();
         Label multiplayerLabel = new Label("Choose connection type");
@@ -505,6 +508,7 @@ public class Game extends Application {
         Button advanceTop2Setup = new Button("Click when finished");
         advanceTop2Setup.setOnAction(actionEvent ->{
             client1.setName(p1nameInput.getText());
+            player1.setName(p1nameInput.getText());
             guiStage.setScene(createMPp1View());
             guiStage.show();
         });
@@ -585,7 +589,6 @@ public class Game extends Application {
             }
         });
 
-        Button refresh = new Button("Refresh");
         refresh.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -595,10 +598,22 @@ public class Game extends Application {
             }
         });
 
+        gameOverp1.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        guiStage.setScene(createMpGameOver("You Lose!!"));
+                        guiStage.show();
+                    }
+                });
+            }
+        });
+
         p1Turn.getChildren().add(p1display);
         p1Turn.getChildren().add(p1input);
         p1Turn.getChildren().add(p1Send);
-        p1Turn.getChildren().add(refresh);
         p1Turn.setAlignment(Pos.CENTER);
         p1Turn.setPadding(new Insets(10, 10, 10, 10));
         p1Turn.setSpacing(10);
@@ -612,7 +627,7 @@ public class Game extends Application {
         p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2PlaceShips);
         p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2fireEvent);
         p1Opponent.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1PlaceShips);
-        p1Opponent.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p1opponentFireEvent);
+        p1Opponent.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1opponentFireEvent);
         p2BoardView.setSpacing(95);
         p2BoardView.getChildren().add(p1Opponent.getGameBoard());
         p2BoardView.getChildren().add(p2Board.getGameBoard());
@@ -625,7 +640,6 @@ public class Game extends Application {
 
 
         String coordinates = p2Board.populateBoard();
-        System.out.println("p2 ship coordinates " + coordinates);
         client2.p2sendShip(coordinates);
 
 
@@ -635,6 +649,19 @@ public class Game extends Application {
             public void handle(ActionEvent event) {
                 client2.send(p2input.getText());
                 p2input.setText("");
+            }
+        });
+
+        gameOverp2.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        guiStage.setScene(createMpGameOver("You Lose!!"));
+                        guiStage.show();
+                    }
+                });
             }
         });
 
@@ -667,9 +694,9 @@ public class Game extends Application {
         return new Scene(gameOver, 400, 700);
     }
 
-    public static Scene createMpGameOver(){
+    public static Scene createMpGameOver(String message){
         VBox gameOver = new VBox();
-        Label welcomeLabel = new Label("GAME OVER MAN, GAME OVER!\n");
+        Label welcomeLabel = new Label("GAME OVER MAN, GAME OVER! - " + message);
         Button anotherGame = new Button("Play again?");
         anotherGame.setOnAction(actionEvent -> {
             resetPlayerandBoard();
@@ -677,13 +704,22 @@ public class Game extends Application {
             guiStage.show();
         });
 
+        backToHome.setOnAction(actionEvent ->{
+            guiStage.setScene(createMainMenu());
+            resetPlayerandBoard();
+            Server.stop();
+        });
+
         Button exit = new Button("Exit");
         exit.setOnAction(actionEvent ->{
+            Server.stop();
             guiStage.close();
         });
 
         gameOver.getChildren().add(welcomeLabel);
         gameOver.getChildren().add(anotherGame);
+        gameOver.getChildren().add(backToHome);
+        gameOver.getChildren().add(exit);
         gameOver.setAlignment(Pos.CENTER);
         gameOver.setPadding(new Insets(10, 10, 10, 10));
         gameOver.setSpacing(10);
@@ -903,6 +939,9 @@ public class Game extends Application {
         }
     };
 
+
+////////////////////////////////////MULTIPLAYER FIRE EVENTS\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
     public static EventHandler<MouseEvent> p2opponentFireEvent = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent me) {
@@ -929,7 +968,11 @@ public class Game extends Application {
                 validMove = true;
                 if (Gameover.isGameOver(player2)) {
                     Gameover.setWinningPlayer(player1);
-                    guiStage.setScene(createMpGameOver());
+                    guiStage.setScene(createMpGameOver("You Win!!"));
+                    guiStage.show();
+                    client1.sendGameOver("\\goA:");
+                } else if(Gameover.isGameOver(player1)){
+                    guiStage.setScene(createMpGameOver("You Win!!"));
                     guiStage.show();
                 }
             } else {
@@ -975,8 +1018,9 @@ public class Game extends Application {
                 validMove = true;
                 if (Gameover.isGameOver(player2)) {
                     Gameover.setWinningPlayer(player1);
-                    guiStage.setScene(createMpGameOver());
+                    guiStage.setScene(createMpGameOver("You Win"));
                     guiStage.show();
+                    client2.sendGameOver("\\goB: ");
                 }
             } else {
                 p1Opponent.rec[colX][colY].setFill(gameIcons.getMissIcon());
@@ -999,6 +1043,7 @@ public class Game extends Application {
 
     public static void p1printToConsole(String message){
         p1display.setText(p1display.getText() + message + "\n");
+        refresh.fire();
     }
 
     public static void p2printToConsole(String message){
@@ -1037,6 +1082,16 @@ public class Game extends Application {
     public static void p2UpdateMisses(String missCoordinates){
         p2Board.drawBoard(missCoordinates, gameIcons.getMissIcon());
         p1Opponent.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p1opponentFireEvent);
+    }
+
+    public static void gameOverp1(){
+        System.out.println("game over");
+        gameOverp1.fire();
+    }
+
+    public static void gameOverp2(){
+        System.out.println("game over");
+        gameOverp2.fire();
     }
 
     //
