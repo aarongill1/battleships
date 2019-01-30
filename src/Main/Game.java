@@ -552,6 +552,43 @@ public class Game extends Application {
 
     // Fire events
 
+//    EventHandler<MouseEvent> p2fireEvent = new EventHandler<MouseEvent>() {
+//        @Override
+//        public void handle(MouseEvent me) {
+//            double posX = me.getX();
+//            double posY = me.getY();
+//            boolean validMove = false;
+//            int colX = (int) (posX / p2Board.getRectWidth());
+//            int colY = (int) (posY / p2Board.getRectWidth());
+//            p2Board.tileList.get(colX).get(colY).fire();
+//            if (p2Board.tileList.get(colX).get(colY).isOccupied()) {
+//                p2Board.rec[colX][colY].setFill(gameIcons.getHitIcon());
+//            }
+//            if (p2Board.tileList.get(colX).get(colY).getMiss() ||
+//                    p2Board.tileList.get(colX).get(colY).isHit())
+//            { showDuplicateMoveAlert(); }
+//            else if (p2Board.tileList.get(colX).get(colY).isOccupied()) {
+//                p2Board.rec[colX][colY].setFill(gameIcons.getHitIcon());
+//                player2.setShipsLeft(player2.getShipsLeft() - 1);
+//                p2Board.tileList.get(colX).get(colY).setHit(true);
+//                validMove = true;
+//                if (Gameover.isGameOver(player2)) {
+//                    Gameover.setWinningPlayer(player1);
+//                    guiStage.setScene(createGameOver());
+//                    guiStage.show();
+//                }
+//            } else {
+//                p2Board.rec[colX][colY].setFill(gameIcons.getMissIcon());
+//                p2Board.tileList.get(colX).get(colY).setMiss(true);
+//                validMove = true;
+//            }
+//            if (validMove) {
+//                p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2fireEvent);
+//                endP1Turn.setDisable(false);
+//            }
+//        }
+//    };
+
     EventHandler<MouseEvent> p2fireEvent = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent me) {
@@ -563,12 +600,6 @@ public class Game extends Application {
             p2Board.tileList.get(colX).get(colY).fire();
             if (p2Board.tileList.get(colX).get(colY).isOccupied()) {
                 p2Board.rec[colX][colY].setFill(gameIcons.getHitIcon());
-            }
-            if (p2Board.tileList.get(colX).get(colY).getMiss() ||
-                    p2Board.tileList.get(colX).get(colY).isHit())
-            { showDuplicateMoveAlert(); }
-            else if (p2Board.tileList.get(colX).get(colY).isOccupied()) {
-                p2Board.rec[colX][colY].setFill(gameIcons.getHitIcon());
                 player2.setShipsLeft(player2.getShipsLeft() - 1);
                 p2Board.tileList.get(colX).get(colY).setHit(true);
                 validMove = true;
@@ -577,13 +608,24 @@ public class Game extends Application {
                     guiStage.setScene(createGameOver());
                     guiStage.show();
                 }
+            }
+            else if (p2Board.tileList.get(colX).get(colY).getMiss() || p2Board.tileList.get(colX).get(colY).isHit()) {
+                showDuplicateMoveAlert();
+            }
+            else if(p2Board.tileList.get(colX).get(colY).isKraken()&& p2Kraken.isReleased()) {
+                showDuplicateKrakenAlert();
+            }
+            else if(p2Board.tileList.get(colX).get(colY).isKraken()) {
+                p2Board.rec[colX][colY].setFill(gameIcons.getKrispinIcon());
+                p2Kraken.setReleased(true);
+                validMove = true;
             } else {
                 p2Board.rec[colX][colY].setFill(gameIcons.getMissIcon());
                 p2Board.tileList.get(colX).get(colY).setMiss(true);
                 validMove = true;
             }
             if (validMove) {
-                p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2fireEvent);
+                p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1fireEvent);
                 endP1Turn.setDisable(false);
             }
         }
@@ -600,11 +642,6 @@ public class Game extends Application {
             p1Board.tileList.get(colX).get(colY).fire();
             if (p1Board.tileList.get(colX).get(colY).isOccupied()) {
                 p1Board.rec[colX][colY].setFill(gameIcons.getHitIcon());
-            }
-            if (p1Board.tileList.get(colX).get(colY).getMiss() || p1Board.tileList.get(colX).get(colY).isHit()) {
-                showDuplicateMoveAlert(); }
-            else if (p1Board.tileList.get(colX).get(colY).isOccupied()) {
-                p1Board.rec[colX][colY].setFill(gameIcons.getHitIcon());
                 player1.setShipsLeft(player1.getShipsLeft() - 1);
                 p1Board.tileList.get(colX).get(colY).setHit(true);
                 validMove = true;
@@ -613,12 +650,17 @@ public class Game extends Application {
                     guiStage.setScene(createGameOver());
                     guiStage.show();
                 }
-            } else if(p1Board.tileList.get(colX).get(colY).isKraken()) {
+            }
+            else if (p1Board.tileList.get(colX).get(colY).getMiss() || p1Board.tileList.get(colX).get(colY).isHit()) {
+                showDuplicateMoveAlert();
+            }
+            else if(p1Board.tileList.get(colX).get(colY).isKraken()&& p1Kraken.isReleased()) {
+                showDuplicateKrakenAlert();
+            }
+            else if(p1Board.tileList.get(colX).get(colY).isKraken()) {
                 p1Board.rec[colX][colY].setFill(gameIcons.getKrispinIcon());
                 p1Kraken.setReleased(true);
                 validMove = true;
-            } else if(p1Board.getTileList().get(colX).get(colY).isKraken() && p1Kraken.isReleased()) {
-                showDuplicateKrakenAlert();
             } else {
                 p1Board.rec[colX][colY].setFill(gameIcons.getMissIcon());
                 p1Board.tileList.get(colX).get(colY).setMiss(true);
