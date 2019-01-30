@@ -45,6 +45,10 @@ public class Tile {
         this.miss = miss;
     }
 
+    public boolean isMiss() {
+        return miss;
+    }
+
     public boolean getMiss(){
         return this.miss;
     }

@@ -14,14 +14,27 @@ public class Kraken {
     }
 
     public void krakenSmash(Board board, ImagePattern destroyedFill, ImagePattern krispin, Player player){
-        int colX = this.getRandom();
-        int colY = this.getRandom();
-        if(board.getTileList().get(colX).get(colY).isOccupied()){
-            board.getTileList().get(colX).get(colY).setHit(true);
-            board.rec[colX][colY].setFill(destroyedFill);
-            player.setFleetNumber(player.getShipsLeft()-1);
-        } else {
-            board.rec[colX][colY].setFill(krispin);
+        for (int i = 0; i < board.getSize(); i++) {
+            for (int j = 0; j < board.getSize(); j++) {
+                if (board.getTileList().get(i).get(j).isKraken()) {
+                    board.rec[i][j].setFill(null);
+                }
+            }
+        }
+        boolean moved = false;
+        while(moved != true) {
+            int colX = this.getRandom();
+            int colY = this.getRandom();
+            if (board.getTileList().get(colX).get(colY).isOccupied()) {
+                board.getTileList().get(colX).get(colY).setHit(true);
+                board.rec[colX][colY].setFill(destroyedFill);
+                player.setFleetNumber(player.getShipsLeft() - 1);
+                moved = true;
+            } else if(!board.getTileList().get(colX).get(colY).isMiss()) {
+                board.rec[colX][colY].setFill(krispin);
+                moved = true;
+            }
+
         }
     }
 

@@ -607,6 +607,7 @@ public class Game extends Application {
             } else if(p1Board.tileList.get(colX).get(colY).isKraken()){
                 p1Board.rec[colX][colY].setFill(gameIcons.getKrispinIcon());
                 p1Kraken.setReleased(true);
+                validMove = true;
             } else {
                 p1Board.rec[colX][colY].setFill(gameIcons.getMissIcon());
                 p1Board.tileList.get(colX).get(colY).setMiss(true);
