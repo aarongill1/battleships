@@ -764,7 +764,7 @@ public class Game extends Application {
                 validMove = true;
             }
             if (validMove) {
-                p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1fireEvent);
+                p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2fireEvent);
                 endP1Turn.setDisable(false);
             }
         }
