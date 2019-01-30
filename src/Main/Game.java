@@ -1,10 +1,7 @@
 package Main;
 
 import Client.Client;
-import Model.Board;
-import Model.Gameover;
-import Model.Icons;
-import Model.Player;
+import Model.*;
 import Server.Server;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
@@ -44,6 +41,8 @@ public class Game extends Application {
     private static Board p2Board = new Board(8, 30);
     private static Board p1Opponent = new Board(8, 30);
     private static Board p2Opponent = new Board(8, 30);
+    Kraken p1Kraken = new Kraken();
+    Kraken p2Kraken = new Kraken();
     private static Player player1 = new Player(null, p1Board);
     private static Player player2 = new Player(null, p2Board);
     public static Button endP1Turn = new Button("End Turn");
@@ -109,6 +108,16 @@ public class Game extends Application {
         shipAlreadyPlacedAlert.setHeaderText("Yes, you are!");
         shipAlreadyPlacedAlert.setContentText("You've already fired in this square!");
         shipAlreadyPlacedAlert.showAndWait();
+    }
+
+
+
+    private void showDuplicateKrakenAlert(){
+        Alert krakenAlreadyReleasedAlert = new Alert(Alert.AlertType.INFORMATION);
+        krakenAlreadyReleasedAlert.setTitle("Dumbass! ");
+        krakenAlreadyReleasedAlert.setHeaderText("Yes, you are!");
+        krakenAlreadyReleasedAlert.setContentText("You've already released the Kraken!");
+        krakenAlreadyReleasedAlert.showAndWait();
     }
 
     private static void resetPlayerandBoard() {
@@ -213,6 +222,9 @@ public class Game extends Application {
 
         advanceTop2Setup.setOnAction(actionEvent ->{
             player1.setName(p1nameInput.getText());
+            p1Board.placeKraken(gameIcons.getKrispinIcon());
+            guiStage.setScene(createP2Setup());
+            guiStage.show();
             if(player2.getName() == "Computer") {
                 guiStage.setScene(createComputerP2Setup());
                 guiStage.show();
@@ -268,6 +280,7 @@ public class Game extends Application {
 
         startGame.setOnAction(actionEvent -> {
             player2.setName(p2nameInput.getText());
+            p2Board.placeKraken(gameIcons.getKrispinIcon());
             guiStage.setScene(endOfP2Turn());
             guiStage.show();
         });
@@ -334,6 +347,9 @@ public class Game extends Application {
         p1Turn.getChildren().add(p1TurnLabel);
         p1Turn.getChildren().add(p2Board.getGameBoard());
         p1Turn.getChildren().add(p1Board.getGameBoard());
+        if(p2Kraken.isReleased()){
+            p2Kraken.krakenSmash(p2Board, gameIcons.getDestroyedIcon(), gameIcons.getKrispinIcon(), player2);
+        }
         endP1Turn.setOnAction(actionEvent -> {
             guiStage.setScene(endOfP1Turn());
             guiStage.show();
@@ -369,6 +385,9 @@ public class Game extends Application {
         p2Turn.getChildren().add(p2TurnLabel);
         p2Turn.getChildren().add(p1Board.getGameBoard());
         p2Turn.getChildren().add(p2Board.getGameBoard());
+        if(p1Kraken.isReleased()){
+            p1Kraken.krakenSmash(p1Board, gameIcons.getDestroyedIcon(), gameIcons.getKrispinIcon(), player1);
+        }
         endP2Turn.setOnAction(actionEvent -> {
             guiStage.setScene(endOfP2Turn());
             guiStage.show();
@@ -673,12 +692,6 @@ public class Game extends Application {
             p2Board.tileList.get(colX).get(colY).fire();
             if (p2Board.tileList.get(colX).get(colY).isOccupied()) {
                 p2Board.rec[colX][colY].setFill(gameIcons.getHitIcon());
-            }
-            if (p2Board.tileList.get(colX).get(colY).getMiss() ||
-                    p2Board.tileList.get(colX).get(colY).isHit())
-            { showDuplicateMoveAlert(); }
-            else if (p2Board.tileList.get(colX).get(colY).isOccupied()) {
-                p2Board.rec[colX][colY].setFill(gameIcons.getHitIcon());
                 player2.setShipsLeft(player2.getShipsLeft() - 1);
                 p2Board.tileList.get(colX).get(colY).setHit(true);
                 validMove = true;
@@ -687,13 +700,24 @@ public class Game extends Application {
                     guiStage.setScene(createGameOver());
                     guiStage.show();
                 }
+            }
+            else if (p2Board.tileList.get(colX).get(colY).getMiss() || p2Board.tileList.get(colX).get(colY).isHit()) {
+                showDuplicateMoveAlert();
+            }
+            else if(p2Board.tileList.get(colX).get(colY).isKraken()&& p2Kraken.isReleased()) {
+                showDuplicateKrakenAlert();
+            }
+            else if(p2Board.tileList.get(colX).get(colY).isKraken()) {
+                p2Board.rec[colX][colY].setFill(gameIcons.getKrispinIcon());
+                p2Kraken.setReleased(true);
+                validMove = true;
             } else {
                 p2Board.rec[colX][colY].setFill(gameIcons.getMissIcon());
                 p2Board.tileList.get(colX).get(colY).setMiss(true);
                 validMove = true;
             }
             if (validMove) {
-                p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2fireEvent);
+                p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1fireEvent);
                 endP1Turn.setDisable(false);
             }
         }
@@ -710,11 +734,6 @@ public class Game extends Application {
             p1Board.tileList.get(colX).get(colY).fire();
             if (p1Board.tileList.get(colX).get(colY).isOccupied()) {
                 p1Board.rec[colX][colY].setFill(gameIcons.getHitIcon());
-            }
-            if (p1Board.tileList.get(colX).get(colY).getMiss() || p1Board.tileList.get(colX).get(colY).isHit()) {
-                showDuplicateMoveAlert(); }
-            else if (p1Board.tileList.get(colX).get(colY).isOccupied()) {
-                p1Board.rec[colX][colY].setFill(gameIcons.getHitIcon());
                 player1.setShipsLeft(player1.getShipsLeft() - 1);
                 p1Board.tileList.get(colX).get(colY).setHit(true);
                 validMove = true;
@@ -723,6 +742,17 @@ public class Game extends Application {
                     guiStage.setScene(createGameOver());
                     guiStage.show();
                 }
+            }
+            else if (p1Board.tileList.get(colX).get(colY).getMiss() || p1Board.tileList.get(colX).get(colY).isHit()) {
+                showDuplicateMoveAlert();
+            }
+            else if(p1Board.tileList.get(colX).get(colY).isKraken()&& p1Kraken.isReleased()) {
+                showDuplicateKrakenAlert();
+            }
+            else if(p1Board.tileList.get(colX).get(colY).isKraken()) {
+                p1Board.rec[colX][colY].setFill(gameIcons.getKrispinIcon());
+                p1Kraken.setReleased(true);
+                validMove = true;
             } else {
                 p1Board.rec[colX][colY].setFill(gameIcons.getMissIcon());
                 p1Board.tileList.get(colX).get(colY).setMiss(true);
@@ -811,7 +841,7 @@ public class Game extends Application {
             double posY = me.getY();
             int colX = (int) (posX / p1Board.getRectWidth());
             int colY = (int) (posY / p1Board.getRectWidth());
-            p1Board.rec[colX][colY].setFill(gameIcons.getKrakenIcon());
+            p1Board.rec[colX][colY].setFill(gameIcons.getKrispinIcon());
         }
     };
 
