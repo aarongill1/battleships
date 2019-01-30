@@ -119,6 +119,8 @@ public class Game extends Application {
     private static void resetPlayerandBoard() {
         p1Kraken.setReleased(false);
         p2Kraken.setReleased(false);
+        p1Board.setKrakenPlaced(false);
+        p2Board.setKrakenPlaced(false);
         player1.resetPlayer();
         player2.resetPlayer();
         p1Board.resetBoard();
