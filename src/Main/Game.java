@@ -46,8 +46,6 @@ public class Game extends Application {
     private static Kraken p2Kraken = new Kraken();
     private static Player player1 = new Player(null, p1Board);
     private static Player player2 = new Player(null, p2Board);
-    public static Button endP1Turn = new Button("End Turn");
-    public static Button endP2Turn = new Button("End Turn");
 
     public static Icons gameIcons = new Icons();
 
@@ -58,6 +56,8 @@ public class Game extends Application {
     public static Button refresh = new Button("Refresh");
     public static Button gameOverp1 = new Button("Game Over p1");
     public static Button gameOverp2 = new Button("Game Over p2");
+    public static Button endP1Turn = new Button("End Turn");
+    public static Button endP2Turn = new Button("End Turn");
 
     public static TextField p1nameInput = new TextField();
     public static TextField p2nameInput = new TextField();
@@ -67,19 +67,11 @@ public class Game extends Application {
 
     final static String computer = "Computer";
     private static String greet1 = "Welcome to Battleships";
+    private static String greet1b = ": <ONLINE>";
     private static String greet2 = "Enter your name, Kräken Kommander!";
     private static String prompt1 = "It is your turn, Kommander ";
     private static String prompt2 = "Redeploy this ship elsewhere, Kommander?";
 
-
-/////////////This alert block is now unused//////////////
-//    private void showDoubleShipAlert(){
-//        Alert shipAlreadyPlacedAlert = new Alert(Alert.AlertType.INFORMATION);
-//        shipAlreadyPlacedAlert.setTitle("Dumbass! ");
-//        shipAlreadyPlacedAlert.setHeaderText("Yes, you are!");
-//        shipAlreadyPlacedAlert.setContentText("You've already placed a ship there!");
-//        shipAlreadyPlacedAlert.showAndWait();
-//    }
 
     private static void removeShipAlertP1(int colX, int colY) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -166,8 +158,7 @@ public class Game extends Application {
         Button twoPlayerLocal = new Button("2 Player Local");
         Button twoPlayerLan = new Button("2 Player LAN");
         Button singlePlayer = new Button("Single Player");
-//        !!Single Player set to disabled - remove when implement single player feature!!
-//        singlePlayer.setDisable(true);
+
         twoPlayerLocal.setOnAction(actionEvent -> {
             guiStage.setScene(createP1Setup());
             guiStage.show();
@@ -500,19 +491,39 @@ public class Game extends Application {
     // Host can set up their board
     public static Scene createMP1Setup(){
         VBox p1setup = new VBox();
-        Label p1welcomeMessage = new Label("Welcome to Battleships - Select your ship locations");
-        Label p1nameLabel = new Label("Enter your name!");
-        p1setup.getChildren().add(p1nameLabel);
-        TextField p1nameInput = new TextField();
-        p1setup.getChildren().add(p1nameInput);
-        Button advanceTop2Setup = new Button("Click when finished");
+        Label p1welcomeMessage = new Label(greet1 + greet1b);
+        Label p1placeShipsA = new Label("Ships left to place: ");
+        Label p1placeShipsB = new Label("" +player1.getFleetNumber());
+        p1nameInput.setText("");
+        p1nameInput.setPromptText(greet2);
+        p1nameInput.setFocusTraversable(false);
+        advanceTop2Setup.setDisable(true);
+        p1nameInput.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> ov, String t, String t1) {
+                if (player1.getFleetNumber()>0)
+                    advanceTop2Setup.setDisable(true);
+                else if (t1.equals(""))
+                    advanceTop2Setup.setDisable(true);
+                else
+                    advanceTop2Setup.setDisable(false);
+            }
+        });
+
+        player1.fleetNumberProperty().addListener(new ChangeListener<Object>() {
+            @Override
+            public void changed(ObservableValue<? extends Object> observable, Object oldValue, Object newValue) {
+                p1placeShipsB.setText(new Integer(player1.getFleetNumber()).toString());
+            }
+        });
+
         advanceTop2Setup.setOnAction(actionEvent ->{
             client1.setName(p1nameInput.getText());
             player1.setName(p1nameInput.getText());
             guiStage.setScene(createMPp1View());
             guiStage.show();
         });
-        Button backToHome = new Button("Home");
+
         backToHome.setOnAction(actionEvent -> {
             resetPlayerandBoard();
             client1.disconnect();
@@ -522,9 +533,14 @@ public class Game extends Application {
         p1setup.getChildren().add(backToHome);
 
         p1Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p1PlaceShips);
-        p1setup.getChildren().add(p1Board.getGameBoard());
+        HBox p1placeShips = new HBox(p1placeShipsA, p1placeShipsB);
+        p1placeShips.setAlignment(Pos.CENTER);
         p1setup.getChildren().add(p1welcomeMessage);
+        p1setup.getChildren().add(p1nameInput);
+        p1setup.getChildren().add(p1Board.getGameBoard());
+        p1setup.getChildren().add(p1placeShips);
         p1setup.getChildren().add(advanceTop2Setup);
+        p1setup.getChildren().add(backToHome);
         p1setup.setAlignment(Pos.CENTER);
         p1setup.setPadding(new Insets(10, 10, 10, 10));
         p1setup.setSpacing(10);
@@ -534,13 +550,33 @@ public class Game extends Application {
     // Client can set up their board
     public static Scene createMP2Setup(){
         VBox p2setup = new VBox();
-        Label p2welcomeMessage = new Label("Welcome to Battleships - Select your ship locations");
-        Label p2nameLabel = new Label("Enter your name!");
-        p2setup.getChildren().add(p2nameLabel);
-        TextField p2nameInput = new TextField();
-        p2setup.getChildren().add(p2nameInput);
-        Button advanceToGame = new Button("Click when finished");
-        advanceToGame.setOnAction(actionEvent ->{
+        Label p2welcomeMessage = new Label(greet1 + greet1b);
+        Label p2placeShipsA = new Label("Ships left to place: ");
+        Label p2placeShipsB = new Label("" +player2.getFleetNumber());
+        p2nameInput.setText("");
+        p2nameInput.setPromptText(greet2);
+        p2nameInput.setFocusTraversable(false);
+        startGame.setDisable(true);
+        p2nameInput.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> ov, String t, String t1) {
+                if (player2.getFleetNumber()>0)
+                    startGame.setDisable(true);
+                else if (t1.equals(""))
+                    startGame.setDisable(true);
+                else
+                    startGame.setDisable(false);
+            }
+        });
+
+        player2.fleetNumberProperty().addListener(new ChangeListener<Object>() {
+            @Override
+            public void changed(ObservableValue<? extends Object> observable, Object oldValue, Object newValue) {
+                p2placeShipsB.setText(new Integer(player2.getFleetNumber()).toString());
+            }
+        });
+
+        startGame.setOnAction(actionEvent ->{
             client2.setName(p2nameInput.getText());
             guiStage.setScene(createMPp2View());
             guiStage.show();
@@ -550,12 +586,16 @@ public class Game extends Application {
             resetPlayerandBoard();
             guiStage.setScene(createMPSetup());
         });
-        p2setup.getChildren().add(backToHome);
 
         p2Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p2PlaceShips);
-        p2setup.getChildren().add(p2Board.getGameBoard());
+        HBox p2placeShips = new HBox(p2placeShipsA, p2placeShipsB);
+        p2placeShips.setAlignment(Pos.CENTER);
         p2setup.getChildren().add(p2welcomeMessage);
-        p2setup.getChildren().add(advanceToGame);
+        p2setup.getChildren().add(p2nameInput);
+        p2setup.getChildren().add(p2Board.getGameBoard());
+        p2setup.getChildren().add(p2placeShips);
+        p2setup.getChildren().add(startGame);
+        p2setup.getChildren().add(backToHome);
         p2setup.setAlignment(Pos.CENTER);
         p2setup.setPadding(new Insets(10, 10, 10, 10));
         p2setup.setSpacing(10);
