@@ -110,8 +110,6 @@ public class Game extends Application {
         shipAlreadyPlacedAlert.showAndWait();
     }
 
-
-
     private static void showDuplicateKrakenAlert(){
         Alert krakenAlreadyReleasedAlert = new Alert(Alert.AlertType.INFORMATION);
         krakenAlreadyReleasedAlert.setTitle("Dumbass! ");
@@ -143,7 +141,6 @@ public class Game extends Application {
             guiStage.show();
         }
     }
-
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -223,8 +220,8 @@ public class Game extends Application {
         advanceTop2Setup.setOnAction(actionEvent ->{
             player1.setName(p1nameInput.getText());
             p1Board.placeKraken(gameIcons.getKrispinIcon());
-            guiStage.setScene(createP2Setup());
-            guiStage.show();
+//            guiStage.setScene(createP2Setup());
+//            guiStage.show();
             if(player2.getName() == "Computer") {
                 guiStage.setScene(createComputerP2Setup());
                 guiStage.show();
@@ -677,8 +674,6 @@ public class Game extends Application {
         return new Scene(gameOver, 400, 700);
     }
 
-
-
     // Fire events
 
     public static EventHandler<MouseEvent> p2fireEvent = new EventHandler<MouseEvent>() {
@@ -891,8 +886,6 @@ public class Game extends Application {
             }
         }
     };
-
-
 
     public static EventHandler<MouseEvent> p2opponentFireEvent = new EventHandler<MouseEvent>() {
         @Override
