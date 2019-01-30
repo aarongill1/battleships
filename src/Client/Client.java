@@ -91,6 +91,20 @@ public class Client {
             return false;
     }
 
+    private static boolean isGameOverp1(String message, DatagramPacket packet){
+          if (message.startsWith("\\goA:")){
+              return true;
+          } else
+              return false;
+    }
+
+    private static boolean isGameOverp2(String message, DatagramPacket packet){
+        if (message.startsWith("\\goB:")){
+            return true;
+        } else
+            return false;
+    }
+
     public void send(String message){
         try {
             if(message != "") {
@@ -209,9 +223,22 @@ public class Client {
         }
     }
 
+    public void sendGameOver(String message){
+          try {
+              message += "\\e";  // \\e denotes the end of the message
+              byte[] data = message.getBytes();
+              //We have to pass in the source, source length, address to send to and the client's port
+              DatagramPacket packet = new DatagramPacket(data, data.length, address, port);
+              socket.send(packet);
+              System.out.println("Sent game over message to: " + address.getHostAddress() + " - " + port);
+          } catch(Exception e){
+              e.printStackTrace();
+          }
+    }
+
 
     private static void listen(){
-        Thread listenThread = new Thread("ChatProgram Listener"){
+        Thread listenThread = new Thread("Battleships Listener"){
             @Override
             public void run() {
                 try {
@@ -229,10 +256,8 @@ public class Client {
                         //This will need to be wrapped in a loop for turn based gameplay
                         if(isInitializeP1(message, packet)) {
                             Game.p1UpdateShips(message);
-                            System.out.println("Update1 is functional");
                         } else if(isInitializeP2(message, packet)){
                             Game.p2UpdateShips(message);
-                            System.out.println("Update2 is functional");
                         } else if(isHitp1(message, packet)){
                             Game.p1UpdateHits(message);
                         } else if(isHitp2(message, packet)){
@@ -241,10 +266,15 @@ public class Client {
                             Game.p1UpdateMisses(message);
                         }   else if(isMiss2(message, packet)){
                             Game.p2UpdateMisses(message);
+                        } else if(isGameOverp1(message, packet)){
+                            Game.gameOverp2();
+                        } else if(isGameOverp2(message, packet)){
+                            Game.gameOverp1();
                         }
 //
                         if(!isCommand(message, packet) && !isInitializeP1(message, packet) && !isInitializeP2(message, packet)
-                        && !isHitp2(message, packet) && !isHitp1(message, packet) && !isMiss1(message, packet) && !isMiss2(message, packet)) {
+                        && !isHitp2(message, packet) && !isHitp1(message, packet) && !isMiss1(message, packet) && !isMiss2(message, packet)
+                        && !isGameOverp1(message, packet) && !isGameOverp2(message, packet)) {
 //                            ClientsWindow.printToConsole(message);
                             Game.p1printToConsole(message);
                             Game.p2printToConsole(message);

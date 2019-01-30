@@ -103,6 +103,7 @@ public class Server {
     // Stops the server without closing the program
     public static void stop(){
         running = false;
+        System.out.println("Server shut down complete");
     }
 
 }
