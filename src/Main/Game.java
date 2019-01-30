@@ -41,8 +41,8 @@ public class Game extends Application {
     private static Board p2Board = new Board(8, 30);
     private static Board p1Opponent = new Board(8, 30);
     private static Board p2Opponent = new Board(8, 30);
-    Kraken p1Kraken = new Kraken();
-    Kraken p2Kraken = new Kraken();
+    private static Kraken p1Kraken = new Kraken();
+    private static Kraken p2Kraken = new Kraken();
     private static Player player1 = new Player(null, p1Board);
     private static Player player2 = new Player(null, p2Board);
     public static Button endP1Turn = new Button("End Turn");
@@ -112,7 +112,7 @@ public class Game extends Application {
 
 
 
-    private void showDuplicateKrakenAlert(){
+    private static void showDuplicateKrakenAlert(){
         Alert krakenAlreadyReleasedAlert = new Alert(Alert.AlertType.INFORMATION);
         krakenAlreadyReleasedAlert.setTitle("Dumbass! ");
         krakenAlreadyReleasedAlert.setHeaderText("Yes, you are!");
