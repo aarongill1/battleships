@@ -4,8 +4,7 @@ import javafx.scene.paint.ImagePattern;
 
 public class Kraken {
 
-    private boolean released;
-
+    private boolean released = false;
 
     //Duplicate method from board - maybe move methods into single class?
     // 7 is a magic number - one less than the grid size

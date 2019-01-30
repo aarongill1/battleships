@@ -102,14 +102,23 @@ public class Game extends Application {
         shipAlreadyPlacedAlert.showAndWait();
     }
 
-    private static void showDuplicateKrakenAlert(){
+    private static void showKrakenReleasedAlert(){
         Alert krakenAlreadyReleasedAlert = new Alert(Alert.AlertType.INFORMATION);
-        krakenAlreadyReleasedAlert.setTitle("You can't do that!");
-        krakenAlreadyReleasedAlert.setContentText("You've already released the Kraken!");
+        krakenAlreadyReleasedAlert.setTitle("THE KRAKEN HAS BEEN RELEASED!");
+        krakenAlreadyReleasedAlert.setContentText("Krispin will now patrol your enemy's sea!");
+        krakenAlreadyReleasedAlert.showAndWait();
+    }
+
+    private static void showKrakenDulpicateAlert(){
+        Alert krakenAlreadyReleasedAlert = new Alert(Alert.AlertType.INFORMATION);
+        krakenAlreadyReleasedAlert.setTitle("THE KRAKEN HAS ALREADY BEEN RELEASED!");
+        krakenAlreadyReleasedAlert.setContentText("Krispin is already doing all he can to help");
         krakenAlreadyReleasedAlert.showAndWait();
     }
 
     private static void resetPlayerandBoard() {
+        p1Kraken.setReleased(false);
+        p2Kraken.setReleased(false);
         player1.resetPlayer();
         player2.resetPlayer();
         p1Board.resetBoard();
@@ -193,7 +202,7 @@ public class Game extends Application {
         VBox p1setup = new VBox();
         Label p1welcomeMessage = new Label(greet1);
         Label p1placeShipsA = new Label("Ships left to place: ");
-        Label p1placeShipsB = new Label("" +player1.getFleetNumber());
+        Label p1placeShipsB = new Label("" + player1.getFleetNumber());
         p1nameInput.setText("");
         p1nameInput.setPromptText(greet2);
         p1nameInput.setFocusTraversable(false);
@@ -743,11 +752,12 @@ public class Game extends Application {
                 showDuplicateMoveAlert();
             }
             else if(p2Board.tileList.get(colX).get(colY).isKraken()&& p2Kraken.isReleased()) {
-                showDuplicateKrakenAlert();
+                showKrakenDulpicateAlert();
             }
             else if(p2Board.tileList.get(colX).get(colY).isKraken()) {
                 p2Board.rec[colX][colY].setFill(gameIcons.getKrispinIcon());
                 p2Kraken.setReleased(true);
+                showKrakenReleasedAlert();
                 validMove = true;
             } else {
                 p2Board.rec[colX][colY].setFill(gameIcons.getMissIcon());
@@ -785,11 +795,12 @@ public class Game extends Application {
                 showDuplicateMoveAlert();
             }
             else if(p1Board.tileList.get(colX).get(colY).isKraken()&& p1Kraken.isReleased()) {
-                showDuplicateKrakenAlert();
+                showKrakenDulpicateAlert();
             }
             else if(p1Board.tileList.get(colX).get(colY).isKraken()) {
                 p1Board.rec[colX][colY].setFill(gameIcons.getKrispinIcon());
                 p1Kraken.setReleased(true);
+                showKrakenReleasedAlert();
                 validMove = true;
             } else {
                 p1Board.rec[colX][colY].setFill(gameIcons.getMissIcon());
@@ -871,17 +882,17 @@ public class Game extends Application {
                 advanceTop2Setup.setDisable(true);
         }
     };
-
-    public static EventHandler<MouseEvent> p1PlaceKraken = new EventHandler<MouseEvent>() {
-        @Override
-        public void handle(MouseEvent me) {
-            double posX = me.getX();
-            double posY = me.getY();
-            int colX = (int) (posX / p1Board.getRectWidth());
-            int colY = (int) (posY / p1Board.getRectWidth());
-            p1Board.rec[colX][colY].setFill(gameIcons.getKrispinIcon());
-        }
-    };
+//
+//    public static EventHandler<MouseEvent> p1PlaceKraken = new EventHandler<MouseEvent>() {
+//        @Override
+//        public void handle(MouseEvent me) {
+//            double posX = me.getX();
+//            double posY = me.getY();
+//            int colX = (int) (posX / p1Board.getRectWidth());
+//            int colY = (int) (posY / p1Board.getRectWidth());
+//            p1Board.rec[colX][colY].setFill(gameIcons.getKrispinIcon());
+//        }
+//    };
 
 
 
