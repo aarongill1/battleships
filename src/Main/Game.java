@@ -800,6 +800,7 @@ public class Game extends Application {
         public void handle(MouseEvent me) {
             double posX = me.getX();
             double posY = me.getY();
+            String coordinates = new String();
             int colX = (int) (posX / p2Opponent.getRectWidth());
             int colY = (int) (posY / p2Board.getRectWidth());
             p2Opponent.tileList.get(colX).get(colY).fire();
@@ -812,6 +813,10 @@ public class Game extends Application {
                 p2Opponent.rec[colX][colY].setFill(gameIcons.getHitIcon());
                 player2.setShipsLeft(player2.getShipsLeft() - 1);
                 p2Opponent.tileList.get(colX).get(colY).setHit(true);
+                coordinates += colX;
+                coordinates += colY;
+                client1.sendHitp2(coordinates);
+                coordinates = "";
                 validMove = true;
                 if (Gameover.isGameOver(player2)) {
                     Gameover.setWinningPlayer(player1);
@@ -821,6 +826,10 @@ public class Game extends Application {
             } else {
                 p2Opponent.rec[colX][colY].setFill(gameIcons.getMissIcon());
                 p2Opponent.tileList.get(colX).get(colY).setMiss(true);
+                coordinates += colX;
+                coordinates += colY;
+                client1.sendMissp2(coordinates);
+                coordinates = "";
                 validMove = true;
             }
             if (validMove) {
@@ -835,6 +844,7 @@ public class Game extends Application {
         public void handle(MouseEvent me) {
             double posX = me.getX();
             double posY = me.getY();
+            String coordinates = new String();
             int colX = (int) (posX / p1Opponent.getRectWidth());
             int colY = (int) (posY / p1Opponent.getRectWidth());
             p1Opponent.tileList.get(colX).get(colY).fire();
@@ -847,6 +857,9 @@ public class Game extends Application {
                 p1Opponent.rec[colX][colY].setFill(gameIcons.getHitIcon());
                 player2.setShipsLeft(player2.getShipsLeft() - 1);
                 p1Opponent.tileList.get(colX).get(colY).setHit(true);
+                coordinates += colX;
+                coordinates += colY;
+                client2.sendHitp1(coordinates);
                 validMove = true;
                 if (Gameover.isGameOver(player2)) {
                     Gameover.setWinningPlayer(player1);
@@ -856,6 +869,10 @@ public class Game extends Application {
             } else {
                 p1Opponent.rec[colX][colY].setFill(gameIcons.getMissIcon());
                 p1Opponent.tileList.get(colX).get(colY).setMiss(true);
+                coordinates += colX;
+                coordinates += colY;
+                client2.sendMissp1(coordinates);
+                coordinates = "";
                 validMove = true;
             }
             if (validMove) {
@@ -891,8 +908,8 @@ public class Game extends Application {
         p1Board.drawBoard(hitCoordinates, gameIcons.getHitIcon());
     }
 
-    public static void p2UpdateHitss(String hitCoordinates){
-        p1Board.drawBoard(hitCoordinates, gameIcons.getHitIcon());
+    public static void p2UpdateHits(String hitCoordinates){
+        p2Board.drawBoard(hitCoordinates, gameIcons.getHitIcon());
     }
 
     public static void p1UpdateMisses(String missCoordinates){
@@ -900,7 +917,7 @@ public class Game extends Application {
     }
 
     public static void p2UpdateMisses(String missCoordinates){
-        p1Board.drawBoard(missCoordinates, gameIcons.getMissIcon());
+        p2Board.drawBoard(missCoordinates, gameIcons.getMissIcon());
     }
 
     public static void main(String[] args) {
