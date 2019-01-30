@@ -139,6 +139,20 @@ public class Board {
         return result;
     }
 
+    public String populateBoardByKraken() {
+        // Gets ship coordinates
+        String result = "";
+        for (int i = 0; i < this.getSize(); i++) {
+            for (int j = 0; j < this.getSize(); j++) {
+                if (this.getTileList().get(i).get(j).isKraken()) {
+                    result += i;
+                    result += j;
+                }
+            }
+        }
+        return result;
+    }
+
     public void drawBoard(String coords, ImagePattern fill) {
         // Use coordinates to place ships in existing board
         coords = coords.replaceAll("[^\\d.]", "");
@@ -178,7 +192,7 @@ public class Board {
             if(!this.getTileList().get(colX).get(colY).isOccupied()){
                 this.getTileList().get(colX).get(colY).setKraken(true);
                 // Hide below line to hide krispen from view
-                rec[colX][colY].setFill(krispen);
+//                rec[colX][colY].setFill(krispen);
                 this.setKrakenPlaced(true);
             }
         }

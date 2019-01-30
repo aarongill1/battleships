@@ -72,7 +72,7 @@ public class Game extends Application {
     private static String prompt1 = "It is your turn, Kommander ";
     private static String prompt2 = "Redeploy this ship elsewhere, Kommander?";
 
-
+  
     private static void removeShipAlertP1(int colX, int colY) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Remove ship?");
@@ -99,21 +99,30 @@ public class Game extends Application {
 
     private static void showDuplicateMoveAlert(){
         Alert shipAlreadyPlacedAlert = new Alert(Alert.AlertType.INFORMATION);
-        shipAlreadyPlacedAlert.setTitle("Dumbass! ");
-        shipAlreadyPlacedAlert.setHeaderText("Yes, you are!");
+        shipAlreadyPlacedAlert.setTitle("You can't do that!");
         shipAlreadyPlacedAlert.setContentText("You've already fired in this square!");
         shipAlreadyPlacedAlert.showAndWait();
     }
 
-    private static void showDuplicateKrakenAlert(){
+    private static void showKrakenReleasedAlert(){
         Alert krakenAlreadyReleasedAlert = new Alert(Alert.AlertType.INFORMATION);
-        krakenAlreadyReleasedAlert.setTitle("Dumbass! ");
-        krakenAlreadyReleasedAlert.setHeaderText("Yes, you are!");
-        krakenAlreadyReleasedAlert.setContentText("You've already released the Kraken!");
+        krakenAlreadyReleasedAlert.setTitle("THE KRAKEN HAS BEEN RELEASED!");
+        krakenAlreadyReleasedAlert.setContentText("Krispin will now patrol your enemy's sea!");
+        krakenAlreadyReleasedAlert.showAndWait();
+    }
+
+    private static void showKrakenDulpicateAlert(){
+        Alert krakenAlreadyReleasedAlert = new Alert(Alert.AlertType.INFORMATION);
+        krakenAlreadyReleasedAlert.setTitle("THE KRAKEN HAS ALREADY BEEN RELEASED!");
+        krakenAlreadyReleasedAlert.setContentText("Krispin is already doing all he can to help");
         krakenAlreadyReleasedAlert.showAndWait();
     }
 
     private static void resetPlayerandBoard() {
+        p1Kraken.setReleased(false);
+        p2Kraken.setReleased(false);
+        p1Board.setKrakenPlaced(false);
+        p2Board.setKrakenPlaced(false);
         player1.resetPlayer();
         player2.resetPlayer();
         p1Board.resetBoard();
@@ -121,6 +130,9 @@ public class Game extends Application {
         p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1fireEvent);
         p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2fireEvent);
         p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1ComputerfireEvent);
+        p1Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1fireEvent);
+        p1Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2fireEvent);
+        p1Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1ComputerfireEvent);
     }
 
     private static void areYouSureYouWantToQuitAlert() {
@@ -193,7 +205,7 @@ public class Game extends Application {
         VBox p1setup = new VBox();
         Label p1welcomeMessage = new Label(greet1);
         Label p1placeShipsA = new Label("Ships left to place: ");
-        Label p1placeShipsB = new Label("" +player1.getFleetNumber());
+        Label p1placeShipsB = new Label("" + player1.getFleetNumber());
         p1nameInput.setText("");
         p1nameInput.setPromptText(greet2);
         p1nameInput.setFocusTraversable(false);
@@ -520,6 +532,7 @@ public class Game extends Application {
         advanceTop2Setup.setOnAction(actionEvent ->{
             client1.setName(p1nameInput.getText());
             player1.setName(p1nameInput.getText());
+            p1Board.placeKraken(gameIcons.getKrispinIcon());
             guiStage.setScene(createMPp1View());
             guiStage.show();
         });
@@ -530,8 +543,8 @@ public class Game extends Application {
             Server.stop();
             guiStage.setScene(createMPSetup());
         });
-        p1setup.getChildren().add(backToHome);
 
+        p1setup.getChildren().add(backToHome);
         p1Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p1PlaceShips);
         HBox p1placeShips = new HBox(p1placeShipsA, p1placeShipsB);
         p1placeShips.setAlignment(Pos.CENTER);
@@ -578,6 +591,8 @@ public class Game extends Application {
 
         startGame.setOnAction(actionEvent ->{
             client2.setName(p2nameInput.getText());
+            player2.setName(p2nameInput.getText());
+            p2Board.placeKraken(gameIcons.getKrispinIcon());
             guiStage.setScene(createMPp2View());
             guiStage.show();
         });
@@ -633,7 +648,9 @@ public class Game extends Application {
             @Override
             public void handle(ActionEvent event) {
                 String coordinates2 = p1Board.populateBoard();
+                String krakenCoordinates2 = p1Board.populateBoardByKraken();
                 System.out.println("p1 ship coordinates " + coordinates2);
+                System.out.println("kraken coordinates " + krakenCoordinates2);
                 client1.p1sendShip(coordinates2);
             }
         });
@@ -680,7 +697,10 @@ public class Game extends Application {
 
 
         String coordinates = p2Board.populateBoard();
+        String krakenCoordinates = p2Board.populateBoardByKraken();
+        System.out.println("Kraken coordinates: " + krakenCoordinates);
         client2.p2sendShip(coordinates);
+
 
 
         Button p2Send = new Button("Send");
@@ -792,11 +812,12 @@ public class Game extends Application {
                 showDuplicateMoveAlert();
             }
             else if(p2Board.tileList.get(colX).get(colY).isKraken()&& p2Kraken.isReleased()) {
-                showDuplicateKrakenAlert();
+                showKrakenDulpicateAlert();
             }
             else if(p2Board.tileList.get(colX).get(colY).isKraken()) {
                 p2Board.rec[colX][colY].setFill(gameIcons.getKrispinIcon());
                 p2Kraken.setReleased(true);
+                showKrakenReleasedAlert();
                 validMove = true;
             } else {
                 p2Board.rec[colX][colY].setFill(gameIcons.getMissIcon());
@@ -834,11 +855,12 @@ public class Game extends Application {
                 showDuplicateMoveAlert();
             }
             else if(p1Board.tileList.get(colX).get(colY).isKraken()&& p1Kraken.isReleased()) {
-                showDuplicateKrakenAlert();
+                showKrakenDulpicateAlert();
             }
             else if(p1Board.tileList.get(colX).get(colY).isKraken()) {
                 p1Board.rec[colX][colY].setFill(gameIcons.getKrispinIcon());
                 p1Kraken.setReleased(true);
+                showKrakenReleasedAlert();
                 validMove = true;
             } else {
                 p1Board.rec[colX][colY].setFill(gameIcons.getMissIcon());
@@ -920,17 +942,17 @@ public class Game extends Application {
                 advanceTop2Setup.setDisable(true);
         }
     };
-
-    public static EventHandler<MouseEvent> p1PlaceKraken = new EventHandler<MouseEvent>() {
-        @Override
-        public void handle(MouseEvent me) {
-            double posX = me.getX();
-            double posY = me.getY();
-            int colX = (int) (posX / p1Board.getRectWidth());
-            int colY = (int) (posY / p1Board.getRectWidth());
-            p1Board.rec[colX][colY].setFill(gameIcons.getKrispinIcon());
-        }
-    };
+//
+//    public static EventHandler<MouseEvent> p1PlaceKraken = new EventHandler<MouseEvent>() {
+//        @Override
+//        public void handle(MouseEvent me) {
+//            double posX = me.getX();
+//            double posY = me.getY();
+//            int colX = (int) (posX / p1Board.getRectWidth());
+//            int colY = (int) (posY / p1Board.getRectWidth());
+//            p1Board.rec[colX][colY].setFill(gameIcons.getKrispinIcon());
+//        }
+//    };
 
 
 
