@@ -28,8 +28,8 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Game extends Application {
     private static Stage guiStage;
-    private Client client1;
-    private Client client2;
+    private static Client client1;
+    private static Client client2;
     private static TextArea p1display = new TextArea();
     private static TextArea p2display = new TextArea();
 
@@ -41,32 +41,32 @@ public class Game extends Application {
     private static Board p2Board = new Board(8, 30);
     private static Board p1Opponent = new Board(8, 30);
     private static Board p2Opponent = new Board(8, 30);
-    Player player1 = new Player(null, p1Board);
-    Player player2 = new Player(null, p2Board);
     Kraken p1Kraken = new Kraken();
     Kraken p2Kraken = new Kraken();
-    Button endP1Turn = new Button("End Turn");
-    Button endP2Turn = new Button("End Turn");
+    private static Player player1 = new Player(null, p1Board);
+    private static Player player2 = new Player(null, p2Board);
+    public static Button endP1Turn = new Button("End Turn");
+    public static Button endP2Turn = new Button("End Turn");
 
     public static Icons gameIcons = new Icons();
 
-    Button advanceTop2Setup = new Button("Click when finished");
-    Button startGame = new Button("Click to start game!");
-    Button quitGame = new Button("Quit game and return to Main Menu");
-    Button backToHome = new Button("Back to Main Menu");
+    public static Button advanceTop2Setup = new Button("Click when finished");
+    public static Button startGame = new Button("Click to start game!");
+    public static Button quitGame = new Button("Quit game and return to Main Menu");
+    public static Button backToHome = new Button("Back to Main Menu");
 
 
-    TextField p1nameInput = new TextField();
-    TextField p2nameInput = new TextField();
+    public static TextField p1nameInput = new TextField();
+    public static TextField p2nameInput = new TextField();
 
     boolean p2loaded = false;
     boolean p2updated = false;
 
-    final String computer = "Computer";
-    private String greet1 = "Welcome to Battleships";
-    private String greet2 = "Enter your name, Kräken Kommander!";
-    private String prompt1 = "It is your turn, Kommander ";
-    private String prompt2 = "Redeploy this ship elsewhere, Kommander?";
+    final static String computer = "Computer";
+    private static String greet1 = "Welcome to Battleships";
+    private static String greet2 = "Enter your name, Kräken Kommander!";
+    private static String prompt1 = "It is your turn, Kommander ";
+    private static String prompt2 = "Redeploy this ship elsewhere, Kommander?";
 
 
 /////////////This alert block is now unused//////////////
@@ -78,7 +78,7 @@ public class Game extends Application {
 //        shipAlreadyPlacedAlert.showAndWait();
 //    }
 
-    private void removeShipAlertP1(int colX, int colY) {
+    private static void removeShipAlertP1(int colX, int colY) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Remove ship?");
         alert.setContentText(prompt2);
@@ -90,7 +90,7 @@ public class Game extends Application {
         }
     }
 
-    private void removeShipAlertP2(int colX, int colY) {
+    private static void removeShipAlertP2(int colX, int colY) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Remove ship?");
         alert.setContentText(prompt2);
@@ -102,7 +102,7 @@ public class Game extends Application {
         }
     }
 
-    private void showDuplicateMoveAlert(){
+    private static void showDuplicateMoveAlert(){
         Alert shipAlreadyPlacedAlert = new Alert(Alert.AlertType.INFORMATION);
         shipAlreadyPlacedAlert.setTitle("Dumbass! ");
         shipAlreadyPlacedAlert.setHeaderText("Yes, you are!");
@@ -111,14 +111,16 @@ public class Game extends Application {
     }
 
 
+
     private void showDuplicateKrakenAlert(){
         Alert krakenAlreadyReleasedAlert = new Alert(Alert.AlertType.INFORMATION);
         krakenAlreadyReleasedAlert.setTitle("Dumbass! ");
         krakenAlreadyReleasedAlert.setHeaderText("Yes, you are!");
         krakenAlreadyReleasedAlert.setContentText("You've already released the Kraken!");
         krakenAlreadyReleasedAlert.showAndWait();
+    }
 
-    private void resetPlayerandBoard() {
+    private static void resetPlayerandBoard() {
         player1.resetPlayer();
         player2.resetPlayer();
         p1Board.resetBoard();
@@ -128,7 +130,7 @@ public class Game extends Application {
         p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1ComputerfireEvent);
     }
 
-    private void areYouSureYouWantToQuitAlert() {
+    private static void areYouSureYouWantToQuitAlert() {
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Quit game?");
@@ -153,7 +155,7 @@ public class Game extends Application {
         primaryStage.show();
     }
 
-    public Scene createMainMenu(){
+    public static Scene createMainMenu(){
         VBox frontPage = new VBox();
         Label welcomeLabel = new Label(greet1);
         Label welcomeLabelPt2 = new Label("Kräken Edition");
@@ -196,7 +198,7 @@ public class Game extends Application {
         return new Scene(frontPage, 400, 700);
     }
 
-    public Scene createP1Setup(){
+    public static Scene createP1Setup(){
         VBox p1setup = new VBox();
         Label p1welcomeMessage = new Label(greet1);
         Label p1placeShips = new Label("Choose the location of your " +player1.getFleetNumber() +" ships");
@@ -254,7 +256,7 @@ public class Game extends Application {
         return new Scene(p1setup, 400, 700);
     }
 
-    public Scene createP2Setup(){
+    public static Scene createP2Setup(){
         VBox p2setup = new VBox();
         Label p2welcomeMessage = new Label(greet1);
         Label p2placeShips = new Label("Choose the location of your " +player2.getFleetNumber() +" ships");
@@ -301,7 +303,7 @@ public class Game extends Application {
         return new Scene(p2setup, 400, 700);
     }
 
-    public Scene createComputerP2Setup(){
+    public static Scene createComputerP2Setup(){
         VBox computerSetup = new VBox();
         Label computerSelection = new Label("Computer selection is automatic - select Start Game");
         p2nameInput.setFocusTraversable(false);
@@ -332,7 +334,7 @@ public class Game extends Application {
         return new Scene(computerSetup, 400, 700);
     }
 
-    public Scene createP1Turn(){
+    public static Scene createP1Turn(){
         VBox p1Turn = new VBox();
         Label p1TurnLabel = new Label(prompt1 + player1.getName());
         p1Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1PlaceShips);
@@ -363,7 +365,7 @@ public class Game extends Application {
         return new Scene(p1Turn, 400, 700);
     }
 
-    public Scene createP2Turn(){
+    public static Scene createP2Turn(){
         VBox p2Turn = new VBox();
         Label p2TurnLabel = new Label(prompt1 + player2.getName());
         p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2PlaceShips);
@@ -401,7 +403,7 @@ public class Game extends Application {
         return new Scene(p2Turn, 400, 700);
     }
 
-    public Scene endOfP1Turn() {
+    public static Scene endOfP1Turn() {
         VBox p1Intermission = new VBox();
         Button advanceToP2Go = new Button("Start " + player2.getName() + "'s Turn");
         advanceToP2Go.setOnAction(actionEvent -> {
@@ -415,7 +417,7 @@ public class Game extends Application {
         return new Scene(p1Intermission, 400, 700);
     }
 
-    public Scene endOfP2Turn() {
+    public static Scene endOfP2Turn() {
         VBox p2Intermission = new VBox();
         Button advanceToP1Go = new Button("Start " + player1.getName() + "'s Turn");
         advanceToP1Go.setOnAction(actionEvent -> {
@@ -429,7 +431,7 @@ public class Game extends Application {
         return new Scene(p2Intermission, 400, 700);
     }
 
-    public Scene createMPSetup(){
+    public static Scene createMPSetup(){
         VBox mpSetup = new VBox();
         Label multiplayerLabel = new Label("Choose connection type");
         multiplayerLabel.setTextFill(Color.WHITE);
@@ -480,7 +482,7 @@ public class Game extends Application {
     }
 
     // Host can set up their board
-    public Scene createMP1Setup(){
+    public static Scene createMP1Setup(){
         VBox p1setup = new VBox();
         Label p1welcomeMessage = new Label("Welcome to Battleships - Select your ship locations");
         Label p1nameLabel = new Label("Enter your name!");
@@ -493,7 +495,7 @@ public class Game extends Application {
             guiStage.setScene(createMPp1View());
             guiStage.show();
         });
-
+        Button backToHome = new Button("Home");
         backToHome.setOnAction(actionEvent -> {
             resetPlayerandBoard();
             client1.disconnect();
@@ -513,7 +515,7 @@ public class Game extends Application {
     }
 
     // Client can set up their board
-    public Scene createMP2Setup(){
+    public static Scene createMP2Setup(){
         VBox p2setup = new VBox();
         Label p2welcomeMessage = new Label("Welcome to Battleships - Select your ship locations");
         Label p2nameLabel = new Label("Enter your name!");
@@ -544,7 +546,7 @@ public class Game extends Application {
     }
 
     // Host's view
-    public Scene createMPp1View(){
+    public static Scene createMPp1View(){
         VBox p1Turn = new VBox();
         HBox p1boardView = new HBox();
         p1Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1PlaceShips);
@@ -591,7 +593,7 @@ public class Game extends Application {
     }
 
     // Client's view
-    public Scene createMPp2View(){
+    public static Scene createMPp2View(){
         VBox p2Turn = new VBox();
         HBox p2BoardView = new HBox();
         p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2PlaceShips);
@@ -632,7 +634,7 @@ public class Game extends Application {
         return new Scene(p2Turn, 600, 700);
     }
 
-    public Scene createGameOver(){
+    public static Scene createGameOver(){
         VBox gameOver = new VBox();
         Label welcomeLabel = new Label("GAME OVER MAN, GAME OVER!\n"
         + Gameover.getWinningPlayer().getName().toUpperCase() + " IS THE WINNER!"
@@ -652,9 +654,34 @@ public class Game extends Application {
         return new Scene(gameOver, 400, 700);
     }
 
-//Fire Events:
-      
-    EventHandler<MouseEvent> p2fireEvent = new EventHandler<MouseEvent>() {
+    public static Scene createMpGameOver(){
+        VBox gameOver = new VBox();
+        Label welcomeLabel = new Label("GAME OVER MAN, GAME OVER!\n");
+        Button anotherGame = new Button("Play again?");
+        anotherGame.setOnAction(actionEvent -> {
+            resetPlayerandBoard();
+            guiStage.setScene(createMainMenu());
+            guiStage.show();
+        });
+
+        Button exit = new Button("Exit");
+        exit.setOnAction(actionEvent ->{
+            guiStage.close();
+        });
+
+        gameOver.getChildren().add(welcomeLabel);
+        gameOver.getChildren().add(anotherGame);
+        gameOver.setAlignment(Pos.CENTER);
+        gameOver.setPadding(new Insets(10, 10, 10, 10));
+        gameOver.setSpacing(10);
+        return new Scene(gameOver, 400, 700);
+    }
+
+
+
+    // Fire events
+
+    public static EventHandler<MouseEvent> p2fireEvent = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent me) {
             double posX = me.getX();
@@ -696,7 +723,7 @@ public class Game extends Application {
         }
     };
 
-    EventHandler<MouseEvent> p1fireEvent = new EventHandler<MouseEvent>() {
+    public static EventHandler<MouseEvent> p1fireEvent = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent me) {
             double posX = me.getX();
@@ -738,7 +765,7 @@ public class Game extends Application {
         }
     };
   
-    EventHandler<MouseEvent> p1ComputerfireEvent = new EventHandler<MouseEvent>() {
+    public static EventHandler<MouseEvent> p1ComputerfireEvent = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent me) {
 
@@ -780,7 +807,7 @@ public class Game extends Application {
 
     // Place ships events
 
-    EventHandler<MouseEvent> p1PlaceShips = new EventHandler<MouseEvent>() {
+    public static EventHandler<MouseEvent> p1PlaceShips = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent me) {
             double posX = me.getX();
@@ -807,7 +834,7 @@ public class Game extends Application {
         }
     };
 
-    EventHandler<MouseEvent> p1PlaceKraken = new EventHandler<MouseEvent>() {
+    public static EventHandler<MouseEvent> p1PlaceKraken = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent me) {
             double posX = me.getX();
@@ -820,7 +847,7 @@ public class Game extends Application {
 
 
 
-    EventHandler<MouseEvent> p2PlaceShips = new EventHandler<MouseEvent>() {
+    public static EventHandler<MouseEvent> p2PlaceShips = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent me) {
             double posX = me.getX();
@@ -846,7 +873,7 @@ public class Game extends Application {
         }
     };
 
-    EventHandler<MouseEvent> p2ComputerPlaceShips = new EventHandler<MouseEvent>() {
+    public static EventHandler<MouseEvent> p2ComputerPlaceShips = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent me) {
             while (player2.getFleetNumber() != 0) {
@@ -867,7 +894,7 @@ public class Game extends Application {
 
 
 
-    EventHandler<MouseEvent> p2opponentFireEvent = new EventHandler<MouseEvent>() {
+    public static EventHandler<MouseEvent> p2opponentFireEvent = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent me) {
             double posX = me.getX();
@@ -889,10 +916,11 @@ public class Game extends Application {
                 coordinates += colY;
                 client1.sendHitp2(coordinates);
                 coordinates = "";
+                p2Opponent.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2opponentFireEvent);
                 validMove = true;
                 if (Gameover.isGameOver(player2)) {
                     Gameover.setWinningPlayer(player1);
-                    guiStage.setScene(createGameOver());
+                    guiStage.setScene(createMpGameOver());
                     guiStage.show();
                 }
             } else {
@@ -902,6 +930,7 @@ public class Game extends Application {
                 coordinates += colY;
                 client1.sendMissp2(coordinates);
                 coordinates = "";
+                p2Opponent.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2opponentFireEvent);
                 validMove = true;
             }
             if (validMove) {
@@ -911,7 +940,7 @@ public class Game extends Application {
         }
     };
 
-    EventHandler<MouseEvent> p1opponentFireEvent = new EventHandler<MouseEvent>() {
+    public static EventHandler<MouseEvent> p1opponentFireEvent = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent me) {
             double posX = me.getX();
@@ -932,10 +961,12 @@ public class Game extends Application {
                 coordinates += colX;
                 coordinates += colY;
                 client2.sendHitp1(coordinates);
+                coordinates = "";
+                p1Opponent.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1opponentFireEvent);
                 validMove = true;
                 if (Gameover.isGameOver(player2)) {
                     Gameover.setWinningPlayer(player1);
-                    guiStage.setScene(createGameOver());
+                    guiStage.setScene(createMpGameOver());
                     guiStage.show();
                 }
             } else {
@@ -945,6 +976,7 @@ public class Game extends Application {
                 coordinates += colY;
                 client2.sendMissp1(coordinates);
                 coordinates = "";
+                p1Opponent.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1opponentFireEvent);
                 validMove = true;
             }
             if (validMove) {
@@ -966,32 +998,39 @@ public class Game extends Application {
 
     public static void p1UpdateShips(String shipCoordinates){
         p1Opponent.drawBoard(shipCoordinates, gameIcons.getShipIcon());
-        System.out.println("p1Updateships fired");
         p1Opponent.setShipstoInvisible();
     }
 
     public static void p2UpdateShips(String shipCoordinates){
         p2Opponent.drawBoard(shipCoordinates, gameIcons.getShipIcon());
-        System.out.println("p2UpdateShips fired");
         p2Opponent.setShipstoInvisible();
     }
 
+    // Updates p1's board after move is made on p1opponent board
     public static void p1UpdateHits(String hitCoordinates){
         p1Board.drawBoard(hitCoordinates, gameIcons.getHitIcon());
+        p2Opponent.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p2opponentFireEvent);
     }
 
+    // Updates p2's board after move is made on p2opponent board
     public static void p2UpdateHits(String hitCoordinates){
         p2Board.drawBoard(hitCoordinates, gameIcons.getHitIcon());
+        p1Opponent.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p1opponentFireEvent);
     }
 
+    //
     public static void p1UpdateMisses(String missCoordinates){
         p1Board.drawBoard(missCoordinates, gameIcons.getMissIcon());
+        p2Opponent.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p2opponentFireEvent);
     }
 
+    //
     public static void p2UpdateMisses(String missCoordinates){
         p2Board.drawBoard(missCoordinates, gameIcons.getMissIcon());
+        p1Opponent.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p1opponentFireEvent);
     }
 
+    //
     public static void main(String[] args) {
         Application.launch(args);
     }
