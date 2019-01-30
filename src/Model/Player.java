@@ -4,9 +4,8 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
 public class Player {
-
-    private String name;
     //  private int playerId;       Could be useful for the server side logic
+    private String name;
     private Board board;
     private IntegerProperty fleetNumber;
     private int shipsLeft;
