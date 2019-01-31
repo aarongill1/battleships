@@ -354,6 +354,8 @@ public class Game extends Application {
     public static Scene createP1Turn(){
         VBox p1Turn = new VBox();
         Label p1TurnLabel = new Label(prompt1 + player1.getName());
+        Label p1BoardTitle = new Label(player1.getName()+"'s Board");
+        Label p2BoardTitle = new Label(player2.getName()+"'s Board");
         p1Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1PlaceShips);
         p1Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p1fireEvent);
         p1Board.setShipstoVisible(gameIcons.getShipIcon());
@@ -362,8 +364,10 @@ public class Game extends Application {
         p2Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p2fireEvent);
         p1Turn.getChildren().add(quitGame);
         p1Turn.getChildren().add(p1TurnLabel);
+        p1Turn.getChildren().add(p2BoardTitle);
         p1Turn.getChildren().add(p2Board.getGameBoard());
         p1Turn.getChildren().add(p1Board.getGameBoard());
+        p1Turn.getChildren().add(p1BoardTitle);
         if(p2Kraken.isReleased()){
             p2Kraken.krakenSmash(p2Board, gameIcons.getDestroyedIcon(), gameIcons.getKrispinIcon(), player2);
         }
@@ -385,6 +389,8 @@ public class Game extends Application {
     public static Scene createP2Turn(){
         VBox p2Turn = new VBox();
         Label p2TurnLabel = new Label(prompt1 + player2.getName());
+        Label p1BoardTitle = new Label(player1.getName()+"'s Board");
+        Label p2BoardTitle = new Label(player2.getName()+"'s Board");
         p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2PlaceShips);
         p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2fireEvent);
         p1Board.setShipstoInvisible();
@@ -400,8 +406,10 @@ public class Game extends Application {
         p1Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p1fireEvent);
         p2Turn.getChildren().add(quitGame);
         p2Turn.getChildren().add(p2TurnLabel);
+        p2Turn.getChildren().add(p1BoardTitle);
         p2Turn.getChildren().add(p1Board.getGameBoard());
         p2Turn.getChildren().add(p2Board.getGameBoard());
+        p2Turn.getChildren().add(p2BoardTitle);
         if(p1Kraken.isReleased()){
             p1Kraken.krakenSmash(p1Board, gameIcons.getDestroyedIcon(), gameIcons.getKrispinIcon(), player1);
         }
@@ -544,7 +552,6 @@ public class Game extends Application {
             guiStage.setScene(createMPSetup());
         });
 
-        p1setup.getChildren().add(backToHome);
         p1Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p1PlaceShips);
         HBox p1placeShips = new HBox(p1placeShipsA, p1placeShipsB);
         p1placeShips.setAlignment(Pos.CENTER);
