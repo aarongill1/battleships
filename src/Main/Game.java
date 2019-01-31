@@ -370,6 +370,11 @@ public class Game extends Application {
         p1Turn.getChildren().add(p1BoardTitle);
         if(p2Kraken.isReleased()){
             p2Kraken.krakenSmash(p2Board, gameIcons.getDestroyedIcon(), gameIcons.getKrispinIcon(), player2);
+            if (Gameover.isGameOver(player2)) {
+                Gameover.setWinningPlayer(player1);
+                guiStage.setScene(createGameOver());
+                guiStage.show();
+            }
         }
         endP1Turn.setOnAction(actionEvent -> {
             guiStage.setScene(endOfP1Turn());
@@ -412,6 +417,11 @@ public class Game extends Application {
         p2Turn.getChildren().add(p2BoardTitle);
         if(p1Kraken.isReleased()){
             p1Kraken.krakenSmash(p1Board, gameIcons.getDestroyedIcon(), gameIcons.getKrispinIcon(), player1);
+            if (Gameover.isGameOver(player1)) {
+                Gameover.setWinningPlayer(player2);
+                guiStage.setScene(createGameOver());
+                guiStage.show();
+            }
         }
         endP2Turn.setOnAction(actionEvent -> {
             guiStage.setScene(endOfP2Turn());
