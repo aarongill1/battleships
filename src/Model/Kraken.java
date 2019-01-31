@@ -39,6 +39,25 @@ public class Kraken {
         }
     }
 
+    public void krakenSmash(Board board, ImagePattern destroyedFill, ImagePattern krispin, Player player, int colX, int colY){
+        for (int i = 0; i < board.getSize(); i++) {
+            for (int j = 0; j < board.getSize(); j++) {
+                if (board.getTileList().get(i).get(j).isKraken()) {
+                    board.getTileList().get(i).get(j).setKraken(false);
+                    board.rec[i][j].setFill(null);
+                }
+            }
+        }
+        if (board.getTileList().get(colX).get(colY).isOccupied()) {
+            board.getTileList().get(colX).get(colY).setHit(true);
+            board.rec[colX][colY].setFill(destroyedFill);
+            player.setFleetNumber(player.getShipsLeft() - 1);
+        } else if(!board.getTileList().get(colX).get(colY).isMiss()) {
+            board.rec[colX][colY].setFill(krispin);
+            board.getTileList().get(colX).get(colY).setKraken(true);
+        }
+    }
+
     public boolean isReleased() {
         return released;
     }
