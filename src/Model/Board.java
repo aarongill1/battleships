@@ -198,4 +198,15 @@ public class Board {
         }
 
     }
+
+    // Overided method - use this to manually place krispen where desired
+    public void placeKraken(ImagePattern krispen, int colX, int colY){
+            if(!this.getTileList().get(colX).get(colY).isOccupied()){
+                this.getTileList().get(colX).get(colY).setKraken(true);
+                // Hide below line to hide krispen from view
+//                rec[colX][colY].setFill(krispen);
+                this.setKrakenPlaced(true);
+            }
+
+    }
 }

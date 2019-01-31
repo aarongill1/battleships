@@ -544,7 +544,6 @@ public class Game extends Application {
             guiStage.setScene(createMPSetup());
         });
 
-        p1setup.getChildren().add(backToHome);
         p1Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p1PlaceShips);
         HBox p1placeShips = new HBox(p1placeShipsA, p1placeShipsB);
         p1placeShips.setAlignment(Pos.CENTER);
