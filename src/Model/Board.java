@@ -198,4 +198,11 @@ public class Board {
         }
 
     }
+
+    public void placeKraken(ImagePattern krispen, int colX, int colY) {
+        this.getTileList().get(colX).get(colY).setKraken(true);
+        // Hide below line to hide krispen from view
+//      rec[colX][colY].setFill(krispen);
+        this.setKrakenPlaced(true);
+    }
 }

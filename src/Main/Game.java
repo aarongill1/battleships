@@ -64,6 +64,7 @@ public class Game extends Application {
 
     boolean p2loaded = false;
     boolean p2updated = false;
+    public static boolean gamed = true;
 
     final static String computer = "Computer";
     private static String greet1 = "Welcome to Battleships";
@@ -231,7 +232,7 @@ public class Game extends Application {
 
         advanceTop2Setup.setOnAction(actionEvent ->{
             player1.setName(p1nameInput.getText());
-            p1Board.placeKraken(gameIcons.getKrispinIcon());
+            p1Board.placeKraken(gameIcons.getKrispinIcon(), 0, 7);
 //            guiStage.setScene(createP2Setup());
 //            guiStage.show();
             if(player2.getName() == "Computer") {
@@ -402,7 +403,10 @@ public class Game extends Application {
         p2Turn.getChildren().add(p2TurnLabel);
         p2Turn.getChildren().add(p1Board.getGameBoard());
         p2Turn.getChildren().add(p2Board.getGameBoard());
-        if(p1Kraken.isReleased()){
+        if(p1Kraken.isReleased() && gamed){
+            p1Kraken.krakenSmash(p1Board, gameIcons.getDestroyedIcon(), gameIcons.getKrispinIcon(), player1, 3, 3);
+            gamed = false;
+        } else if(p1Kraken.isReleased()) {
             p1Kraken.krakenSmash(p1Board, gameIcons.getDestroyedIcon(), gameIcons.getKrispinIcon(), player1);
         }
         endP2Turn.setOnAction(actionEvent -> {
