@@ -389,6 +389,8 @@ public class Game extends Application {
     public static Scene createP2Turn(){
         VBox p2Turn = new VBox();
         Label p2TurnLabel = new Label(prompt1 + player2.getName());
+        Label p1BoardTitle = new Label(player1.getName()+"'s Board");
+        Label p2BoardTitle = new Label(player2.getName()+"'s Board");
         p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2PlaceShips);
         p2Board.getGameBoard().removeEventFilter(MouseEvent.MOUSE_CLICKED, p2fireEvent);
         p1Board.setShipstoInvisible();
@@ -404,8 +406,10 @@ public class Game extends Application {
         p1Board.getGameBoard().addEventFilter(MouseEvent.MOUSE_CLICKED, p1fireEvent);
         p2Turn.getChildren().add(quitGame);
         p2Turn.getChildren().add(p2TurnLabel);
+        p2Turn.getChildren().add(p1BoardTitle);
         p2Turn.getChildren().add(p1Board.getGameBoard());
         p2Turn.getChildren().add(p2Board.getGameBoard());
+        p2Turn.getChildren().add(p2BoardTitle);
         if(p1Kraken.isReleased()){
             p1Kraken.krakenSmash(p1Board, gameIcons.getDestroyedIcon(), gameIcons.getKrispinIcon(), player1);
         }
