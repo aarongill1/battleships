@@ -28,9 +28,10 @@ public class Kraken {
             if (board.getTileList().get(colX).get(colY).isOccupied()) {
                 board.getTileList().get(colX).get(colY).setHit(true);
                 board.rec[colX][colY].setFill(destroyedFill);
-                player.setFleetNumber(player.getShipsLeft() - 1);
+                player.setShipsLeft(player.getShipsLeft() - 1);
+                System.out.println(player.getFleetNumber());
                 moved = true;
-            } else if(!board.getTileList().get(colX).get(colY).isMiss()) {
+            } else if(!board.getTileList().get(colX).get(colY).isMiss() && !board.getTileList().get(colX).get(colY).isHit()) {
                 board.rec[colX][colY].setFill(krispin);
                 board.getTileList().get(colX).get(colY).setKraken(true);
                 moved = true;
